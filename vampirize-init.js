@@ -1,9 +1,16 @@
-// Vampirisation & fusion intelligente :
-// - Applique la base initiale (colonnes A à S, colonnes T+ exclues)
-// - Préserve les notes terrain et modifications manuelles de l'utilisateur lors des mises à jour de version
-const VAMPIRIZATION_VERSION = "v3_smart_sync";
-const STATE_KEY = "radar_ludique_state_v1";
+const VAMPIRIZATION_VERSION = "v4_editeurs_sync";
+const STATE_KEY = "radar_ludique_state_v2";
 const VER_KEY = "radar_ludique_vampirization_ver";
+
+function getBaseEntities() {
+  if (typeof INITIAL_ENTITIES !== "undefined" && Array.isArray(INITIAL_ENTITIES)) {
+    return INITIAL_ENTITIES;
+  }
+  if (typeof editeurs !== "undefined" && Array.isArray(editeurs)) {
+    return editeurs;
+  }
+  return null;
+}
 
 function mergeBaseWithUserChanges(baseEntities, currentState) {
   if (!Array.isArray(currentState) || currentState.length === 0) {
@@ -14,9 +21,10 @@ function mergeBaseWithUserChanges(baseEntities, currentState) {
     currentState.map((item) => [String(item.nom || "").trim().toLowerCase(), item])
   );
 
-  const merged = baseEntities.map((baseItem) => {
+  const merged = baseEntities.map((baseItem, index) => {
+    const baseId = baseItem.id || index;
     const prev =
-      currentById.get(baseItem.id) ||
+      currentById.get(baseId) ||
       currentByName.get(String(baseItem.nom || "").trim().toLowerCase());
 
     if (!prev) return structuredClone(baseItem);
@@ -36,13 +44,11 @@ function mergeBaseWithUserChanges(baseEntities, currentState) {
     return {
       ...structuredClone(baseItem),
       notes_terrain: combinedNotes,
-      // Conserve l'éventuelle personnalisation manuelle de l'utilisateur si marquée
       user_modified: Boolean(prev.user_modified)
     };
   });
 
-  // Conserve également d'éventuelles fiches créées manuellement par l'utilisateur qui ne sont pas dans la base
-  const baseIds = new Set(baseEntities.map((b) => b.id));
+  const baseIds = new Set(baseEntities.map((b, i) => b.id || i));
   const baseNames = new Set(baseEntities.map((b) => String(b.nom || "").trim().toLowerCase()));
   for (const prev of currentState) {
     const key = String(prev.nom || "").trim().toLowerCase();
@@ -55,12 +61,14 @@ function mergeBaseWithUserChanges(baseEntities, currentState) {
 }
 
 (function initSmartSync() {
-  if (typeof INITIAL_ENTITIES === "undefined") return;
+  const baseEntities = getBaseEntities();
+  if (!baseEntities) return;
+
   const savedVer = localStorage.getItem(VER_KEY);
   const rawState = localStorage.getItem(STATE_KEY);
 
   if (!rawState) {
-    localStorage.setItem(STATE_KEY, JSON.stringify(INITIAL_ENTITIES));
+    localStorage.setItem(STATE_KEY, JSON.stringify(baseEntities));
     localStorage.setItem(VER_KEY, VAMPIRIZATION_VERSION);
     return;
   }
@@ -68,11 +76,11 @@ function mergeBaseWithUserChanges(baseEntities, currentState) {
   if (savedVer !== VAMPIRIZATION_VERSION) {
     try {
       const parsedCurrent = JSON.parse(rawState);
-      const nextState = mergeBaseWithUserChanges(INITIAL_ENTITIES, parsedCurrent);
+      const nextState = mergeBaseWithUserChanges(baseEntities, parsedCurrent);
       localStorage.setItem(STATE_KEY, JSON.stringify(nextState));
       localStorage.setItem(VER_KEY, VAMPIRIZATION_VERSION);
     } catch (e) {
-      localStorage.setItem(STATE_KEY, JSON.stringify(INITIAL_ENTITIES));
+      localStorage.setItem(STATE_KEY, JSON.stringify(baseEntities));
       localStorage.setItem(VER_KEY, VAMPIRIZATION_VERSION);
     }
   }
