@@ -70,9 +70,14 @@
       border-color: #0284c7;
       font-weight: 600;
     }
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
     button.secondary { background: var(--card-2); border-color: var(--border); font-weight: 500; }
     button.danger { background: #991b1b; border-color: #ef4444; }
     button.warn-btn { background: #92400e; border-color: var(--warn); }
+    button.ok-btn { background: #15803d; border-color: var(--ok); }
     button.small { padding: 4px 8px; font-size: 0.78rem; width: auto; }
     .badge {
       display: inline-block;
@@ -100,6 +105,22 @@
       border-radius: 10px;
       padding: 10px;
       margin-top: 10px;
+    }
+    .box-draft {
+      background: rgba(245, 158, 11, 0.14);
+      border: 1px solid var(--warn);
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 8px;
+    }
+    .box-sync-fail {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      border-radius: 8px;
+      padding: 8px 10px;
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: #fecaca;
     }
     .box-own {
       background: rgba(15, 23, 42, 0.55);
@@ -353,7 +374,7 @@
     <section id="tab-tendances" class="panel">
       <div class="card">
         <strong>Radar Tendances</strong>
-        <div class="box-missing">Cet onglet sera configuré juste après la validation du Matching.</div>
+        <div class="box-missing">Cet onglet sera configuré juste après la validation des Données publiques et du Matching.</div>
       </div>
       <div id="tendances-results"></div>
     </section>
@@ -385,6 +406,8 @@
     const feedbackById = {};
     const editingIds = new Set();
     const editingPublicIds = new Set();
+    const syncingIds = new Set();
+    const pendingPublicDrafts = {};
     const selectedCriteria = new Set();
     let authSession = null;
     let isAdmin = false;
@@ -474,7 +497,10 @@
           recherche: String(publicObj.recherche ?? raw.public_recherche ?? "").trim(),
           refuse: String(publicObj.refuse ?? raw.public_refuse ?? "").trim(),
           source: String(publicObj.source ?? raw.public_source ?? "").trim(),
-          maj: String(publicObj.maj ?? raw.public_maj ?? "").trim()
+          maj: String(publicObj.maj ?? raw.public_maj ?? "").trim(),
+          sync_status: String(publicObj.sync_status ?? "").trim(),
+          sync_fail_date: String(publicObj.sync_fail_date ?? "").trim(),
+          sync_fail_reason: String(publicObj.sync_fail_reason ?? "").trim()
         },
         recherche_connue: raw.recherche_connue ?? raw.recherche ?? "",
         refuse: raw.refuse ?? "",
@@ -746,7 +772,15 @@
           initie: document.getElementById("new-c-ini").checked,
           expert: document.getElementById("new-c-exp").checked
         },
-        donnees_publiques: { recherche: "", refuse: "", source: "", maj: "" },
+        donnees_publiques: {
+          recherche: "",
+          refuse: "",
+          source: "",
+          maj: "",
+          sync_status: "",
+          sync_fail_date: "",
+          sync_fail_reason: ""
+        },
         recherche_connue: recherche,
         refuse,
         commentaires_dates: []
@@ -816,6 +850,119 @@
         .replace(/"/g, "&quot;");
     }
 
+    async function recordSyncFailure(target, reasonText) {
+      const nowStr = new Date().toLocaleString("fr-FR");
+      const currentPub = target.donnees_publiques || {};
+      target.donnees_publiques = {
+        ...currentPub,
+        sync_status: "failed",
+        sync_fail_date: nowStr,
+        sync_fail_reason: String(reasonText || "Aucune donnée publique exploitable trouvée.").trim()
+      };
+      delete pendingPublicDrafts[target.id];
+      try {
+        await publishEntity(target);
+      } catch (e) {
+        feedbackById[target.id] = "Erreur lors de l'enregistrement de l'échec : " + e.message;
+      }
+      renderEditeurs();
+    }
+
+    async function syncPublicDataFromCloud(id) {
+      if (!isAdmin) {
+        alert("Connexion admin requise pour synchroniser les données publiques.");
+        return;
+      }
+      const target = state.find((e) => e.id === id);
+      if (!target || syncingIds.has(id)) return;
+
+      syncingIds.add(id);
+      delete pendingPublicDrafts[id];
+      renderEditeurs();
+
+      try {
+        const result = await sbFetch("/functions/v1/sync-editeur", {
+          method: "POST",
+          body: JSON.stringify({
+            id: target.id,
+            nom: target.nom,
+            drapeau: target.drapeau,
+            liens: target.liens || [],
+            emails: target.emails || []
+          })
+        });
+
+        syncingIds.delete(id);
+
+        if (!result || !result.success || (!result.recherche && !result.refuse)) {
+          await recordSyncFailure(
+            target,
+            (result && result.reason) ? result.reason : "Aucune donnée publique exploitable trouvée."
+          );
+          return;
+        }
+
+        pendingPublicDrafts[id] = {
+          recherche: String(result.recherche || "").trim(),
+          refuse: String(result.refuse || "").trim(),
+          source: String(result.source || "").trim(),
+          strategy: String(result.strategy || "").trim(),
+          fetchedAt: new Date().toLocaleString("fr-FR")
+        };
+        renderEditeurs();
+      } catch (err) {
+        syncingIds.delete(id);
+        await recordSyncFailure(
+          target,
+          `Relais Supabase indisponible ou bloqué (${err.message}).`
+        );
+      }
+    }
+
+    async function approvePublicDraft(id) {
+      if (!isAdmin) return;
+      const target = state.find((e) => e.id === id);
+      const draft = pendingPublicDrafts[id];
+      if (!target || !draft) return;
+
+      const finalRecherche = (document.getElementById(`draft-recherche-${id}`)?.value ?? draft.recherche).trim();
+      const finalRefuse = (document.getElementById(`draft-refuse-${id}`)?.value ?? draft.refuse).trim();
+      const finalSource = (document.getElementById(`draft-source-${id}`)?.value ?? draft.source).trim();
+
+      if (!finalRecherche && !finalRefuse) {
+        await recordSyncFailure(target, "Proposition vide rejetée lors de la validation.");
+        return;
+      }
+
+      const nowStr = new Date().toLocaleString("fr-FR");
+      target.donnees_publiques = {
+        recherche: finalRecherche,
+        refuse: finalRefuse,
+        source: finalSource,
+        maj: nowStr,
+        sync_status: "ok",
+        sync_fail_date: "",
+        sync_fail_reason: ""
+      };
+
+      delete pendingPublicDrafts[id];
+
+      try {
+        await publishEntity(target);
+        feedbackById[id] = `Données publiques validées et publiées (${nowStr}).`;
+      } catch (e) {
+        feedbackById[id] = "Erreur publication : " + e.message;
+      }
+      renderEditeurs();
+    }
+
+    async function rejectPublicDraft(id) {
+      if (!isAdmin) return;
+      const target = state.find((e) => e.id === id);
+      if (!target) return;
+      await recordSyncFailure(target, "Proposition rejetée manuellement (données jugées non pertinentes).");
+    }
+
     function togglePublicEdit(id) {
       if (!isAdmin) {
         alert("Connexion admin requise pour modifier les données publiques.");
@@ -841,67 +988,24 @@
       const pubRefuse = (document.getElementById(`pub-refuse-${id}`)?.value || "").trim();
       const pubSource = (document.getElementById(`pub-source-${id}`)?.value || "").trim();
 
+      const resume = `Valider l'enregistrement des Données publiques pour ${target.nom} ?\n\n• Recherche : ${pubRecherche || "(vide)"}\n• Refus : ${pubRefuse || "(vide)"}\n• Source : ${pubSource || "(vide)"}`;
+      if (!confirm(resume)) return;
+
+      const nowStr = new Date().toLocaleString("fr-FR");
       target.donnees_publiques = {
         recherche: pubRecherche,
         refuse: pubRefuse,
         source: pubSource,
-        maj: new Date().toLocaleString("fr-FR")
+        maj: nowStr,
+        sync_status: "ok",
+        sync_fail_date: "",
+        sync_fail_reason: ""
       };
 
       try {
         await publishEntity(target);
         editingPublicIds.delete(id);
-        feedbackById[id] = "Données publiques enregistrées et publiées.";
-        renderEditeurs();
-      } catch (e) {
-        feedbackById[id] = "Erreur publication : " + e.message;
-        renderEditeurs();
-      }
-    }
-
-    function appendToField(existingText, addedText) {
-      const base = String(existingText || "").trim();
-      const add = String(addedText || "").trim();
-      if (!add) return base;
-      if (!base) return add;
-      const lowerParts = base.toLowerCase().split(/[\/|,;\n]+/).map((s) => s.trim());
-      if (lowerParts.includes(add.toLowerCase())) return base;
-      return `${base} / ${add}`;
-    }
-
-    async function transferPublicToOwn(id, fieldKind) {
-      if (!isAdmin) {
-        alert("Connexion admin requise pour transférer vers Nos critères.");
-        return;
-      }
-      const target = state.find((e) => e.id === id);
-      if (!target) return;
-
-      const pub = target.donnees_publiques || {};
-      const inputVal = fieldKind === "recherche"
-        ? (document.getElementById(`pub-recherche-${id}`)?.value ?? pub.recherche ?? "")
-        : (document.getElementById(`pub-refuse-${id}`)?.value ?? pub.refuse ?? "");
-
-      const cleanVal = String(inputVal || "").trim();
-      if (!cleanVal) {
-        feedbackById[id] = fieldKind === "recherche"
-          ? "Aucune donnée publique « Recherche » à copier."
-          : "Aucune donnée publique « Refus » à copier.";
-        renderEditeurs();
-        return;
-      }
-
-      if (fieldKind === "recherche") {
-        target.recherche_connue = appendToField(target.recherche_connue, cleanVal);
-      } else {
-        target.refuse = appendToField(target.refuse, cleanVal);
-      }
-
-      try {
-        await publishEntity(target);
-        feedbackById[id] = fieldKind === "recherche"
-          ? "Copié dans « Nos critères — Recherche » et publié."
-          : "Copié dans « Nos critères — Refus » et publié.";
+        feedbackById[id] = `Données publiques validées et publiées (${nowStr}).`;
         renderEditeurs();
       } catch (e) {
         feedbackById[id] = "Erreur publication : " + e.message;
@@ -1055,22 +1159,73 @@
           item.cibles.expert ? `<span class="badge c-expert">Expert</span>` : ""
         ].join("");
 
-        const pub = item.donnees_publiques || { recherche: "", refuse: "", source: "", maj: "" };
+        const pub = item.donnees_publiques || {
+          recherche: "",
+          refuse: "",
+          source: "",
+          maj: "",
+          sync_status: "",
+          sync_fail_date: "",
+          sync_fail_reason: ""
+        };
         const isEditingPublic = isAdmin && editingPublicIds.has(item.id);
+        const isSyncing = syncingIds.has(item.id);
+        const draft = pendingPublicDrafts[item.id] || null;
+        const liensList = (item.liens || []).filter(Boolean);
+
+        const failBannerHTML = pub.sync_status === "failed" ? `
+          <div class="box-sync-fail">
+            <div class="row" style="justify-content: space-between;">
+              <span class="badge alert">Echec de la synchronisation</span>
+              <span class="muted" style="font-size:0.76rem;">Tentative le ${escapeHTML(pub.sync_fail_date || "date inconnue")}</span>
+            </div>
+            ${pub.sync_fail_reason ? `<div style="margin-top:4px;">${escapeHTML(pub.sync_fail_reason)}</div>` : ""}
+          </div>
+        ` : "";
+
+        const draftPreviewHTML = (isAdmin && draft) ? `
+          <div class="box-draft">
+            <div class="row" style="justify-content: space-between;">
+              <span class="badge terrain">VALIDATION REQUISE (BROUILLON INTERNET)</span>
+              <span class="muted" style="font-size:0.75rem;">Récupéré le ${escapeHTML(draft.fetchedAt)}</span>
+            </div>
+            ${draft.strategy ? `<div class="muted" style="font-size:0.76rem; margin-top:4px;">Méthode : ${escapeHTML(draft.strategy)}</div>` : ""}
+            <label>Recherche proposée (vérifie avant de valider)</label>
+            <textarea id="draft-recherche-${escapeHTML(item.id)}" rows="2">${escapeHTML(draft.recherche)}</textarea>
+            <label>Refus proposé (vérifie avant de valider)</label>
+            <textarea id="draft-refuse-${escapeHTML(item.id)}" rows="2">${escapeHTML(draft.refuse)}</textarea>
+            <label>Source détectée</label>
+            <input id="draft-source-${escapeHTML(item.id)}" type="text" value="${escapeHTML(draft.source)}" />
+            <div class="row" style="margin-top:10px;">
+              <button type="button" class="ok-btn small" onclick="approvePublicDraft('${escapeHTML(item.id)}')">Valider & Enregistrer</button>
+              <button type="button" class="danger small" onclick="rejectPublicDraft('${escapeHTML(item.id)}')">Rejeter (Échec synchro)</button>
+            </div>
+          </div>
+        ` : "";
 
         const publicBoxHTML = `
           <div class="box-public">
             <div class="row" style="justify-content: space-between;">
               <div>
                 <span class="badge pub">DONNÉES PUBLIQUES (INTERNET)</span>
-                ${pub.maj ? `<span class="muted" style="font-size:0.78rem;">MAJ : ${escapeHTML(pub.maj)}</span>` : `<span class="muted" style="font-size:0.78rem;">Non renseigné</span>`}
+                ${pub.maj
+                  ? `<span class="muted" style="font-size:0.78rem;">Validé le ${escapeHTML(pub.maj)}</span>`
+                  : `<span class="muted" style="font-size:0.78rem;">Aucune donnée validée</span>`}
               </div>
               ${isAdmin ? `
-                <button type="button" class="secondary small" onclick="togglePublicEdit('${escapeHTML(item.id)}')">
-                  ${isEditingPublic ? "Fermer" : "Mettre à jour"}
-                </button>
+                <div class="row">
+                  <button type="button" class="small" ${isSyncing ? "disabled" : ""} onclick="syncPublicDataFromCloud('${escapeHTML(item.id)}')">
+                    ${isSyncing ? "Recherche en cours..." : "Synchroniser (Internet)"}
+                  </button>
+                  <button type="button" class="secondary small" onclick="togglePublicEdit('${escapeHTML(item.id)}')">
+                    ${isEditingPublic ? "Fermer" : "Éditer"}
+                  </button>
+                </div>
               ` : ""}
             </div>
+
+            ${failBannerHTML}
+            ${draftPreviewHTML}
 
             ${!isEditingPublic ? `
               <div style="margin-top:8px; font-size:0.88rem;">
@@ -1086,30 +1241,21 @@
                   <strong>Source :</strong> ${escapeHTML(pub.source)}
                 </div>
               ` : ""}
-              ${isAdmin && (pub.recherche || pub.refuse) ? `
-                <div class="row" style="margin-top:8px;">
-                  ${pub.recherche ? `<button type="button" class="secondary small" onclick="transferPublicToOwn('${escapeHTML(item.id)}', 'recherche')">+ Copier Recherche vers Nos critères</button>` : ""}
-                  ${pub.refuse ? `<button type="button" class="secondary small" onclick="transferPublicToOwn('${escapeHTML(item.id)}', 'refuse')">+ Copier Refus vers Nos critères</button>` : ""}
-                </div>
-              ` : ""}
             ` : `
               <label>Recherche revendiquée (Internet)</label>
               <textarea id="pub-recherche-${escapeHTML(item.id)}" rows="2" placeholder="Ce que l'éditeur indique rechercher sur son site ou en ligne...">${escapeHTML(pub.recherche)}</textarea>
               <label>Refus revendiqués (Internet)</label>
               <textarea id="pub-refuse-${escapeHTML(item.id)}" rows="2" placeholder="Ce que l'éditeur indique refuser ou ne pas éditer...">${escapeHTML(pub.refuse)}</textarea>
-              <label>Source / Lien public (optionnel)</label>
-              <input id="pub-source-${escapeHTML(item.id)}" type="text" value="${escapeHTML(pub.source)}" placeholder="Ex. Page soumission site officiel, BGG..." />
+              <label>Source / Lien public</label>
+              <input id="pub-source-${escapeHTML(item.id)}" type="text" value="${escapeHTML(pub.source)}" placeholder="Ex. Page soumission site officiel..." />
               <div class="row" style="margin-top:10px;">
-                <button type="button" onclick="savePublicData('${escapeHTML(item.id)}')">Enregistrer Données publiques</button>
-                <button type="button" class="secondary small" onclick="transferPublicToOwn('${escapeHTML(item.id)}', 'recherche')">Vers Nos Recherches</button>
-                <button type="button" class="secondary small" onclick="transferPublicToOwn('${escapeHTML(item.id)}', 'refuse')">Vers Nos Refus</button>
+                <button type="button" class="ok-btn small" onclick="savePublicData('${escapeHTML(item.id)}')">Valider & Enregistrer</button>
               </div>
             `}
           </div>
         `;
 
         const mailsList = (item.emails || []).filter(Boolean);
-        const liensList = (item.liens || []).filter(Boolean);
         let contactBlockContent = "";
         if (mailsList.length > 0) {
           contactBlockContent += `<div><strong>Mails :</strong> ${mailsList.map((m) => escapeHTML(m)).join(" • ")}</div>`;
