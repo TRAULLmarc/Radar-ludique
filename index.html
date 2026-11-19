@@ -58,6 +58,11 @@
       color: var(--text);
       padding: 8px 10px;
     }
+    input[type="range"] {
+      padding: 4px 0;
+      background: transparent;
+      border: none;
+    }
     input, select, textarea { width: 100%; }
     button {
       cursor: pointer;
@@ -134,6 +139,34 @@
       border-radius: 10px;
       padding: 10px;
       margin-top: 10px;
+    }
+    .criteria-box {
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 8px;
+      max-height: 190px;
+      overflow-y: auto;
+    }
+    .chip-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      background: #1e293b;
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: auto;
+      font-weight: 500;
+    }
+    .chip-btn.selected {
+      background: #0369a1;
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 600;
     }
     .muted { color: var(--muted); font-size: 0.85rem; }
     .box-missing {
@@ -252,17 +285,9 @@
     <section id="tab-matching" class="panel">
       <div class="card">
         <strong>Matching Prototype → Éditeurs</strong>
-        <p class="muted">Renseigne les infos de ton prototype pour classer les éditeurs selon leurs recherches, leurs commentaires et leurs interdits.</p>
+        <p class="muted">Compare ton pitch et tes critères choisis dans la base avec les recherches, refus et commentaires des fiches.</p>
 
         <div class="row">
-          <div style="flex:1; min-width:140px;">
-            <label for="m-joueurs">Joueurs (ex. 2-4)</label>
-            <input id="m-joueurs" type="text" placeholder="Ex. 2-4 ou 3-5" />
-          </div>
-          <div style="flex:1; min-width:140px;">
-            <label for="m-duree">Durée (ex. 30-45 min)</label>
-            <input id="m-duree" type="text" placeholder="Ex. 30-45 min" />
-          </div>
           <div style="flex:1; min-width:160px;">
             <label for="m-cible">Cible visée</label>
             <select id="m-cible">
@@ -273,20 +298,30 @@
               <option value="expert">Expert</option>
             </select>
           </div>
+          <div style="flex:2; min-width:220px;">
+            <label for="m-seuil">Seuil minimum d'affichage : <strong id="m-seuil-val">50 %</strong></label>
+            <div class="row" style="gap:6px;">
+              <input id="m-seuil" type="range" min="0" max="100" step="5" value="50" style="flex:1;" oninput="updateSeuilLabel(true)" />
+              <button type="button" class="secondary small" onclick="setMatchingSeuil(50)">50 %</button>
+              <button type="button" class="secondary small" onclick="setMatchingSeuil(75)">75 %</button>
+            </div>
+          </div>
         </div>
 
-        <label for="m-mots">Mécaniques / Thèmes / Mots-clés (séparés par des virgules)</label>
-        <input id="m-mots" type="text" placeholder="Ex. jeu de plis, draft, coopération, enquête, nature" />
+        <label for="m-pitch">Pitch / Description du prototype (mécanique, thème, ambiance, format, joueurs, durée)</label>
+        <textarea id="m-pitch" rows="3" placeholder="Ex. Jeu de plis malin et rapide à 3-4 joueurs, ambiance nature, cartes uniquement, accessible en famille mais avec de vrais choix tactiques..."></textarea>
 
-        <label for="m-materiel">Format / Contrainte matérielle (optionnel)</label>
-        <input id="m-materiel" type="text" placeholder="Ex. cartes uniquement, petite boîte, tuiles" />
+        <label>Critères issus de ta base (recherches & refus détectés dans les fiches)</label>
+        <input id="m-critere-filter" type="text" placeholder="Filtrer la liste des critères de la base (ex. enquête, draft, 2J, tuiles...)" oninput="renderBaseCriteriaSelector()" />
+        <div id="m-criteria-selector" class="criteria-box"></div>
+        <div id="m-selected-criteria" class="muted" style="margin-top:6px;">Aucun critère de base sélectionné.</div>
 
         <div class="row" style="margin-top: 10px;">
           <label style="margin:0; display:inline-flex; gap:6px; align-items:center;">
             <input type="checkbox" id="m-only-editeur" style="width:auto;" checked /> Uniquement les structures « Éditeur »
           </label>
           <label style="margin:0; display:inline-flex; gap:6px; align-items:center;">
-            <input type="checkbox" id="m-hide-refused" style="width:auto;" checked /> Écarter les éditeurs qui refusent un de mes mots-clés
+            <input type="checkbox" id="m-hide-refused" style="width:auto;" checked /> Écarter les éditeurs dont un refus correspond
           </label>
         </div>
 
@@ -332,6 +367,7 @@
 
     const feedbackById = {};
     const editingIds = new Set();
+    const selectedCriteria = new Set();
     let authSession = null;
     let isAdmin = false;
 
@@ -451,6 +487,7 @@
     function saveLocalCache() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       updateStatusBar();
+      renderBaseCriteriaSelector();
     }
 
     function loadSavedSession() {
@@ -713,6 +750,9 @@
       document.querySelectorAll("nav.bottom-nav button").forEach((b) => b.classList.remove("active"));
       document.getElementById(`tab-${tabName}`).classList.add("active");
       document.getElementById(`btn-${tabName}`).classList.add("active");
+      if (tabName === "matching") {
+        renderBaseCriteriaSelector();
+      }
     }
 
     function escapeHTML(str) {
@@ -991,100 +1031,240 @@
       }
     }
 
+    function extractBaseCriteriaCounts() {
+      const counts = new Map();
+      const splitPattern = /[\/|,;•\n]+/;
+
+      state.forEach((item) => {
+        const sources = [
+          String(item.recherche_connue || ""),
+          String(item.refuse || "")
+        ];
+        sources.forEach((rawText) => {
+          rawText.split(splitPattern).forEach((segment) => {
+            const clean = segment.replace(/^[«"'\s-]+|[»"'\s-]+$/g, "").trim();
+            if (clean.length < 2 || clean.length > 45) return;
+            const key = clean.toLowerCase();
+            const current = counts.get(key) || { label: clean, count: 0 };
+            current.count += 1;
+            if (clean.length > current.label.length && current.label === current.label.toLowerCase()) {
+              current.label = clean;
+            }
+            counts.set(key, current);
+          });
+        });
+      });
+
+      return Array.from(counts.entries())
+        .sort((a, b) => b[1].count - a[1].count || a[1].label.localeCompare(b[1].label, "fr"));
+    }
+
+    function toggleBaseCriterion(key) {
+      if (selectedCriteria.has(key)) {
+        selectedCriteria.delete(key);
+      } else {
+        selectedCriteria.add(key);
+      }
+      renderBaseCriteriaSelector();
+    }
+
+    function renderBaseCriteriaSelector() {
+      const selectorEl = document.getElementById("m-criteria-selector");
+      const summaryEl = document.getElementById("m-selected-criteria");
+      if (!selectorEl || !summaryEl) return;
+
+      const filterText = (document.getElementById("m-critere-filter")?.value || "").trim().toLowerCase();
+      const allCriteria = extractBaseCriteriaCounts();
+      const filtered = filterText
+        ? allCriteria.filter(([key, info]) => key.includes(filterText) || info.label.toLowerCase().includes(filterText))
+        : allCriteria.slice(0, 80);
+
+      if (selectedCriteria.size === 0) {
+        summaryEl.textContent = "Aucun critère de base sélectionné.";
+      } else {
+        const labels = Array.from(selectedCriteria).map((k) => {
+          const found = allCriteria.find(([key]) => key === k);
+          return found ? found[1].label : k;
+        });
+        summaryEl.innerHTML = `<strong>Critères sélectionnés (${labels.length}) :</strong> ${escapeHTML(labels.join(" • "))}`;
+      }
+
+      if (filtered.length === 0) {
+        selectorEl.innerHTML = `<span class="muted">Aucun critère correspondant dans la base.</span>`;
+        return;
+      }
+
+      selectorEl.innerHTML = `<div class="row" style="gap:6px;">` + filtered.map(([key, info]) => {
+        const isSel = selectedCriteria.has(key);
+        return `
+          <button type="button" class="chip-btn ${isSel ? "selected" : ""}" onclick="toggleBaseCriterion('${escapeHTML(key.replace(/'/g, "\\'"))}')">
+            <span>${escapeHTML(info.label)}</span>
+            <span class="muted" style="font-size:0.7rem;">(${info.count})</span>
+          </button>
+        `;
+      }).join("") + `</div>`;
+    }
+
+    function updateSeuilLabel(autoRun = false) {
+      const val = Number(document.getElementById("m-seuil")?.value ?? 50);
+      const labelEl = document.getElementById("m-seuil-val");
+      if (labelEl) labelEl.textContent = `${val} %`;
+      if (autoRun && document.getElementById("matching-results")?.innerHTML.trim()) {
+        runMatching();
+      }
+    }
+
+    function setMatchingSeuil(pct) {
+      const slider = document.getElementById("m-seuil");
+      if (slider) {
+        slider.value = String(pct);
+        updateSeuilLabel(true);
+      }
+    }
+
+    function extractPitchKeywords(pitchText) {
+      const stopWords = new Set([
+        "avec", "dans", "pour", "sur", "les", "des", "une", "un", "qui", "que", "quoi",
+        "dont", "mais", "ou", "et", "est", "sont", "plus", "moins", "très", "tres",
+        "tout", "tous", "toute", "toutes", "jeu", "jeux", "prototype", "joueur", "joueurs",
+        "partie", "parties", "avoir", "faire", "être", "etre", "son", "ses", "leur", "leurs",
+        "aux", "par", "pas", "peu", "assez", "chaque", "entre", "vers", "chez", "comme"
+      ]);
+
+      return Array.from(new Set(
+        String(pitchText || "")
+          .toLowerCase()
+          .replace(/[^a-zàâäéèêëïîôöùûüç0-9\s-]/g, " ")
+          .split(/\s+/)
+          .map((w) => w.replace(/^-|-$/g, ""))
+          .filter((w) => w.length >= 3 && !stopWords.has(w))
+      ));
+    }
+
     function resetMatching() {
-      document.getElementById("m-joueurs").value = "";
-      document.getElementById("m-duree").value = "";
+      document.getElementById("m-pitch").value = "";
+      document.getElementById("m-critere-filter").value = "";
       document.getElementById("m-cible").value = "famille";
-      document.getElementById("m-mots").value = "";
-      document.getElementById("m-materiel").value = "";
+      document.getElementById("m-seuil").value = "50";
       document.getElementById("m-only-editeur").checked = true;
       document.getElementById("m-hide-refused").checked = true;
+      selectedCriteria.clear();
+      updateSeuilLabel(false);
+      renderBaseCriteriaSelector();
       document.getElementById("matching-results").innerHTML = "";
     }
 
     function runMatching() {
       const cible = document.getElementById("m-cible").value;
-      const joueurs = (document.getElementById("m-joueurs").value || "").trim().toLowerCase();
-      const duree = (document.getElementById("m-duree").value || "").trim().toLowerCase();
-      const materiel = (document.getElementById("m-materiel").value || "").trim().toLowerCase();
+      const seuil = Number(document.getElementById("m-seuil").value || 50);
+      const pitch = (document.getElementById("m-pitch").value || "").trim();
       const onlyEditeur = document.getElementById("m-only-editeur").checked;
       const hideRefused = document.getElementById("m-hide-refused").checked;
-      const mots = (document.getElementById("m-mots").value || "")
-        .split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
+      const criteriaList = Array.from(selectedCriteria);
+      const pitchWords = extractPitchKeywords(pitch);
 
-      const scored = state
+      const hasCible = Boolean(cible);
+      const hasCriteria = criteriaList.length > 0;
+      const hasPitch = pitchWords.length > 0;
+
+      if (!hasCible && !hasCriteria && !hasPitch) {
+        document.getElementById("matching-results").innerHTML = `
+          <div class="card">
+            <p class="muted">Renseigne au moins un pitch, un critère de la base ou une cible pour calculer un score de matching.</p>
+          </div>
+        `;
+        return;
+      }
+
+      let maxPossible = 0;
+      if (hasCible) maxPossible += 25;
+      if (hasCriteria) maxPossible += 45;
+      if (hasPitch) maxPossible += 30;
+
+      const evaluated = state
         .filter((e) => !onlyEditeur || (e.roles && e.roles.editeur))
         .map((e) => {
-          let score = 0;
+          let rawPoints = 0;
           const reasons = [];
           const warnings = [];
 
           const commentsBlob = (e.commentaires_dates || []).map((c) => c.texte).join(" ");
-          const searchBlob = `${e.recherche_connue} ${commentsBlob}`.toLowerCase();
+          const positiveBlob = `${e.recherche_connue} ${commentsBlob}`.toLowerCase();
           const refuseBlob = String(e.refuse || "").toLowerCase();
 
-          if (cible && e.cibles && e.cibles[cible]) {
-            score += 35;
-            reasons.push(`Cible ${cible} cochée`);
+          if (hasCible && e.cibles && e.cibles[cible]) {
+            rawPoints += 25;
+            reasons.push(`Cible ${cible}`);
           }
 
-          if (mots.length > 0) {
-            const matchedWords = mots.filter((m) => searchBlob.includes(m));
-            if (matchedWords.length > 0) {
-              const pts = Math.round((matchedWords.length / mots.length) * 45);
-              score += pts;
-              reasons.push(`Mots-clés trouvés (${pts} pts) : ${matchedWords.join(", ")}`);
+          if (hasCriteria) {
+            const matchedCrit = criteriaList.filter((k) => positiveBlob.includes(k));
+            if (matchedCrit.length > 0) {
+              rawPoints += (matchedCrit.length / criteriaList.length) * 45;
+              reasons.push(`Critères base (${matchedCrit.length}/${criteriaList.length}) : ${matchedCrit.join(", ")}`);
             }
-            const refusedMatches = mots.filter((m) => refuseBlob.includes(m));
-            if (refusedMatches.length > 0) {
-              score -= 40;
-              warnings.push(`Refus mentionné : ${refusedMatches.join(", ")}`);
+            const refusedCrit = criteriaList.filter((k) => refuseBlob.includes(k));
+            if (refusedCrit.length > 0) {
+              rawPoints -= 40;
+              warnings.push(`Refus : ${refusedCrit.join(", ")}`);
             }
           }
 
-          const extraTokens = [joueurs, duree, materiel].filter(Boolean);
-          if (extraTokens.length > 0) {
-            const extraMatches = extraTokens.filter((t) => searchBlob.includes(t));
-            if (extraMatches.length > 0) {
-              const pts = Math.min(20, extraMatches.length * 10);
-              score += pts;
-              reasons.push(`Précisions alignées : ${extraMatches.join(", ")}`);
+          if (hasPitch) {
+            const matchedPitch = pitchWords.filter((w) => positiveBlob.includes(w));
+            if (matchedPitch.length > 0) {
+              const ratio = Math.min(1, matchedPitch.length / Math.min(pitchWords.length, 6));
+              rawPoints += ratio * 30;
+              reasons.push(`Pitch : ${matchedPitch.slice(0, 6).join(", ")}`);
             }
-            const extraRefused = extraTokens.filter((t) => refuseBlob.includes(t));
-            if (extraRefused.length > 0) {
-              score -= 30;
-              warnings.push(`Contrainte refusée : ${extraRefused.join(", ")}`);
+            const refusedPitch = pitchWords.filter((w) => refuseBlob.includes(w));
+            if (refusedPitch.length > 0) {
+              rawPoints -= 30;
+              warnings.push(`Mot du pitch dans refus : ${refusedPitch.join(", ")}`);
             }
           }
+
+          const pct = maxPossible > 0
+            ? Math.max(0, Math.min(100, Math.round((rawPoints / maxPossible) * 100)))
+            : 0;
 
           return {
             entity: e,
-            score: Math.max(0, Math.min(100, score)),
+            score: pct,
             reasons,
             warnings
           };
-        })
+        });
+
+      const visible = evaluated
         .filter((item) => {
           if (hideRefused && item.warnings.length > 0) return false;
-          return item.score > 0;
+          return item.score >= seuil;
         })
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 20);
+        .sort((a, b) => b.score - a.score || a.entity.nom.localeCompare(b.entity.nom, "fr"));
+
+      const belowCount = evaluated.length - visible.length;
 
       document.getElementById("matching-results").innerHTML = `
         <div class="card">
-          <strong>Résultats du matching (${scored.length} piste(s) retenue(s))</strong>
-          ${scored.length === 0
-            ? `<p class="muted" style="margin-top:8px;">Aucun éditeur ne ressort avec ces critères. Essaie d'élargir tes mots-clés ou de décocher l'option d'exclusion des refus.</p>`
-            : scored.map((s) => `
+          <div class="row" style="justify-content: space-between;">
+            <strong>${visible.length} éditeur(s) à &ge; ${seuil} %</strong>
+            <span class="muted">${belowCount} fiche(s) sous le seuil ou écartée(s)</span>
+          </div>
+          ${visible.length === 0
+            ? `<p class="muted" style="margin-top:8px;">Aucun éditeur n'atteint ${seuil} % avec ces critères. Baisse le curseur (ex. 50 % ou 25 %) ou ajuste ton pitch/critères.</p>`
+            : visible.map((s) => `
               <div style="border-top:1px solid var(--border); padding-top:10px; margin-top:10px;">
                 <div class="row" style="justify-content: space-between;">
                   <strong>${escapeHTML(s.entity.nom)}</strong>
-                  <span class="badge ${s.score >= 70 ? "ok" : s.score >= 40 ? "terrain" : ""}">${s.score} %</span>
+                  <span class="badge ${s.score >= 75 ? "ok" : s.score >= 50 ? "terrain" : ""}">${s.score} %</span>
                 </div>
                 <div class="muted" style="margin-top:4px;">${escapeHTML(s.reasons.join(" • ") || "Correspondance partielle")}</div>
                 ${s.warnings.length > 0 ? `<div class="err-msg" style="margin-top:4px;">${escapeHTML(s.warnings.join(" • "))}</div>` : ""}
                 ${s.entity.recherche_connue ? `<div style="font-size:0.84rem; margin-top:4px;"><strong>Recherche :</strong> ${escapeHTML(s.entity.recherche_connue)}</div>` : ""}
+                ${s.entity.commentaires_dates && s.entity.commentaires_dates.length > 0
+                  ? `<div class="muted" style="font-size:0.8rem; margin-top:4px;"><strong>Dernier commentaire :</strong> ${escapeHTML(s.entity.commentaires_dates[s.entity.commentaires_dates.length - 1].texte)}</div>`
+                  : ""}
               </div>
             `).join("")}
         </div>
@@ -1111,6 +1291,8 @@
     renderAuthUI();
     updateStatusBar();
     renderEditeurs();
+    renderBaseCriteriaSelector();
+    updateSeuilLabel(false);
     syncFromSupabase();
   </script>
 </body>
