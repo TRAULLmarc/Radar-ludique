@@ -1,4 +1,4 @@
-const CACHE_NAME = "radar-ludique-v2";
+const CACHE_NAME = "radar-ludique-v3";
 const ASSETS = ["./", "./index.html", "./data.js", "./vampirize-init.js", "./manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {
@@ -25,7 +25,6 @@ self.addEventListener("fetch", (event) => {
   const reqUrl = new URL(event.request.url);
   if (reqUrl.origin !== self.location.origin) return;
 
-  // Network-first for dynamic/data/code files so smartphone updates automatically without manual cache clearing
   event.respondWith(
     fetch(event.request)
       .then((networkResponse) => {
