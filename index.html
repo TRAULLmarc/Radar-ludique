@@ -364,34 +364,37 @@
         .replace(/^-|-$/g, "");
 
       const mergedComments = [];
-      if (raw.commentaire && String(raw.commentaire).trim()) {
+      const seenTexts = new Set();
+
+      function pushUniqueComment(id, date, texte) {
+        const clean = String(texte || "").trim();
+        if (!clean) return;
+        const key = clean.toLowerCase();
+        if (seenTexts.has(key)) return;
+        seenTexts.add(key);
         mergedComments.push({
-          id: `legacy-comment-${index}`,
-          date: "Initial",
-          texte: String(raw.commentaire).trim()
+          id: id || `c-${index}-${mergedComments.length}`,
+          date: date || new Date().toLocaleString("fr-FR"),
+          texte: clean
         });
       }
+
       if (Array.isArray(raw.commentaires_dates)) {
         raw.commentaires_dates.forEach((c, idx) => {
           if (c && c.texte) {
-            mergedComments.push({
-              id: c.id || `c-${index}-${idx}`,
-              date: c.date || new Date().toLocaleString("fr-FR"),
-              texte: String(c.texte)
-            });
+            pushUniqueComment(c.id || `c-${index}-${idx}`, c.date, c.texte);
           }
         });
       }
       if (Array.isArray(raw.notes_terrain)) {
         raw.notes_terrain.forEach((n, idx) => {
           if (n && n.texte) {
-            mergedComments.push({
-              id: n.id || `note-${index}-${idx}`,
-              date: n.date || new Date().toLocaleString("fr-FR"),
-              texte: String(n.texte)
-            });
+            pushUniqueComment(n.id || `note-${index}-${idx}`, n.date, n.texte);
           }
         });
+      }
+      if (raw.commentaire && String(raw.commentaire).trim()) {
+        pushUniqueComment(`legacy-comment-${index}`, "Initial", raw.commentaire);
       }
 
       return {
@@ -413,19 +416,23 @@
     }
 
     function getLocalFallbackEntities() {
+      const baseList = (typeof editeurs !== "undefined" && Array.isArray(editeurs))
+        ? editeurs.map(normalizeEntity)
+        : [];
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            return parsed.map(normalizeEntity);
-          }
-        } catch (e) {}
+      if (!saved) return baseList;
+      try {
+        const parsed = JSON.parse(saved);
+        if (!Array.isArray(parsed) || parsed.length === 0) return baseList;
+        const normalizedSaved = parsed.map(normalizeEntity);
+        if (baseList.length > normalizedSaved.length) {
+          const byId = new Map(normalizedSaved.map((item) => [item.id, item]));
+          return baseList.map((item) => byId.get(item.id) || item);
+        }
+        return normalizedSaved;
+      } catch (e) {
+        return baseList;
       }
-      if (typeof editeurs !== "undefined" && Array.isArray(editeurs)) {
-        return editeurs.map(normalizeEntity);
-      }
-      return [];
     }
 
     let state = getLocalFallbackEntities();
@@ -515,8 +522,23 @@
       if (!isSupabaseConfigured()) return;
       try {
         const rows = await sbFetch("/rest/v1/structures?select=id,sort_order,payload&order=sort_order.asc");
+        const baseList = (typeof editeurs !== "undefined" && Array.isArray(editeurs))
+          ? editeurs.map(normalizeEntity)
+          : [];
+
         if (Array.isArray(rows) && rows.length > 0) {
-          state = rows.map((r, idx) => normalizeEntity({ ...r.payload, id: r.id }, idx));
+          const remoteItems = rows.map((r, idx) => normalizeEntity({ ...r.payload, id: r.id }, idx));
+          const remoteById = new Map(remoteItems.map((item) => [item.id, item]));
+
+          if (baseList.length > remoteItems.length) {
+            state = baseList.map((item, idx) => remoteById.get(item.id) || normalizeEntity(item, idx));
+            const missingItems = state.filter((item) => !remoteById.has(item.id));
+            if (isAdmin && missingItems.length > 0) {
+              await seedInitialToSupabase();
+            }
+          } else {
+            state = remoteItems;
+          }
           saveLocalCache();
           renderEditeurs();
         } else if (isAdmin && state.length > 0) {
@@ -752,6 +774,14 @@
       const target = state.find((e) => e.id === id);
       if (!target) return;
       if (!Array.isArray(target.commentaires_dates)) target.commentaires_dates = [];
+
+      const alreadyExists = target.commentaires_dates.some(
+        (c) => String(c.texte || "").trim().toLowerCase() === txt.toLowerCase()
+      );
+      if (alreadyExists) {
+        input.value = "";
+        return;
+      }
 
       target.commentaires_dates.push({
         id: `c-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
