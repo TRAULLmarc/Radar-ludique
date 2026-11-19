@@ -88,10 +88,27 @@
     .badge.terrain { background: #78350f; color: #fde68a; border: 1px solid var(--warn); }
     .badge.alert { background: #7f1d1d; color: #fecaca; border: 1px solid var(--danger); }
     .badge.ok { background: #14532d; color: #bbf7d0; border: 1px solid var(--ok); }
+    .badge.pub { background: #0c4a6e; color: #bae6fd; border: 1px solid var(--accent); }
     .badge.c-enfant { background: #831843; color: #fbcfe8; border: 1px solid #f472b6; }
     .badge.c-famille { background: #1e3a8a; color: #bfdbfe; border: 1px solid #60a5fa; }
     .badge.c-initie { background: #4c1d95; color: #ddd6fe; border: 1px solid #a78bfa; }
     .badge.c-expert { background: #7c2d12; color: #fed7aa; border: 1px solid #fb923c; }
+    .box-public {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-left: 3px solid var(--accent);
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .box-own {
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--ok);
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 10px;
+    }
     .box-search {
       background: rgba(34, 197, 94, 0.08);
       border-left: 3px solid var(--ok);
@@ -244,11 +261,11 @@
               <input id="new-drapeau" type="text" placeholder="🇫🇷" />
             </div>
             <div style="flex:2; min-width:180px;">
-              <label>Recherche / Ligne éditoriale</label>
+              <label>Recherche / Ligne éditoriale (Nos critères)</label>
               <input id="new-recherche" type="text" placeholder="Mécaniques, thèmes..." />
             </div>
           </div>
-          <label>Refuse</label>
+          <label>Refuse (Nos critères)</label>
           <input id="new-refuse" type="text" placeholder="Ce que la structure refuse" />
           <div class="row" style="margin-top:8px;">
             <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="new-r-ed" style="width:auto;" checked /> Éditeur</label>
@@ -265,7 +282,7 @@
           </div>
         </div>
 
-        <label for="search-editeur">Recherche (nom, recherche, refus, commentaire, mail, lien)</label>
+        <label for="search-editeur">Recherche (nom, données publiques, nos critères, commentaire, mail, lien)</label>
         <input id="search-editeur" type="text" placeholder="Ex. Bombyx, enquête, abstrait, Asmodee..." oninput="renderEditeurs()" />
 
         <div class="row" style="margin-top: 10px;">
@@ -285,7 +302,7 @@
     <section id="tab-matching" class="panel">
       <div class="card">
         <strong>Matching Prototype → Éditeurs</strong>
-        <p class="muted">Compare ton pitch et tes critères choisis dans la base avec les recherches, refus et commentaires des fiches.</p>
+        <p class="muted">Compare ton pitch et tes critères choisis dans la base avec les données publiques (Internet) et tes critères (Base / Terrain).</p>
 
         <div class="row">
           <div style="flex:1; min-width:160px;">
@@ -311,7 +328,7 @@
         <label for="m-pitch">Pitch / Description du prototype (mécanique, thème, ambiance, format, joueurs, durée)</label>
         <textarea id="m-pitch" rows="3" placeholder="Ex. Jeu de plis malin et rapide à 3-4 joueurs, ambiance nature, cartes uniquement, accessible en famille mais avec de vrais choix tactiques..."></textarea>
 
-        <label>Critères issus de ta base (recherches & refus détectés dans les fiches)</label>
+        <label>Critères issus de ta base (données publiques & nos critères détectés dans les fiches)</label>
         <input id="m-critere-filter" type="text" placeholder="Filtrer la liste des critères de la base (ex. enquête, draft, 2J, tuiles...)" oninput="renderBaseCriteriaSelector()" />
         <div id="m-criteria-selector" class="criteria-box"></div>
         <div id="m-selected-criteria" class="muted" style="margin-top:6px;">Aucun critère de base sélectionné.</div>
@@ -367,6 +384,7 @@
 
     const feedbackById = {};
     const editingIds = new Set();
+    const editingPublicIds = new Set();
     const selectedCriteria = new Set();
     let authSession = null;
     let isAdmin = false;
@@ -444,12 +462,20 @@
         pushUniqueComment(`legacy-comment-${index}`, "Initial", raw.commentaire);
       }
 
+      const publicObj = (typeof raw.donnees_publiques === "object" && raw.donnees_publiques) ? raw.donnees_publiques : {};
+
       return {
         id: raw.id || `${slug}-${index}`,
         nom: raw.nom || `Structure #${index + 1}`,
         drapeau: raw.drapeau || "",
         roles: rolesObj,
         cibles: ciblesObj,
+        donnees_publiques: {
+          recherche: String(publicObj.recherche ?? raw.public_recherche ?? "").trim(),
+          refuse: String(publicObj.refuse ?? raw.public_refuse ?? "").trim(),
+          source: String(publicObj.source ?? raw.public_source ?? "").trim(),
+          maj: String(publicObj.maj ?? raw.public_maj ?? "").trim()
+        },
         recherche_connue: raw.recherche_connue ?? raw.recherche ?? "",
         refuse: raw.refuse ?? "",
         commentaire: raw.commentaire ?? "",
@@ -516,7 +542,29 @@
       renderEditeurs();
     }
 
-    async function sbFetch(path, options = {}) {
+    async function refreshSessionIfNeeded() {
+      if (!authSession || !authSession.refresh_token) return;
+      try {
+        const refreshed = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_ANON_KEY,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ refresh_token: authSession.refresh_token })
+        });
+        if (refreshed.ok) {
+          const data = await refreshed.json();
+          if (data && data.access_token) {
+            authSession = data;
+            isAdmin = true;
+            localStorage.setItem(SESSION_KEY, JSON.stringify(data));
+          }
+        }
+      } catch (e) {}
+    }
+
+    async function sbFetch(path, options = {}, allowRetry = true) {
       const headers = {
         "apikey": SUPABASE_ANON_KEY,
         "Content-Type": "application/json",
@@ -533,6 +581,10 @@
       });
       if (!res.ok) {
         const errText = await res.text();
+        if (allowRetry && errText.includes("JWT expired") && authSession && authSession.refresh_token) {
+          await refreshSessionIfNeeded();
+          return sbFetch(path, options, false);
+        }
         throw new Error(errText || `HTTP ${res.status}`);
       }
       const text = await res.text();
@@ -548,7 +600,7 @@
         const data = await sbFetch("/auth/v1/token?grant_type=password", {
           method: "POST",
           body: JSON.stringify({ email: email.trim(), password })
-        });
+        }, false);
         saveSession(data);
         alert("Connexion admin active. Tes modifications seront publiées automatiquement.");
       } catch (e) {
@@ -559,7 +611,7 @@
     async function logoutAdmin() {
       if (authSession && authSession.access_token) {
         try {
-          await sbFetch("/auth/v1/logout", { method: "POST" });
+          await sbFetch("/auth/v1/logout", { method: "POST" }, false);
         } catch (e) {}
       }
       saveSession(null);
@@ -694,6 +746,7 @@
           initie: document.getElementById("new-c-ini").checked,
           expert: document.getElementById("new-c-exp").checked
         },
+        donnees_publiques: { recherche: "", refuse: "", source: "", maj: "" },
         recherche_connue: recherche,
         refuse,
         commentaires_dates: []
@@ -761,6 +814,99 @@
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
+    }
+
+    function togglePublicEdit(id) {
+      if (!isAdmin) {
+        alert("Connexion admin requise pour modifier les données publiques.");
+        return;
+      }
+      if (editingPublicIds.has(id)) {
+        editingPublicIds.delete(id);
+      } else {
+        editingPublicIds.add(id);
+      }
+      renderEditeurs();
+    }
+
+    async function savePublicData(id) {
+      if (!isAdmin) {
+        alert("Connexion admin requise pour enregistrer les données publiques.");
+        return;
+      }
+      const target = state.find((e) => e.id === id);
+      if (!target) return;
+
+      const pubRecherche = (document.getElementById(`pub-recherche-${id}`)?.value || "").trim();
+      const pubRefuse = (document.getElementById(`pub-refuse-${id}`)?.value || "").trim();
+      const pubSource = (document.getElementById(`pub-source-${id}`)?.value || "").trim();
+
+      target.donnees_publiques = {
+        recherche: pubRecherche,
+        refuse: pubRefuse,
+        source: pubSource,
+        maj: new Date().toLocaleString("fr-FR")
+      };
+
+      try {
+        await publishEntity(target);
+        editingPublicIds.delete(id);
+        feedbackById[id] = "Données publiques enregistrées et publiées.";
+        renderEditeurs();
+      } catch (e) {
+        feedbackById[id] = "Erreur publication : " + e.message;
+        renderEditeurs();
+      }
+    }
+
+    function appendToField(existingText, addedText) {
+      const base = String(existingText || "").trim();
+      const add = String(addedText || "").trim();
+      if (!add) return base;
+      if (!base) return add;
+      const lowerParts = base.toLowerCase().split(/[\/|,;\n]+/).map((s) => s.trim());
+      if (lowerParts.includes(add.toLowerCase())) return base;
+      return `${base} / ${add}`;
+    }
+
+    async function transferPublicToOwn(id, fieldKind) {
+      if (!isAdmin) {
+        alert("Connexion admin requise pour transférer vers Nos critères.");
+        return;
+      }
+      const target = state.find((e) => e.id === id);
+      if (!target) return;
+
+      const pub = target.donnees_publiques || {};
+      const inputVal = fieldKind === "recherche"
+        ? (document.getElementById(`pub-recherche-${id}`)?.value ?? pub.recherche ?? "")
+        : (document.getElementById(`pub-refuse-${id}`)?.value ?? pub.refuse ?? "");
+
+      const cleanVal = String(inputVal || "").trim();
+      if (!cleanVal) {
+        feedbackById[id] = fieldKind === "recherche"
+          ? "Aucune donnée publique « Recherche » à copier."
+          : "Aucune donnée publique « Refus » à copier.";
+        renderEditeurs();
+        return;
+      }
+
+      if (fieldKind === "recherche") {
+        target.recherche_connue = appendToField(target.recherche_connue, cleanVal);
+      } else {
+        target.refuse = appendToField(target.refuse, cleanVal);
+      }
+
+      try {
+        await publishEntity(target);
+        feedbackById[id] = fieldKind === "recherche"
+          ? "Copié dans « Nos critères — Recherche » et publié."
+          : "Copié dans « Nos critères — Refus » et publié.";
+        renderEditeurs();
+      } catch (e) {
+        feedbackById[id] = "Erreur publication : " + e.message;
+        renderEditeurs();
+      }
     }
 
     function toggleEdit(id) {
@@ -886,8 +1032,9 @@
         if (fExp && !item.cibles.expert) return false;
 
         if (!q) return true;
+        const pub = item.donnees_publiques || {};
         const commentsText = (item.commentaires_dates || []).map((c) => `${c.date} ${c.texte}`).join(" ");
-        const hay = `${item.nom} ${item.recherche_connue} ${item.refuse} ${commentsText} ${(item.emails || []).join(" ")} ${(item.liens || []).join(" ")}`.toLowerCase();
+        const hay = `${item.nom} ${pub.recherche || ""} ${pub.refuse || ""} ${pub.source || ""} ${item.recherche_connue} ${item.refuse} ${commentsText} ${(item.emails || []).join(" ")} ${(item.liens || []).join(" ")}`.toLowerCase();
         return hay.includes(q);
       });
 
@@ -907,6 +1054,59 @@
           item.cibles.initie ? `<span class="badge c-initie">Initié</span>` : "",
           item.cibles.expert ? `<span class="badge c-expert">Expert</span>` : ""
         ].join("");
+
+        const pub = item.donnees_publiques || { recherche: "", refuse: "", source: "", maj: "" };
+        const isEditingPublic = isAdmin && editingPublicIds.has(item.id);
+
+        const publicBoxHTML = `
+          <div class="box-public">
+            <div class="row" style="justify-content: space-between;">
+              <div>
+                <span class="badge pub">DONNÉES PUBLIQUES (INTERNET)</span>
+                ${pub.maj ? `<span class="muted" style="font-size:0.78rem;">MAJ : ${escapeHTML(pub.maj)}</span>` : `<span class="muted" style="font-size:0.78rem;">Non renseigné</span>`}
+              </div>
+              ${isAdmin ? `
+                <button type="button" class="secondary small" onclick="togglePublicEdit('${escapeHTML(item.id)}')">
+                  ${isEditingPublic ? "Fermer" : "Mettre à jour"}
+                </button>
+              ` : ""}
+            </div>
+
+            ${!isEditingPublic ? `
+              <div style="margin-top:8px; font-size:0.88rem;">
+                <strong>Recherche (Internet) :</strong> ${pub.recherche ? escapeHTML(pub.recherche) : `<span class="muted">Non renseigné</span>`}
+              </div>
+              ${pub.refuse ? `
+                <div class="box-refuse" style="margin-top:6px;">
+                  <strong>Refus (Internet) :</strong> ${escapeHTML(pub.refuse)}
+                </div>
+              ` : `<div class="muted" style="font-size:0.82rem; margin-top:4px;">Refus (Internet) : non renseigné</div>`}
+              ${pub.source ? `
+                <div class="muted" style="font-size:0.78rem; margin-top:6px;">
+                  <strong>Source :</strong> ${escapeHTML(pub.source)}
+                </div>
+              ` : ""}
+              ${isAdmin && (pub.recherche || pub.refuse) ? `
+                <div class="row" style="margin-top:8px;">
+                  ${pub.recherche ? `<button type="button" class="secondary small" onclick="transferPublicToOwn('${escapeHTML(item.id)}', 'recherche')">+ Copier Recherche vers Nos critères</button>` : ""}
+                  ${pub.refuse ? `<button type="button" class="secondary small" onclick="transferPublicToOwn('${escapeHTML(item.id)}', 'refuse')">+ Copier Refus vers Nos critères</button>` : ""}
+                </div>
+              ` : ""}
+            ` : `
+              <label>Recherche revendiquée (Internet)</label>
+              <textarea id="pub-recherche-${escapeHTML(item.id)}" rows="2" placeholder="Ce que l'éditeur indique rechercher sur son site ou en ligne...">${escapeHTML(pub.recherche)}</textarea>
+              <label>Refus revendiqués (Internet)</label>
+              <textarea id="pub-refuse-${escapeHTML(item.id)}" rows="2" placeholder="Ce que l'éditeur indique refuser ou ne pas éditer...">${escapeHTML(pub.refuse)}</textarea>
+              <label>Source / Lien public (optionnel)</label>
+              <input id="pub-source-${escapeHTML(item.id)}" type="text" value="${escapeHTML(pub.source)}" placeholder="Ex. Page soumission site officiel, BGG..." />
+              <div class="row" style="margin-top:10px;">
+                <button type="button" onclick="savePublicData('${escapeHTML(item.id)}')">Enregistrer Données publiques</button>
+                <button type="button" class="secondary small" onclick="transferPublicToOwn('${escapeHTML(item.id)}', 'recherche')">Vers Nos Recherches</button>
+                <button type="button" class="secondary small" onclick="transferPublicToOwn('${escapeHTML(item.id)}', 'refuse')">Vers Nos Refus</button>
+              </div>
+            `}
+          </div>
+        `;
 
         const mailsList = (item.emails || []).filter(Boolean);
         const liensList = (item.liens || []).filter(Boolean);
@@ -937,7 +1137,7 @@
         const isEditing = isAdmin && editingIds.has(item.id);
         const editFormHTML = isEditing ? `
           <div class="edit-box">
-            <strong>Modifier la structure</strong>
+            <strong>Modifier la fiche & Nos critères</strong>
             <label>Nom</label>
             <input id="edit-nom-${escapeHTML(item.id)}" type="text" value="${escapeHTML(item.nom)}" />
             <label>Drapeau</label>
@@ -951,9 +1151,9 @@
               <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="edit-c-ini-${escapeHTML(item.id)}" style="width:auto;" ${item.cibles.initie ? "checked" : ""} /> Initié</label>
               <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="edit-c-exp-${escapeHTML(item.id)}" style="width:auto;" ${item.cibles.expert ? "checked" : ""} /> Expert</label>
             </div>
-            <label>Recherche / Ligne éditoriale</label>
+            <label>Recherche / Ligne éditoriale (Nos critères)</label>
             <textarea id="edit-recherche-${escapeHTML(item.id)}" rows="2">${escapeHTML(item.recherche_connue)}</textarea>
-            <label>Refuse / Interdit</label>
+            <label>Refuse / Interdit (Nos critères)</label>
             <textarea id="edit-refuse-${escapeHTML(item.id)}" rows="2">${escapeHTML(item.refuse)}</textarea>
             <label>Mails (séparés par des virgules)</label>
             <input id="edit-emails-${escapeHTML(item.id)}" type="text" value="${escapeHTML(mailsList.join(", "))}" />
@@ -970,6 +1170,32 @@
             </div>
           </div>
         ` : "";
+
+        const ownBoxHTML = `
+          <div class="box-own">
+            <span class="badge ok">NOS CRITÈRES (BASE / TERRAIN)</span>
+            <div class="box-search">
+              <strong>Recherche / Ligne éditoriale :</strong> ${item.recherche_connue ? escapeHTML(item.recherche_connue) : `<span class="muted">Non renseigné</span>`}
+            </div>
+
+            ${item.refuse ? `
+              <div class="box-refuse">
+                <strong>Refuse / Interdit :</strong> ${escapeHTML(item.refuse)}
+              </div>
+            ` : `<div class="muted" style="font-size:0.82rem; margin-top:6px;">Refuse / Interdit : non renseigné</div>`}
+
+            <div class="box-comments">
+              <strong style="color:#fde68a;">Commentaires</strong>
+              ${commentsHTML || `<div class="muted" style="font-size:0.8rem; margin-top:4px;">Aucun commentaire enregistré.</div>`}
+              ${isAdmin ? `
+                <div style="margin-top:8px;">
+                  <input id="comment-input-${escapeHTML(item.id)}" type="text" placeholder="Ajouter un commentaire daté..." onkeydown="if(event.key==='Enter'){addDatedComment('${escapeHTML(item.id)}');}" />
+                  <button class="warn-btn small" style="margin-top:6px;" onclick="addDatedComment('${escapeHTML(item.id)}')">+ Ajouter commentaire daté</button>
+                </div>
+              ` : ""}
+            </div>
+          </div>
+        `;
 
         const msg = feedbackById[item.id]
           ? `<div class="${feedbackById[item.id].startsWith("Erreur") ? "err-msg" : "toast-msg"}">${escapeHTML(feedbackById[item.id])}</div>`
@@ -988,15 +1214,8 @@
           </div>
           <div style="margin:4px 0;">${rolesBadges} ${ciblesBadges}</div>
 
-          <div class="box-search">
-            <strong>Recherche / Ligne éditoriale :</strong> ${item.recherche_connue ? escapeHTML(item.recherche_connue) : `<span class="muted">Non renseigné</span>`}
-          </div>
-
-          ${item.refuse ? `
-            <div class="box-refuse">
-              <strong>Refuse / Interdit :</strong> ${escapeHTML(item.refuse)}
-            </div>
-          ` : ""}
+          ${publicBoxHTML}
+          ${ownBoxHTML}
 
           <div class="box-contacts">
             <strong>Contact & Suivi</strong>
@@ -1004,17 +1223,6 @@
             <div class="muted" style="margin-top:6px;">
               Dernier catalogue : <strong>${escapeHTML(item.dernier_catalogue)}</strong> • Clic lien : <strong>${item.clique_lien ? "Oui" : "Non"}</strong>
             </div>
-          </div>
-
-          <div class="box-comments">
-            <strong style="color:#fde68a;">Commentaires</strong>
-            ${commentsHTML || `<div class="muted" style="font-size:0.8rem; margin-top:4px;">Aucun commentaire enregistré.</div>`}
-            ${isAdmin ? `
-              <div style="margin-top:8px;">
-                <input id="comment-input-${escapeHTML(item.id)}" type="text" placeholder="Ajouter un commentaire daté..." onkeydown="if(event.key==='Enter'){addDatedComment('${escapeHTML(item.id)}');}" />
-                <button class="warn-btn small" style="margin-top:6px;" onclick="addDatedComment('${escapeHTML(item.id)}')">+ Ajouter commentaire daté</button>
-              </div>
-            ` : ""}
           </div>
 
           ${editFormHTML}
@@ -1036,7 +1244,10 @@
       const splitPattern = /[\/|,;•\n]+/;
 
       state.forEach((item) => {
+        const pub = item.donnees_publiques || {};
         const sources = [
+          String(pub.recherche || ""),
+          String(pub.refuse || ""),
           String(item.recherche_connue || ""),
           String(item.refuse || "")
         ];
@@ -1188,9 +1399,12 @@
           const reasons = [];
           const warnings = [];
 
+          const pub = e.donnees_publiques || {};
           const commentsBlob = (e.commentaires_dates || []).map((c) => c.texte).join(" ");
-          const positiveBlob = `${e.recherche_connue} ${commentsBlob}`.toLowerCase();
-          const refuseBlob = String(e.refuse || "").toLowerCase();
+          const ownPosBlob = `${e.recherche_connue} ${commentsBlob}`.toLowerCase();
+          const pubPosBlob = String(pub.recherche || "").toLowerCase();
+          const ownRefuseBlob = String(e.refuse || "").toLowerCase();
+          const pubRefuseBlob = String(pub.refuse || "").toLowerCase();
 
           if (hasCible && e.cibles && e.cibles[cible]) {
             rawPoints += 25;
@@ -1198,29 +1412,43 @@
           }
 
           if (hasCriteria) {
-            const matchedCrit = criteriaList.filter((k) => positiveBlob.includes(k));
-            if (matchedCrit.length > 0) {
-              rawPoints += (matchedCrit.length / criteriaList.length) * 45;
-              reasons.push(`Critères base (${matchedCrit.length}/${criteriaList.length}) : ${matchedCrit.join(", ")}`);
+            const matchedOwn = criteriaList.filter((k) => ownPosBlob.includes(k));
+            const matchedPub = criteriaList.filter((k) => pubPosBlob.includes(k));
+            const unionMatched = Array.from(new Set([...matchedOwn, ...matchedPub]));
+            if (unionMatched.length > 0) {
+              rawPoints += (unionMatched.length / criteriaList.length) * 45;
+              const tags = unionMatched.map((k) => {
+                const src = [];
+                if (matchedPub.includes(k)) src.push("Internet");
+                if (matchedOwn.includes(k)) src.push("Nous");
+                return `${k} (${src.join("+")})`;
+              });
+              reasons.push(`Critères base (${unionMatched.length}/${criteriaList.length}) : ${tags.join(", ")}`);
             }
-            const refusedCrit = criteriaList.filter((k) => refuseBlob.includes(k));
-            if (refusedCrit.length > 0) {
+            const refusedOwn = criteriaList.filter((k) => ownRefuseBlob.includes(k));
+            const refusedPub = criteriaList.filter((k) => pubRefuseBlob.includes(k));
+            const unionRefused = Array.from(new Set([...refusedOwn, ...refusedPub]));
+            if (unionRefused.length > 0) {
               rawPoints -= 40;
-              warnings.push(`Refus : ${refusedCrit.join(", ")}`);
+              warnings.push(`Refus : ${unionRefused.join(", ")}`);
             }
           }
 
           if (hasPitch) {
-            const matchedPitch = pitchWords.filter((w) => positiveBlob.includes(w));
-            if (matchedPitch.length > 0) {
-              const ratio = Math.min(1, matchedPitch.length / Math.min(pitchWords.length, 6));
+            const matchedOwnPitch = pitchWords.filter((w) => ownPosBlob.includes(w));
+            const matchedPubPitch = pitchWords.filter((w) => pubPosBlob.includes(w));
+            const unionPitch = Array.from(new Set([...matchedOwnPitch, ...matchedPubPitch]));
+            if (unionPitch.length > 0) {
+              const ratio = Math.min(1, unionPitch.length / Math.min(pitchWords.length, 6));
               rawPoints += ratio * 30;
-              reasons.push(`Pitch : ${matchedPitch.slice(0, 6).join(", ")}`);
+              reasons.push(`Pitch : ${unionPitch.slice(0, 6).join(", ")}`);
             }
-            const refusedPitch = pitchWords.filter((w) => refuseBlob.includes(w));
-            if (refusedPitch.length > 0) {
+            const refusedOwnPitch = pitchWords.filter((w) => ownRefuseBlob.includes(w));
+            const refusedPubPitch = pitchWords.filter((w) => pubRefuseBlob.includes(w));
+            const unionRefPitch = Array.from(new Set([...refusedOwnPitch, ...refusedPubPitch]));
+            if (unionRefPitch.length > 0) {
               rawPoints -= 30;
-              warnings.push(`Mot du pitch dans refus : ${refusedPitch.join(", ")}`);
+              warnings.push(`Mot du pitch dans refus : ${unionRefPitch.join(", ")}`);
             }
           }
 
@@ -1253,20 +1481,24 @@
           </div>
           ${visible.length === 0
             ? `<p class="muted" style="margin-top:8px;">Aucun éditeur n'atteint ${seuil} % avec ces critères. Baisse le curseur (ex. 50 % ou 25 %) ou ajuste ton pitch/critères.</p>`
-            : visible.map((s) => `
-              <div style="border-top:1px solid var(--border); padding-top:10px; margin-top:10px;">
-                <div class="row" style="justify-content: space-between;">
-                  <strong>${escapeHTML(s.entity.nom)}</strong>
-                  <span class="badge ${s.score >= 75 ? "ok" : s.score >= 50 ? "terrain" : ""}">${s.score} %</span>
+            : visible.map((s) => {
+              const pub = s.entity.donnees_publiques || {};
+              return `
+                <div style="border-top:1px solid var(--border); padding-top:10px; margin-top:10px;">
+                  <div class="row" style="justify-content: space-between;">
+                    <strong>${escapeHTML(s.entity.nom)}</strong>
+                    <span class="badge ${s.score >= 75 ? "ok" : s.score >= 50 ? "terrain" : ""}">${s.score} %</span>
+                  </div>
+                  <div class="muted" style="margin-top:4px;">${escapeHTML(s.reasons.join(" • ") || "Correspondance partielle")}</div>
+                  ${s.warnings.length > 0 ? `<div class="err-msg" style="margin-top:4px;">${escapeHTML(s.warnings.join(" • "))}</div>` : ""}
+                  ${pub.recherche ? `<div style="font-size:0.84rem; margin-top:4px;"><strong>Recherche (Internet) :</strong> ${escapeHTML(pub.recherche)}</div>` : ""}
+                  ${s.entity.recherche_connue ? `<div style="font-size:0.84rem; margin-top:4px;"><strong>Recherche (Nous) :</strong> ${escapeHTML(s.entity.recherche_connue)}</div>` : ""}
+                  ${s.entity.commentaires_dates && s.entity.commentaires_dates.length > 0
+                    ? `<div class="muted" style="font-size:0.8rem; margin-top:4px;"><strong>Dernier commentaire :</strong> ${escapeHTML(s.entity.commentaires_dates[s.entity.commentaires_dates.length - 1].texte)}</div>`
+                    : ""}
                 </div>
-                <div class="muted" style="margin-top:4px;">${escapeHTML(s.reasons.join(" • ") || "Correspondance partielle")}</div>
-                ${s.warnings.length > 0 ? `<div class="err-msg" style="margin-top:4px;">${escapeHTML(s.warnings.join(" • "))}</div>` : ""}
-                ${s.entity.recherche_connue ? `<div style="font-size:0.84rem; margin-top:4px;"><strong>Recherche :</strong> ${escapeHTML(s.entity.recherche_connue)}</div>` : ""}
-                ${s.entity.commentaires_dates && s.entity.commentaires_dates.length > 0
-                  ? `<div class="muted" style="font-size:0.8rem; margin-top:4px;"><strong>Dernier commentaire :</strong> ${escapeHTML(s.entity.commentaires_dates[s.entity.commentaires_dates.length - 1].texte)}</div>`
-                  : ""}
-              </div>
-            `).join("")}
+              `;
+            }).join("")}
         </div>
       `;
     }
