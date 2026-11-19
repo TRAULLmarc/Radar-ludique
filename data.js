@@ -1,4 +1,4 @@
-export const editeurs = [
+const editeurs = [
   {
     "nom": "🇫🇷 192pack",
     "nom_brut": "192pack",
