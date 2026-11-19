@@ -1,7557 +1,4159 @@
-// Vampirisation unique issue de 'Suivie planification TRAULL (1).xlsx' (colonnes A à S uniquement, colonnes T+ ignorées)
-const INITIAL_ENTITIES = [
+export const editeurs = [
   {
-    "id": "ent_001",
-    "nom": "192pack",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeux politiquement incorrects : cyberpunk / onirique / dystopiques",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 192pack",
+    "nom_brut": "192pack",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "jeux politiquement incorrects : cyberpunk / onirique / dystopiques",
+    "refuse": "",
     "commentaire": "éditeur underground",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 2,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_002",
-    "nom": "2tomatoesgames",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Prise en main facile / mécanique avancée",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇪🇸 2tomatoesgames",
+    "nom_brut": "2tomatoesgames",
+    "drapeau": "🇪🇸",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [
+      "https://forms.zohopublic.eu/2tomatoesgames/form/ContactaconnosotrosColaboradores/formperma/s3iGWqg9Y6WrlStkhyzpAfJq6LiGxrJbpUwR78Coi8M?zf_lang=fr"
+    ],
+    "recherche": "Prise en main facile / mécanique avancée",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 3,
-        "mail": "https://forms.zohopublic.eu/2tomatoesgames/form/ContactaconnosotrosColaboradores/formperma/s3iGWqg9Y6WrlStkhyzpAfJq6LiGxrJbpUwR78Coi8M?zf_lang=fr",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_003",
-    "nom": "404onboard",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
+    "nom": "🇫🇷 404onboard",
+    "nom_brut": "404onboard",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "pop culture / culture geek",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 4,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_004",
-    "nom": "A.zuga games",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "éducatif / ecoresponsable",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 A.zuga games",
+    "nom_brut": "A.zuga games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "éducatif / ecoresponsable",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 5,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_005",
-    "nom": "A&G éditions",
-    "roles": {
-      "editeur": true,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeux à message / instructifs / ambiance / porteur de valeurs",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 A&G éditions",
+    "nom_brut": "A&G éditions",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "auto-edition"
+    ],
+    "cibles": [
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "jeux à message / instructifs / ambiance / porteur de valeurs",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 6,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_006",
-    "nom": "Abeilles édition",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "éducatifs : surtout lié à santé publique / seoucrisme",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
+    "nom": "🇫🇷 Abeilles édition",
+    "nom_brut": "Abeilles édition",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "éducatifs : surtout lié à santé publique / secourisme",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 7,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_007",
-    "nom": "Allplay",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Petits formats stratégiques et boîtes ultra-compactes aux mécaniques très épurées.",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
+    "nom": "🇺🇸 Allplay",
+    "nom_brut": "Allplay",
+    "drapeau": "🇺🇸",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Petits formats stratégiques et boîtes ultra-compactes aux mécaniques très épurées.",
+    "refuse": "",
     "commentaire": "éditeur US",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 8,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_008",
-    "nom": "Amazing Game",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "moins de 30 min, règles accessibles / thème fort / forte interaction // NON : jeu abstrait / élimination de joueur",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 9,
-        "mail": "cedric@amazinggame.fr",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": "Address Morte"
-      }
+    "nom": "🇫🇷 Amazing Game",
+    "nom_brut": "Amazing Game",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
     ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "cibles": [
+      "famille"
+    ],
+    "emails": [
+      "cedric@amazinggame.fr"
+    ],
+    "liens": [],
+    "recherche": "moins de 30 min, règles accessibles / thème fort / forte interaction",
+    "refuse": "jeu abstrait / élimination de joueur",
+    "commentaire": "adresse mail morte",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
   },
   {
-    "id": "ent_009",
-    "nom": "Ankamas boardgames",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
+    "nom": "🇫🇷 Ankamas boardgames",
+    "nom_brut": "Ankamas boardgames",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille"
+    ],
+    "emails": [
+      "contact-edition@ankama.com"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "filiale d'Ankama animation...",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 10,
-        "mail": "contact-edition@ankama.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": true,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": true
   },
   {
-    "id": "ent_010",
-    "nom": "Argyxgames",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeux immersifs : enquête / réalité alternée",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Argyxgames",
+    "nom_brut": "Argyxgames",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "jeux immersifs : enquête / réalité alternée",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 11,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_011",
-    "nom": "Arkada",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
+    "nom": "🇫🇷 Arkada",
+    "nom_brut": "Arkada",
+    "drapeau": "🇫🇷",
+    "roles": [],
+    "cibles": [],
+    "emails": [
+      "contact@arkada.fr"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 12,
-        "mail": "contact@arkada.fr",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": true,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": true
   },
   {
-    "id": "ent_012",
-    "nom": "Arkham society",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "NON : jeu abstait ou de dextérité ou en duel",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
+    "nom": "🇫🇷 Arkham society",
+    "nom_brut": "Arkham society",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "jeu abstait ou de dextérité ou en duel",
+    "commentaire": "pas de démarchage commercial",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇧🇪 Art of games",
+    "nom_brut": "Art of games",
+    "drapeau": "🇧🇪",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "éducatifs",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "à Marc : \"pas de démarchage commercial\"",
-    "contacts": [
-      {
-        "excel_row": 13,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_013",
-    "nom": "Art of games",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "éducatifs",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Arthory",
+    "nom_brut": "Arthory",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "auto-edition"
+    ],
+    "cibles": [
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [
+      "https://www.arthory.fr/contact"
+    ],
+    "recherche": "Party-games -> jeux haut en couleur",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 14,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_014",
-    "nom": "Arthory",
-    "roles": {
-      "editeur": true,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Party-games  -> jeux haut en couleur",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Asmodee édition",
+    "nom_brut": "Asmodee édition",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "monsieur.francois@lab4games.com"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "thématique doublon",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 15,
-        "mail": "https://www.arthory.fr/contact",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_015",
-    "nom": "Asmodee édition",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "NON : thématique doublon",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Aspic games",
+    "nom_brut": "Aspic games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille"
+    ],
+    "emails": [],
+    "liens": [
+      "aspicgames.fr/index.php/contact/"
+    ],
+    "recherche": "jeux colorés / univers riche / création gamme 5min, Forte interaction sans élimination / 30-40min / peu de cartesn //",
+    "refuse": "Tour par tour / élimination de joueur",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 16,
-        "mail": "monsieur.francois@lab4games.com",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_016",
-    "nom": "Aspic games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeux colorés / univers riche / création gamme 5min, Forte interaction sans élimination / 30-40min / peu de cartesn // NON : Tour par tour / élimination de joueur",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
+    "nom": "🇫🇷 Asyncron games",
+    "nom_brut": "Asyncron games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 17,
-        "mail": "aspicgames.fr/index.php/contact/",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_017",
-    "nom": "Asyncron games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 ATM gaming",
+    "nom_brut": "ATM gaming",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "ambiance (JUDUKU)",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 18,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_018",
-    "nom": "Atalia jeux",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "règles épurées, twist de mécanique original",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "liquidation judiciaire",
-    "contacts": [
-      {
-        "excel_row": 19,
-        "mail": "contact@atalia-jeux.com",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": "liquidation Judiciaire"
-      }
+    "nom": "🇫🇷 Aurora",
+    "nom_brut": "Aurora",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
     ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_019",
-    "nom": "ATM gaming",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "ambiance (JUDUKU)",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 20,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
     ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_020",
-    "nom": "Aurora",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "game jeux enquête .... jeu identité caché : shadow hunter /Avalon",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 21,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_021",
-    "nom": "Auzou games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "\"cultivons l'imagination\"",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
+    "nom": "🇫🇷 Auzou games",
+    "nom_brut": "Auzou games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "\"cultivons l'imagination\"",
+    "refuse": "",
     "commentaire": "issu de auzou livres jeunesse",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 22,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_022",
-    "nom": "Awaken realms",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "nombreuses figurines",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": true
-    },
+    "nom": "🇵🇱 Awaken realms",
+    "nom_brut": "Awaken realms",
+    "drapeau": "🇵🇱",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "nombreuses figurines",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 23,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_023",
-    "nom": "Azao games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "en recherche pour gamme de petite boite",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Azao games",
+    "nom_brut": "Azao games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "info@azaogames.com"
+    ],
+    "liens": [],
+    "recherche": "en recherche pour gamme de petite boite",
+    "refuse": "",
     "commentaire": "peuvent aussi réaliser une commande de proto",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 24,
-        "mail": "info@azaogames.com",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_024",
-    "nom": "Bakakou",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeux d'ambiance",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Bakakou",
+    "nom_brut": "Bakakou",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "jeux d'ambiance",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 25,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_025",
-    "nom": "Banana smiles",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Banana smiles",
+    "nom_brut": "Banana smiles",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 26,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_026",
-    "nom": "Bankiiz éditions",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "famillial rafraichissant  // NON : jeu abstrait / jeu d'adresse / jeu de quizz",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
+    "nom": "🇫🇷 Bankiiz éditions",
+    "nom_brut": "Bankiiz éditions",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "famillial rafraichissant",
+    "refuse": "jeu abstrait / jeu d'adresse / jeu de quizz",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 27,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_027",
-    "nom": "Bayard Jeux",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "Franchise enfants (samsam/toto/petit ours brun)  \"emmener les enfants vers de nouveaux horizons\"",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
+    "nom": "🇫🇷 Bayard Jeux",
+    "nom_brut": "Bayard Jeux",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Franchise enfants (samsam/toto/petit ours brun) \"emmener les enfants vers de nouveaux horizons\"",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 28,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_028",
-    "nom": "Bioviva",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "éducatifs / épanouissement de l'enfant  //  nature - écoresponsabilité",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
+    "nom": "🇫🇷 Bioviva",
+    "nom_brut": "Bioviva",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "éducatifs / épanouissement de l'enfant // nature - écoresponsabilité",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 29,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_029",
-    "nom": "Blackrock games",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Blackrock games",
+    "nom_brut": "Blackrock games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "yoann.laurent@blackrockgames.fr"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 30,
-        "mail": "yoann.laurent@blackrockgames.fr",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_030",
-    "nom": "Blam !",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "éditeur Celestia",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Blam !",
+    "nom_brut": "Blam !",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "éditeur Celestia",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 31,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_031",
-    "nom": "Blue cocker",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Blue cocker",
+    "nom_brut": "Blue cocker",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [
+      "https://bluecocker.com/formulaire-de-contact-sourcing/"
+    ],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 32,
-        "mail": "https://bluecocker.com/formulaire-de-contact-sourcing/",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": "Erreur sur le site"
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
   },
   {
-    "id": "ent_032",
-    "nom": "Blue Orange",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "Innovant / malins / Créer du nouveau joueur // NON : 2J / jeu de souffle / Jeu à « capacité »",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
+    "nom": "🇫🇷 Blue Orange",
+    "nom_brut": "Blue Orange",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie"
+    ],
+    "emails": [
+      "anthony@blueorangegames.eu",
+      "matthieu@blueorangegames.eu",
+      "maxime@blueorangegames.eu",
+      "matthias.girardeau@blueorangegames.eu"
+    ],
+    "liens": [],
+    "recherche": "Innovant / malins / Créer du nouveau joueur",
+    "refuse": "2J / jeu de souffle / Jeu à « capacité » / NON : 2J / jeu de souffle / Jeu à « capacité »",
     "commentaire": "sont en Lorraine",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 33,
-        "mail": "anthony@blueorangegames.eu",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      },
-      {
-        "excel_row": 34,
-        "mail": "matthieu@blueorangegames.eu",
-        "mail_2": "matthias.girardeau@blueorangegames.eu",
-        "catalog_janv_26": true,
-        "check_clic": true,
-        "reponse": "a apporté retour construit sur chacun, demandé test de Floraison",
-        "probleme": ""
-      },
-      {
-        "excel_row": 35,
-        "mail": "maxime@blueorangegames.eu",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": true
   },
   {
-    "id": "ent_033",
-    "nom": "Boarddice",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "",
-    "recherche_connue": "Eurogames moyens/lourds (2-4 joueurs). Pitch vidéo (2-3 min) + version TTS recommandés.Très orienté gros jeux de gestion et d'optimisation.",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "éditeur Polonais lié Asmodée",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 36,
-        "mail": "contact@boardanddice.com | Formulaire web",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
+    "nom": "🇵🇱 Boarddice",
+    "nom_brut": "Boarddice",
+    "drapeau": "🇵🇱",
+    "roles": [
+      "editeur"
     ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "cibles": [
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "contact@boardanddice.com"
+    ],
+    "liens": [],
+    "recherche": "Eurogames moyens/lourds (2-4 joueurs). Très orienté gros jeux de gestion et d'optimisation.",
+    "refuse": "",
+    "commentaire": "éditeur Polonais lié Asmodée Pitch vidéo (2-3 min) + version TTS recommandés. / Formulaire web",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_034",
-    "nom": "Bombyx",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "cartes uniquement (pour nouvelle gamme) / 2J+                       // NON : 2J / party game",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
+    "nom": "🇫🇷 Bombyx",
+    "nom_brut": "Bombyx",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [
+      "ehascoet@studiobombyx.com",
+      "info@studiobombyx.com",
+      "tledoare@studiobombyx.com",
+      "ydroumaguet@studiobombyx.com"
+    ],
+    "liens": [],
+    "recherche": "cartes uniquement (pour nouvelle gamme) / 2J+",
+    "refuse": "2J / party game",
     "commentaire": "\"fonctionnent au coup de coeur\" pour tout type de jeu",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 37,
-        "mail": "ehascoet@studiobombyx.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      },
-      {
-        "excel_row": 38,
-        "mail": "info@studiobombyx.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      },
-      {
-        "excel_row": 39,
-        "mail": "tledoare@studiobombyx.com",
-        "mail_2": "ydroumaguet@studiobombyx.com",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
   },
   {
-    "id": "ent_035",
-    "nom": "Boom boom games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇺🇸 Boom boom games",
+    "nom_brut": "Boom boom games",
+    "drapeau": "🇺🇸",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "éditeur fliptown",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 40,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_036",
-    "nom": "Bouvier international",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "thèmes fort / règles faciles astucieuces  // NON : SEULEMENT EN AUTOEDITION",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": true,
-      "expert": false
-    },
+    "nom": "🇫🇷 Bouvier international",
+    "nom_brut": "Bouvier international",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "initie"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "thèmes fort / règles faciles astucieuces",
+    "refuse": "SEULEMENT EN AUTOEDITION",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 41,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_037",
-    "nom": "Bragelonne games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "? souvent jeux un peu naratif ?",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Bragelonne games",
+    "nom_brut": "Bragelonne games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "e.beiramar@bragelonne.games"
+    ],
+    "liens": [],
+    "recherche": "? souvent jeux un peu narratif ?",
+    "refuse": "",
     "commentaire": "issus de bragelonne édition littéraire",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 42,
-        "mail": "e.beiramar@bragelonne.games",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_038",
-    "nom": "Button shy games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "",
-    "recherche_connue": "18 cartes only",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
+    "nom": "🇺🇸 Button shy games",
+    "nom_brut": "Button shy games",
+    "drapeau": "🇺🇸",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "18 cartes only",
+    "refuse": "",
     "commentaire": "éditeur US",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 43,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_039",
-    "nom": "Buzzy games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "expérience ludique dynamique, FUN, qui bouge autour de la table",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Buzzy games",
+    "nom_brut": "Buzzy games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "wwatine@blackrockgames.fr"
+    ],
+    "liens": [],
+    "recherche": "expérience ludique dynamique, FUN, qui bouge autour de la table",
+    "refuse": "",
+    "commentaire": "Contact - BUZZY GAMES",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 BYR games",
+    "nom_brut": "BYR games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 44,
-        "mail": "wwatine@blackrockgames.fr",
-        "mail_2": "Contact - BUZZY GAMES",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_040",
-    "nom": "BYR games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 45,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
+    "nom": "🇫🇷 Capitaine meeple",
+    "nom_brut": "Capitaine meeple",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
     ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_041",
-    "nom": "Capitaine meeple",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "entreprise de \"vacances ludique\" (dont croisière)",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 46,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_042",
-    "nom": "Catch up games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Mécanique originale   // NON : jeu solo / abstrait",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Catch up games",
+    "nom_brut": "Catch up games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "clement@catchupgames.com",
+      "contact@catchupgames.com"
+    ],
+    "liens": [],
+    "recherche": "Mécanique originale",
+    "refuse": "jeu solo / abstrait",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 47,
-        "mail": "clement@catchupgames.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      },
-      {
-        "excel_row": 48,
-        "mail": "contact@catchupgames.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
   },
   {
-    "id": "ent_043",
-    "nom": "Celtic tales",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeux celtiques / bretons / tradition bretonne : jeux locaux et légendes locales",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Celtic tales",
+    "nom_brut": "Celtic tales",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "jeux celtiques / bretons / tradition bretonne : jeux locaux et légendes locales",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 49,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_044",
-    "nom": "Chèvre édition",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Chèvre édition",
+    "nom_brut": "Chèvre édition",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "écoresponsable",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 50,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_045",
-    "nom": "Chouic",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "créateur d'appli mobile / jeux d'ambiance",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Chouic",
+    "nom_brut": "Chouic",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "créateur d'appli mobile / jeux d'ambiance",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 51,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_046",
-    "nom": "Cocktailgames",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Jeux ambiance en boite metallique, rapide à jouer",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
+    "nom": "🇫🇷 Cocktailgames",
+    "nom_brut": "Cocktailgames",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie"
+    ],
+    "emails": [
+      "info@cocktailgames.com",
+      "mike@cocktailgames.com"
+    ],
+    "liens": [
+      "Site"
+    ],
+    "recherche": "Jeux ambiance en boite metallique, rapide à jouer",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 52,
-        "mail": "info@cocktailgames.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "pas intéressé",
-        "probleme": ""
-      },
-      {
-        "excel_row": 53,
-        "mail": "mike@cocktailgames.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "pas intéressé",
-        "probleme": ""
-      },
-      {
-        "excel_row": 54,
-        "mail": "Site",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "pas intéressé",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
   },
   {
-    "id": "ent_047",
-    "nom": "Collective adventure",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "\"impacter le monde social et environnemental\"",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Collective adventure",
+    "nom_brut": "Collective adventure",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "\"impacter le monde social et environnemental\"",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 55,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_048",
-    "nom": "Comoludo",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Jeux abstrait / stratégie sans hasard : de 25min max               // NON : trop d’informations / variante de jeu d’échecs",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Cosmoludo",
+    "nom_brut": "Cosmoludo",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "info@cosmoludo.com",
+      "cosmoludo@outlook.com"
+    ],
+    "liens": [],
+    "recherche": "Jeux abstrait / stratégie sans hasard : de 25min max",
+    "refuse": "trop d’informations / variante de jeu d’échecs",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 56,
-        "mail": "info@cosmoludo.com",
-        "mail_2": "cosmoludo@outlook.com",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
   },
   {
-    "id": "ent_049",
-    "nom": "CTRL zèbre édition",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 CTRL zèbre édition",
+    "nom_brut": "CTRL zèbre édition",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 57,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_050",
-    "nom": "Czech Games Edition",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "",
-    "recherche_connue": "Eurogames 60-180 min avec twists originaux, party games malins. Formulaire dédié + vidéo en anglais (pas de jeux < 20 min).",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "éditeur république Tchèque",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 58,
-        "mail": "support@czechgames.com",
-        "mail_2": "marketing@czechgames.com",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
+    "nom": "🇨🇿 Czech Games Edition",
+    "nom_brut": "Czech Games Edition",
+    "drapeau": "🇨🇿",
+    "roles": [
+      "editeur"
     ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "cibles": [
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "support@czechgames.com",
+      "marketing@czechgames.com"
+    ],
+    "liens": [],
+    "recherche": "Eurogames 60-180 min avec twists originaux, party games malins.",
+    "refuse": "(pas de jeux < 20 min).",
+    "commentaire": "éditeur république Tchèque. Formulaire dédié + vidéo en anglais",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_051",
-    "nom": "Darucat",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Darucat",
+    "nom_brut": "Darucat",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 59,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_052",
-    "nom": "Dayx of wonder",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
+    "nom": "🇫🇷 Dayx of wonder",
+    "nom_brut": "Dayx of wonder",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "lié à asmodée",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 60,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_053",
-    "nom": "De Breville éditions",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeu divertissants et humoristique",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 De Breville éditions",
+    "nom_brut": "De Breville éditions",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "jeu divertissants et humoristique",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 61,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_054",
-    "nom": "Debacle jeu",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "originaux / frenchy / accessible",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Debacle jeu",
+    "nom_brut": "Debacle jeu",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "marianne@ludistri.fr"
+    ],
+    "liens": [],
+    "recherche": "originaux / frenchy / accessible",
+    "refuse": "",
+    "commentaire": "Contact - Débâcle Jeux (debacle.fr)",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇪🇸 Devir",
+    "nom_brut": "Devir",
+    "drapeau": "🇪🇸",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Jeux de cartes tactiques (Gamme Pocket), Eurogames 30-60 min.",
+    "refuse": "",
+    "commentaire": "éditeur Espagnol Enfant et Expert rarement. Sell sheet + vidéo requises.",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Discovery",
+    "nom_brut": "Discovery",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [],
+    "emails": [],
+    "liens": [],
+    "recherche": "jeux narratif et immercif",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 62,
-        "mail": "marianne@ludistri.fr",
-        "mail_2": "Contact - Débâcle Jeux (debacle.fr)",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_055",
-    "nom": "Devir",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "",
-    "recherche_connue": "Jeux de cartes tactiques (Gamme Pocket), Eurogames 30-60 min. Sell sheet + vidéo requises.",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "éditeur Espagnol   Enfant et Expert rarement",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 63,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
+    "nom": "🇫🇷 Disto studio",
+    "nom_brut": "Disto studio",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
     ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_056",
-    "nom": "Discovery",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeux narratif et immercif",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "contact@distostudio.fr"
+    ],
+    "liens": [],
+    "recherche": "jeux distordus et insolite",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 64,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
   },
   {
-    "id": "ent_057",
-    "nom": "Disto studio",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeux distordus et insolite",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Djeco",
+    "nom_brut": "Djeco",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 65,
-        "mail": "contact@distostudio.fr",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_058",
-    "nom": "Djeco",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
+    "nom": "🇫🇷 Don't panic game",
+    "nom_brut": "Don't panic game",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "communication@dontpanicgames.com"
+    ],
+    "liens": [],
+    "recherche": "Culture de l'imaginaire",
+    "refuse": "",
+    "commentaire": "LOCALISATION",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Double combo games",
+    "nom_brut": "Double combo games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Secret / eternité",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 66,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_059",
-    "nom": "Don't panic game",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Culture de l'imaginaire //  LOCALISATION",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 67,
-        "mail": "communication@dontpanicgames.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
+    "nom": "🇫🇷 Dujardin",
+    "nom_brut": "Dujardin",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
     ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_060",
-    "nom": "Double combo games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Secret / eternité",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 68,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
     ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_061",
-    "nom": "Dujardin",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "appartient à TF1",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 69,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_062",
-    "nom": "Dungeon factory",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "impression 3D",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 70,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_063",
-    "nom": "Edge entertainement",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "imaginaire / partage / rêve",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 71,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_064",
-    "nom": "éditions Spielwiese",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 72,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_065",
-    "nom": "EGPX",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 73,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_066",
-    "nom": "entre 2 chainses",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 74,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_067",
-    "nom": "evolugame",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Jeux de cartes",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 75,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_068",
-    "nom": "Exploding Kitten",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "",
-    "recherche_connue": "Party games très décalés, mécaniques simples, cartes à effets, humour immédiat. Axé sur le grand public, les règles lues en 2 min et le fun. Sournoiserie est reine",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "éditeur US Rarement enfant",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 76,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_069",
-    "nom": "Explor8",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "éditeur  fédération   ainsi que jeu de pli",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 77,
-        "mail": "contact@explor8.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_070",
-    "nom": "Faire play édition",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 78,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_071",
-    "nom": "Fantastic lombric",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 79,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_072",
-    "nom": "Fée mumuz",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 80,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_073",
-    "nom": "Fentasy games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 81,
-        "mail": "florian@fentasy-games.com",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_074",
-    "nom": "Fernand sathan",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Créer exclusivement pour éditer \"JoRéTaPo\" :          \"pervertir les generations a venir\"",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 82,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_075",
-    "nom": "Fish in the sea",
-    "roles": {
-      "editeur": true,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 83,
-        "mail": "contact@editions.fish",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_076",
-    "nom": "Flatlined Games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 84,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_077",
-    "nom": "Funforge",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 85,
-        "mail": "claude@funforge.fr",
-        "mail_2": "contact@funforge.zohosupport.com",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_078",
-    "nom": "Funnyfox",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 86,
-        "mail": "games@funnyfox.fr",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_079",
-    "nom": "Game flow",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Livres jeux",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 87,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_080",
-    "nom": "Game stud",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 88,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_081",
-    "nom": "Geek Attitude Games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Jeux à thème ; mécanique décalée",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 89,
-        "mail": "etienne@geekattitudegames.com",
-        "mail_2": "Contact | Geek Attitude Games",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_082",
-    "nom": "Geekoviz",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 90,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_083",
-    "nom": "Ghost dog games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "Gamme Jeux dans une boite 110*65*25 (vente 10€ max)         // NON : jeu abstrait",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 91,
-        "mail": "antoinedavrou@ghostdoggames.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": "Address Morte"
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_084",
-    "nom": "Gigamic",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "règles simples (Akropolis MAX) / mécanique innovant / matériel valorisant, <1h de jeu       // NON : agression entre les joueurs / bluf / mise / culture",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 92,
-        "mail": "project@gigamic.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": true,
-        "reponse": "",
-        "probleme": "Address plus utilisée : plutôt contacté Alain"
-      },
-      {
-        "excel_row": 93,
-        "mail": "alain@gigamic.com",
-        "mail_2": "caroline@gigamic.com",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_085",
-    "nom": "Goliath",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 94,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_086",
-    "nom": "GR édition",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 95,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_087",
-    "nom": "Green games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 96,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_088",
-    "nom": "Grrre games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 97,
-        "mail": "contact.grrregames@gmail.com",
-        "mail_2": "grrregames@gmail.com",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "pas intéressé",
-        "probleme": "Négatif"
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_089",
-    "nom": "HABA",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 98,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_090",
-    "nom": "Hans im gluck",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 99,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_091",
-    "nom": "Haumea Games",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 100,
-        "mail": "thomas@haumeagames.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_092",
-    "nom": "Hécate éditions",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "JDR et animation",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 101,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_093",
-    "nom": "Helvetiq",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Petits jeux de cartes (Gamme Pocket), thèmes originaux/nature, twist mécanique. Formulaire + vidéo.",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "éditeur suisse",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 102,
-        "mail": "creative@helvetiq.ch",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_094",
-    "nom": "Horrible Guild",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "",
-    "recherche_connue": "Jeux à matériel/concept fort (gimmick original, billes, découpes), familiaux+ à initiés.",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "éditeur Italien",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 103,
-        "mail": "press@horribleguild.com",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_095",
-    "nom": "Hot Macacos",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "innovant / stimulant",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 104,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_096",
-    "nom": "Iello",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "Cherche ++ pour gamme de jeux de dé                               sinon tout type de jeu  // SAUF : petit jeu 2j",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "sont en Lorraine",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 105,
-        "mail": "gautier.althaus@iello.fr",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "pas intéressé",
-        "probleme": "Négatif"
-      },
-      {
-        "excel_row": 106,
-        "mail": "adrien.fenouillet@iello.fr",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_097",
-    "nom": "Igiari",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 107,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_098",
-    "nom": "inPatience",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "spécialisé en jeu SOLO ou COOP.",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 108,
-        "mail": "info@inpatience.com",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_099",
-    "nom": "InstaPlay",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "intermédiaire : propose aux auteurs ayant bon jeu de trouver le bon éditeur",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 109,
-        "mail": "gaetan@instaplay.fr",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_100",
-    "nom": "Intrafin",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "surtout LOCALISATION.... pourrait changer",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 110,
-        "mail": "jurgen@intrafin.be",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_101",
-    "nom": "IPA",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "Tiket 991824",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 111,
-        "mail": "Aurora, Kolossal Games, Grail Games, Maple Games, Matagot Studio, Moon Gate Design",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "pas intéressé",
-        "probleme": "Négatif"
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_102",
-    "nom": "J-lec",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeux familiaux",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 112,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_103",
-    "nom": "Jester games",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeux de stratégie intermediaire : beaux et profond",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 113,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_104",
-    "nom": "Jeunoh",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Ludo-pédagogique : cible les enfants \"dys\"",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 114,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_105",
-    "nom": "Jeux opla",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "dev et éco-fabrication française",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 115,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_106",
-    "nom": "Jocus",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 116,
-        "mail": "nicolas@jocus.fr",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_107",
-    "nom": "Joodini éditions",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "fonctionnent au coup de coeur",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 117,
-        "mail": "auteur@joodini.com",
-        "mail_2": "Contact – JOODINI Éditions",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_108",
-    "nom": "JyDe Games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 118,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_109",
-    "nom": "KYF édition",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 119,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_110",
-    "nom": "La boite de jeu",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 120,
-        "mail": "contact@laboitedejeu.fr",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "pas intéressé ??",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_111",
-    "nom": "Lab4games",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 121,
-        "mail": "Days of Wonder, Libellud, Next Move, Repos Production et Space Cowboys",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      },
-      {
-        "excel_row": 122,
-        "mail": "monsieur.francois@lab4games.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": "Address Morte"
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_112",
-    "nom": "Laboludic",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Jeux enfant que les parents aiment rejouer  // NON : jeu personnalisé",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "écoresponsable",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 123,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_113",
-    "nom": "Les jeux de société De Nico",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "fabrication exclusivement française",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 124,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_114",
-    "nom": "Les jeux du lac",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 125,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_115",
-    "nom": "Les jeux du Mouss",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeux nomades / jeux d'adresse",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "ecoresponsable français",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 126,
-        "mail": "contact@jeuxdumouss.com",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_116",
-    "nom": "Libellud",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 127,
-        "mail": "voir avec asmode",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_117",
-    "nom": "Loki",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 128,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_118",
-    "nom": "Lord racoon games",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 129,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_119",
-    "nom": "Lucky duck kids",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 130,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_120",
-    "nom": "Luckyduckgames",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Cherche des jeux à 40€",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "TOUT DOIT ÊTRE EN ANGLAIS",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 131,
-        "mail": "info@luckyduckgames.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": true,
-        "reponse": "pas intéressé",
-        "probleme": ""
-      },
-      {
-        "excel_row": 132,
-        "mail": "marek.cholostiakow@luckyduckgames.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": true,
-        "reponse": "pas intéressé",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_121",
-    "nom": "Ludistri",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 133,
-        "mail": "cyril@ludistri.f",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": true,
-        "reponse": "",
-        "probleme": "Transférer"
-      },
-      {
-        "excel_row": 134,
-        "mail": "tiffany@ludistri.fr",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": true,
-        "reponse": "",
-        "probleme": "Transférer"
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_122",
-    "nom": "Ludolux",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "plutôt jeux pour enfant",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 135,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_123",
-    "nom": "Ludonaute",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 136,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_124",
-    "nom": "Lumberjack",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 137,
-        "mail": "a.roffe@lumberjacks-studio.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_125",
-    "nom": "Lumberjacks",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 138,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_126",
-    "nom": "Mad distribution",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "Nippon",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 139,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_127",
-    "nom": "Matago",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Généraliste",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 140,
-        "mail": "https://support.matagot-friends.com/open.php?userTypeId=2&lang=fr_FR",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_128",
-    "nom": "Maxilud",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 141,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_129",
-    "nom": "Monolith editions",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 142,
-        "mail": "chloe@monolithedition.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": "Address Morte"
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_130",
-    "nom": "Morning",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Raconter des histoires",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 143,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_131",
-    "nom": "Multifaces éditions",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "> 16 ans  :  rêver / s'évader / partager / communiquer",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 144,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_132",
-    "nom": "Multivers édition",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeu à thème fort, pas spécialement ambiance",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 145,
-        "mail": "dg.multivers@gmail.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_133",
-    "nom": "Naga éditions",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Jeu de cartes expert",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 146,
-        "mail": "contact@nagaeditions.com",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_134",
-    "nom": "NCV",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeux bizarres",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 147,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_135",
-    "nom": "Neoludis",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 148,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_136",
-    "nom": "Next moves",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Abstrait / simple",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 149,
-        "mail": "voir asmodée",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_137",
-    "nom": "Nothing but games",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "univers de AracKhan",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 150,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_138",
-    "nom": "Nürnberger-Spielkarten-Verlag",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "",
-    "recherche_connue": "TRAVEL stands for very compact dice and card games with quick play times \nthat fit into almost any pocket. Their simple structure makes them particularly \nattractive for small debut projects.\nSIGNATURE is the standard format at NSV. Here you’ll find games in the \nspirit of our successful titles QWIXX and THE MIND: timeless mechanics that \nwork as language‑neutral as possible and are therefore easy to bring to the \ninternational market.\nEXTRA includes our games that offer a “certain extra”. With this format, we \ntarget more experienced board game fans, while still staying accessible to an‑\nyone. Materials should primarily be card‑ and/or dice‑based.",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "éditeur allemand ligne éditoriale sur www.nsv.de/en/our-game-designers",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 151,
-        "mail": "https://www.nsv.de/wp-content/uploads/2026/02/Information-for-Game-Designers.pdf",
-        "mail_2": "https://calendly.com/nsv-designer-days/nsvdesignerdays2026dez",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": "- Minimal variations of well-known classics (e.g. Mau-Mau variants)\n- Role-playing systems\n- Trading card games\n- Games with very extensive rules – even if the components would fit our programme\n- Children’s games\n- Pure 2-player games\n- Educational games\n- Arithmetic games\n- Trick-taking games\n- Highly performative party games\n- Games heavily dependent on language\n- Games whose rule systems were developed using generative AI (you’re free to use AI \nto visually enhance your prototypes, though)"
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_139",
-    "nom": "Nuts! Publishing",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "Histoire / situation de conflit fictif",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "max 1 jeu par an",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 152,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_140",
-    "nom": "Nutz",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 153,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_141",
-    "nom": "Oh happy games",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "simple et positif",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 154,
-        "mail": "https://ohhappygames.com/pages/contact",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_142",
-    "nom": "OINK games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "",
-    "recherche_connue": "Format boîte ultra-compact, règles minimalistes mais grande profondeur/bluff (15-30 min).",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "éditeur Japonais",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 155,
-        "mail": "contact@oinkgames.com",
-        "mail_2": "info@oinkgames.com",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_143",
-    "nom": "Oka luda",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeu 100% bon karma",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 156,
-        "mail": "https://okaluda.fr/contactez-nous/",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_144",
-    "nom": "Okopix",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 157,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_145",
-    "nom": "Oldchap games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Jeux d'ambiance",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 158,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_146",
-    "nom": "Oldgames edition",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 159,
-        "mail": "voir avec asmodee",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_147",
-    "nom": "Olibrius",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 160,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_148",
-    "nom": "Origames",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 161,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_149",
-    "nom": "Osprey games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "",
-    "recherche_connue": "axé sur la stratégie, le contrôle de territoire et les règles d'affrontement fluides",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "éditeur UK",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 162,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_150",
-    "nom": "Oya",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 163,
-        "mail": "oya@oya.fr",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_151",
-    "nom": "Ôz éditions",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 164,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_152",
-    "nom": "Paldis",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "ecoresponsabilité",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 165,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_153",
-    "nom": "Pandor games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeu facile d'accés : accessibilité / proximité / émotions  //  NON : aux trop gros jeux",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "sont en Lorraine",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 166,
-        "mail": "guillaume.weislinger@pandor-games.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      },
-      {
-        "excel_row": 167,
-        "mail": "contact@pandor-games.com",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_154",
-    "nom": "Paradice games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Fantastique",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 168,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_155",
-    "nom": "Paria",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 169,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_156",
-    "nom": "Pauses Jeux",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Convivialité",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "Plus en activité ?!?!",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 170,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_157",
-    "nom": "Pearl games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Jeux de Stratégie",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 171,
-        "mail": "https://pearlgames.be/contact/",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_158",
-    "nom": "Pegasus spiel",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "éditeur allemand Attention selection de proto via les \"Pegasus Designer Days\" (visio) ou salons only !",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 172,
-        "mail": "info@pegasus.de",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_159",
-    "nom": "Perroq éditins",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 173,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_160",
-    "nom": "Perte & fracas",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 174,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_161",
-    "nom": "Piatnik",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "puzzle et cartes : convivialité",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 175,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_162",
-    "nom": "Pixie",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "généraliste",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 176,
-        "mail": "pierre@pixiegames.fr",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": "Address Morte"
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_163",
-    "nom": "Plan B games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Jeux familiaux/initiés à matériel premium et règles fluides (séries Azul, Century, Challengers!).",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "exceptionnel ( éditeur canadien)",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 177,
-        "mail": "voir asmodée",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_164",
-    "nom": "Play Punk",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "éditeur Zenith et Captain'flip",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 178,
-        "mail": "antoine@playpunk.com",
-        "mail_2": "thomas@playpunk.com",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_165",
-    "nom": "Poulplay",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Petite séries",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "production française",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 179,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_166",
-    "nom": "Projet CarTylion",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Médieval fantastique / ambiance / Dark fantasy",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 180,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_167",
-    "nom": "Randolph",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 181,
-        "mail": "info@randolph.ca",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_168",
-    "nom": "Ravensburger",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "Classique et Puzzle  // NON : jeux solo",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 182,
-        "mail": "service.fr@ravensburger.com",
-        "mail_2": "Jeux Ravensburger France",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_169",
-    "nom": "Repos production",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 183,
-        "mail": "voir asmodée",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_170",
-    "nom": "Rose noire édition",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "univers originaux et fort de sens",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 184,
-        "mail": "letscreate@wearerosenoire.com",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_171",
-    "nom": "Rossignol édition",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 185,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_172",
-    "nom": "Salt and peppers games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "jeux condensés, les affrontements tactiques et les formats à deux ou petit comité. Ils privilégient la tension entre joueurs, la lecture du jeu adverse et les mécaniques d'opportunité dépouillées de tout superflu.",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "éditeur espagnol",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 186,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_173",
-    "nom": "Schmidt",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "créer en 1907 (c'est important)",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 187,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_174",
-    "nom": "Scorpion masqué",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Ambiance, déduction, coopératif.",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "éditeur canadien",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 188,
-        "mail": "prototypes@scorpionmasque.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_175",
-    "nom": "Shakos",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Wargame  (et sa promotion au \"tout public\")",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 189,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_176",
-    "nom": "Sit down",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 190,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_177",
-    "nom": "Smile life",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 191,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_178",
-    "nom": "space cowboys",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 192,
-        "mail": "voir asmodée",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_179",
-    "nom": "Spiral éditions",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 193,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_180",
-    "nom": "Studio H",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 194,
-        "mail": "contact@studio-h-games.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_181",
-    "nom": "Studio Twin games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Twinples / magie",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 195,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_182",
-    "nom": "Subverti",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "thèmes engagés / jeux modernes",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 196,
-        "mail": "pro@subverti.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_183",
-    "nom": "Superlude",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 197,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_184",
-    "nom": "Supermeeple",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "réédition de classique",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 198,
-        "mail": "info@supermeeple.com",
-        "mail_2": "philippe@supermeeple.com",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": "Erreur"
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_185",
-    "nom": "Sweet november",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "\" Chaque jeu raconte une histoire\"",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 199,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_186",
-    "nom": "Sylex éditions",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Profondeur en univers immersif  -> simplement complexe / thématique très forte  // NON : jeu abstrait",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 200,
-        "mail": "contact@sylex-edition.com",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_187",
-    "nom": "TF1 Games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "dérivé d'émission télé",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 201,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_188",
-    "nom": "The flying games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 202,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_189",
-    "nom": "The freaky 42",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "aucune limite / intellectuellement amusant",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "ecoresponsable",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 203,
-        "mail": "contact@thefreaky42.com",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_190",
-    "nom": "Tiki édition",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 204,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_191",
-    "nom": "Tribuo",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 205,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_192",
-    "nom": "Two manta",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "forte intéraction / adéquation thème et mécanique",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 206,
-        "mail": "https://www.twomanta.fr/contact/",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_193",
-    "nom": "U token to me",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
-    "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 207,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
-  },
-  {
-    "id": "ent_194",
-    "nom": "Unstable games",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "",
-    "recherche_connue": "jeux de cartes compétitifs à attaques directes, éliminations et coups fourrés",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": true,
-      "expert": false
-    },
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Dungeon factory",
+    "nom_brut": "Dungeon factory",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "impression 3D",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Edge entertainement",
+    "nom_brut": "Edge entertainement",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "imaginaire / partage / rêve",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇩🇪 éditions Spielwiese",
+    "nom_brut": "éditions Spielwiese",
+    "drapeau": "🇩🇪",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 EGPX",
+    "nom_brut": "EGPX",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 entre 2 chainses",
+    "nom_brut": "entre 2 chainses",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 evolugame",
+    "nom_brut": "evolugame",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Jeux de cartes",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇺🇸 Exploding Kitten",
+    "nom_brut": "Exploding Kitten",
+    "drapeau": "🇺🇸",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Party games très décalés, mécaniques simples, cartes à effets, humour immédiat. Axé sur le grand public, les règles lues en 2 min et le fun. Sournoiserie est reine",
+    "refuse": "Jeux enfant (très rare dans leur catalogue)",
     "commentaire": "éditeur US",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 208,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_195",
-    "nom": "Victoire",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "immersion / ambiance  -> créé du nouveau joueur",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Explor8",
+    "nom_brut": "Explor8",
+    "drapeau": "🇫🇷",
+    "roles": [],
+    "cibles": [
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "contact@explor8.com"
+    ],
+    "liens": [],
+    "recherche": "éditeur fédération ainsi que jeu de pli",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 209,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
   },
   {
-    "id": "ent_196",
-    "nom": "Wilson jeux",
-    "roles": {
-      "editeur": false,
-      "auto_edition": false,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": false,
-      "famille": false,
-      "initie": false,
-      "expert": false
-    },
+    "nom": "🇫🇷 Faire play édition",
+    "nom_brut": "Faire play édition",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Fantastic lombric",
+    "nom_brut": "Fantastic lombric",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Fée mumuz",
+    "nom_brut": "Fée mumuz",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Fentasy games",
+    "nom_brut": "Fentasy games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "florian@fentasy-games.com"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Good mafia",
+    "nom_brut": "Good mafia",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "auto-edition"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [
+      "contact@editions.fish"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "anciennement Fish in the sea",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Flatlined Games",
+    "nom_brut": "Flatlined Games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Funforge",
+    "nom_brut": "Funforge",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "claude@funforge.fr",
+      "contact@funforge.zohosupport.com"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Funnyfox",
+    "nom_brut": "Funnyfox",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [
+      "games@funnyfox.fr"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Game flow",
+    "nom_brut": "Game flow",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Livres jeux",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Game stud",
+    "nom_brut": "Game stud",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Geek Attitude Games",
+    "nom_brut": "Geek Attitude Games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "etienne@geekattitudegames.com"
+    ],
+    "liens": [],
+    "recherche": "Jeux à thème ; mécanique décalée",
+    "refuse": "",
+    "commentaire": "Contact / Geek Attitude Games",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Geekoviz",
+    "nom_brut": "Geekoviz",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Ghost dog games",
+    "nom_brut": "Ghost dog games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "antoinedavrou@ghostdoggames.com"
+    ],
+    "liens": [],
+    "recherche": "Gamme Jeux dans une boite 110*65*25 (vente 10€ max)",
+    "refuse": "jeu abstrait",
+    "commentaire": "adresse mail morte",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Gigamic",
+    "nom_brut": "Gigamic",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "alain@gigamic.com",
+      "caroline@gigamic.com"
+    ],
+    "liens": [],
+    "recherche": "règles simples (Akropolis MAX) / mécanique innovant / matériel valorisant, <1h de jeu",
+    "refuse": "agression entre les joueurs / bluf / mise / culture",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": true
+  },
+  {
+    "nom": "🇳🇱 Goliath",
+    "nom_brut": "Goliath",
+    "drapeau": "🇳🇱",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 GR édition",
+    "nom_brut": "GR édition",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Green games",
+    "nom_brut": "Green games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Grrre games",
+    "nom_brut": "Grrre games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille"
+    ],
+    "emails": [
+      "contact.grrregames@gmail.com",
+      "grrregames@gmail.com"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇩🇪 HABA",
+    "nom_brut": "HABA",
+    "drapeau": "🇩🇪",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇩🇪 Hans im gluck",
+    "nom_brut": "Hans im gluck",
+    "drapeau": "🇩🇪",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Haumea Games",
+    "nom_brut": "Haumea Games",
+    "drapeau": "🇫🇷",
+    "roles": [],
+    "cibles": [],
+    "emails": [
+      "thomas@haumeagames.com"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Hécate éditions",
+    "nom_brut": "Hécate éditions",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "JDR et animation",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇨🇭 Helvetiq",
+    "nom_brut": "Helvetiq",
+    "drapeau": "🇨🇭",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie"
+    ],
+    "emails": [
+      "creative@helvetiq.ch"
+    ],
+    "liens": [],
+    "recherche": "Petits jeux de cartes (Gamme Pocket), thèmes originaux/nature, twist mécanique.",
+    "refuse": "",
+    "commentaire": "éditeur suisse. Formulaire + vidéo.",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇮🇹 Horrible Guild",
+    "nom_brut": "Horrible Guild",
+    "drapeau": "🇮🇹",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [
+      "press@horribleguild.com"
+    ],
+    "liens": [],
+    "recherche": "Jeux à matériel/concept fort (gimmick original, billes, découpes), familiaux+ à initiés.",
+    "refuse": "",
+    "commentaire": "éditeur Italien",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Hot Macacos",
+    "nom_brut": "Hot Macacos",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "innovant / stimulant",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Iello",
+    "nom_brut": "Iello",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "gautier.althaus@iello.fr",
+      "adrien.fenouillet@iello.fr"
+    ],
+    "liens": [],
+    "recherche": "Cherche ++ pour gamme de jeux de dé",
+    "refuse": "petit jeu 2j",
+    "commentaire": "sont en Lorraine",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Igiari",
+    "nom_brut": "Igiari",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 inPatience",
+    "nom_brut": "inPatience",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "info@inpatience.com"
+    ],
+    "liens": [],
+    "recherche": "spécialisé en jeu SOLO ou COOP.",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 InstaPlay",
+    "nom_brut": "InstaPlay",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "gaetan@instaplay.fr"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "intermédiaire : propose aux auteurs ayant bon jeu de trouver le bon éditeur",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇧🇪 Intrafin",
+    "nom_brut": "Intrafin",
+    "drapeau": "🇧🇪",
+    "roles": [],
+    "cibles": [
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "jurgen@intrafin.be"
+    ],
+    "liens": [],
+    "recherche": "surtout LOCALISATION.... pourrait changer",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 IPA",
+    "nom_brut": "IPA",
+    "drapeau": "🇫🇷",
+    "roles": [],
+    "cibles": [],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "Aurora, Kolossal Games, Grail Games, Maple Games, Matagot Studio, Moon Gate Design",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 J-lec",
+    "nom_brut": "J-lec",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "jeux familiaux",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Jester games",
+    "nom_brut": "Jester games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "jeux de stratégie intermediaire : beaux et profond",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Jeunoh",
+    "nom_brut": "Jeunoh",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Ludo-pédagogique : cible les enfants \"dys\"",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Jeux opla",
+    "nom_brut": "Jeux opla",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "dev et éco-fabrication française",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Jocus",
+    "nom_brut": "Jocus",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "nicolas@jocus.fr"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Joodini éditions",
+    "nom_brut": "Joodini éditions",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "auteur@joodini.com"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "fonctionnent au coup de coeur / Contact – JOODINI Éditions",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 JyDe Games",
+    "nom_brut": "JyDe Games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 KYF édition",
+    "nom_brut": "KYF édition",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 La boite de jeu",
+    "nom_brut": "La boite de jeu",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "contact@laboitedejeu.fr"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Lab4games",
+    "nom_brut": "Lab4games",
+    "drapeau": "🇫🇷",
+    "roles": [],
+    "cibles": [],
+    "emails": [
+      "monsieur.francois@lab4games.com"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "adresse mail morte / Days of Wonder, Libellud, Next Move, Repos Production et Space Cowboys",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇪🇸 Laboludic",
+    "nom_brut": "Laboludic",
+    "drapeau": "🇪🇸",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Jeux enfant que les parents aiment rejouer",
+    "refuse": "jeu personnalisé",
+    "commentaire": "écoresponsable",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Les jeux de société De Nico",
+    "nom_brut": "Les jeux de société De Nico",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "fabrication exclusivement française",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Les jeux du lac",
+    "nom_brut": "Les jeux du lac",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Les jeux du Mouss",
+    "nom_brut": "Les jeux du Mouss",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "contact@jeuxdumouss.com"
+    ],
+    "liens": [],
+    "recherche": "jeux nomades / jeux d'adresse",
+    "refuse": "",
+    "commentaire": "ecoresponsable français",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Libellud",
+    "nom_brut": "Libellud",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "voir avec asmode",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Loki",
+    "nom_brut": "Loki",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Lord racoon games",
+    "nom_brut": "Lord racoon games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇵🇱 Lucky duck kids",
+    "nom_brut": "Lucky duck kids",
+    "drapeau": "🇵🇱",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇵🇱 Luckyduckgames",
+    "nom_brut": "Luckyduckgames",
+    "drapeau": "🇵🇱",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "info@luckyduckgames.com",
+      "marek.cholostiakow@luckyduckgames.com"
+    ],
+    "liens": [],
+    "recherche": "Cherche des jeux à 40€",
+    "refuse": "",
+    "commentaire": "TOUT DOIT ÊTRE EN ANGLAIS",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": true
+  },
+  {
+    "nom": "🇫🇷 Ludistri",
+    "nom_brut": "Ludistri",
+    "drapeau": "🇫🇷",
+    "roles": [],
+    "cibles": [],
+    "emails": [
+      "cyril@ludistri.f",
+      "tiffany@ludistri.fr"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": true
+  },
+  {
+    "nom": "🇫🇷 Ludolux",
+    "nom_brut": "Ludolux",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "plutôt jeux pour enfant",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Ludonaute",
+    "nom_brut": "Ludonaute",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Lumberjack",
+    "nom_brut": "Lumberjack",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "a.roffe@lumberjacks-studio.com"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Lumberjacks",
+    "nom_brut": "Lumberjacks",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Mad distribution",
+    "nom_brut": "Mad distribution",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Nippon",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Matago",
+    "nom_brut": "Matago",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [],
+    "liens": [
+      "https://support.matagot-friends.com/open.php?userTypeId=2&lang=fr_FR"
+    ],
+    "recherche": "Généraliste",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Maxilud",
+    "nom_brut": "Maxilud",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Monolith editions",
+    "nom_brut": "Monolith editions",
+    "drapeau": "🇫🇷",
+    "roles": [],
+    "cibles": [],
+    "emails": [
+      "chloe@monolithedition.com"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "adresse mail morte",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Morning",
+    "nom_brut": "Morning",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Raconter des histoires",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Multifaces éditions",
+    "nom_brut": "Multifaces éditions",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "> 16 ans : rêver / s'évader / partager / communiquer",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Multivers édition",
+    "nom_brut": "Multivers édition",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [
+      "dg.multivers@gmail.com"
+    ],
+    "liens": [],
+    "recherche": "jeu à thème fort, pas spécialement ambiance",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Naga éditions",
+    "nom_brut": "Naga éditions",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "contact@nagaeditions.com"
+    ],
+    "liens": [],
+    "recherche": "Jeu de cartes expert",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 NCV",
+    "nom_brut": "NCV",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "jeux bizarres",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Neoludis",
+    "nom_brut": "Neoludis",
+    "drapeau": "🇫🇷",
+    "roles": [],
+    "cibles": [],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Next moves",
+    "nom_brut": "Next moves",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Abstrait / simple",
+    "refuse": "",
+    "commentaire": "voir asmodée",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Nothing but games",
+    "nom_brut": "Nothing but games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "univers de AracKhan",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇩🇪 Nürnberger-Spielkarten-Verlag",
+    "nom_brut": "Nürnberger-Spielkarten-Verlag",
+    "drapeau": "🇩🇪",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [],
+    "liens": [
+      "https://www.nsv.de/wp-content/uploads/2026/02/Information-for-Game-Designers.pdf",
+      "https://calendly.com/nsv-designer-days/nsvdesignerdays2026dez"
+    ],
+    "recherche": "TRAVEL stands for very compact dice and card games with quick play times that fit into almost any pocket. Their simple structure makes them particularly attractive for small debut projects. SIGNATURE is the standard format at NSV. Here you’ll find games in the spirit of our successful titles QWIXX and THE MIND: timeless mechanics that work as language‑neutral as possible and are therefore easy to bring to the international market. EXTRA includes our games that offer a “certain extra”. With this format, we target more experienced board game fans, while still staying accessible to an‑ yone. Materials should primarily be card‑ and/or dice‑based.",
+    "refuse": "- Minimal variations of well-known classics (e.g. Mau-Mau variants) - Role-playing systems - Trading card games - Games with very extensive rules – even if the components would fit our programme - Children’s games - Pure 2-player games - Educational games - Arithmetic games - Trick-taking games - Highly performative party games - Games heavily dependent on language - Games whose rule systems were developed using generative AI (you’re free to use AI to visually enhance your prototypes, though)",
+    "commentaire": "éditeur allemand ligne éditoriale sur www.nsv.de/en/our-game-designers",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Nuts! Publishing",
+    "nom_brut": "Nuts! Publishing",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Histoire / situation de conflit fictif",
+    "refuse": "",
+    "commentaire": "max 1 jeu par an",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Nutz",
+    "nom_brut": "Nutz",
+    "drapeau": "🇫🇷",
+    "roles": [],
+    "cibles": [],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Oh happy games",
+    "nom_brut": "Oh happy games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [
+      "https://ohhappygames.com/pages/contact"
+    ],
+    "recherche": "simple et positif",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇯🇵 OINK games",
+    "nom_brut": "OINK games",
+    "drapeau": "🇯🇵",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie"
+    ],
+    "emails": [
+      "contact@oinkgames.com",
+      "info@oinkgames.com"
+    ],
+    "liens": [],
+    "recherche": "Format boîte ultra-compact, règles minimalistes mais grande profondeur/bluff (15-30 min).",
+    "refuse": "",
+    "commentaire": "éditeur Japonais",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Oka luda",
+    "nom_brut": "Oka luda",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [
+      "https://okaluda.fr/contactez-nous/"
+    ],
+    "recherche": "jeu 100% bon karma",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Okopix",
+    "nom_brut": "Okopix",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Oldchap games",
+    "nom_brut": "Oldchap games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Jeux d'ambiance",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Oldgames edition",
+    "nom_brut": "Oldgames edition",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "voir avec asmodee",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Olibrius",
+    "nom_brut": "Olibrius",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Origames",
+    "nom_brut": "Origames",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇬🇧 Osprey games",
+    "nom_brut": "Osprey games",
+    "drapeau": "🇬🇧",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "axé sur la stratégie, le contrôle de territoire et les règles d'affrontement fluides",
+    "refuse": "",
+    "commentaire": "éditeur UK",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Oya",
+    "nom_brut": "Oya",
+    "drapeau": "🇫🇷",
+    "roles": [],
+    "cibles": [],
+    "emails": [
+      "oya@oya.fr"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Ôz éditions",
+    "nom_brut": "Ôz éditions",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Paldis",
+    "nom_brut": "Paldis",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "ecoresponsabilité",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Pandor games",
+    "nom_brut": "Pandor games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille"
+    ],
+    "emails": [
+      "guillaume.weislinger@pandor-games.com",
+      "contact@pandor-games.com"
+    ],
+    "liens": [],
+    "recherche": "jeu facile d'accés : accessibilité / proximité / émotions",
+    "refuse": "aux trop gros jeux",
+    "commentaire": "sont en Lorraine",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Paradice games",
+    "nom_brut": "Paradice games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Fantastique",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Paria",
+    "nom_brut": "Paria",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Pauses Jeux",
+    "nom_brut": "Pauses Jeux",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Convivialité",
+    "refuse": "",
+    "commentaire": "Plus en activité ?!?!",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇧🇪 Pearl games",
+    "nom_brut": "Pearl games",
+    "drapeau": "🇧🇪",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [
+      "https://pearlgames.be/contact/"
+    ],
+    "recherche": "Jeux de Stratégie",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇩🇪 Pegasus spiel",
+    "nom_brut": "Pegasus spiel",
+    "drapeau": "🇩🇪",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "info@pegasus.de"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "éditeur allemand Attention selection de proto via les \"Pegasus Designer Days\" (visio) ou salons only !",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Perroq éditins",
+    "nom_brut": "Perroq éditins",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Perte & fracas",
+    "nom_brut": "Perte & fracas",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇦🇹 Piatnik",
+    "nom_brut": "Piatnik",
+    "drapeau": "🇦🇹",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "puzzle et cartes : convivialité",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Pixie",
+    "nom_brut": "Pixie",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "pierre@pixiegames.fr"
+    ],
+    "liens": [],
+    "recherche": "généraliste",
+    "refuse": "",
+    "commentaire": "Adresse mail morte",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇨🇦 Plan B games",
+    "nom_brut": "Plan B games",
+    "drapeau": "🇨🇦",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Jeux familiaux/initiés à matériel premium et règles fluides (séries Azul, Century, Challengers!).",
+    "refuse": "",
+    "commentaire": "exceptionnel ( éditeur canadien) / voir asmodée",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Play Punk",
+    "nom_brut": "Play Punk",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "antoine@playpunk.com",
+      "thomas@playpunk.com"
+    ],
+    "liens": [],
+    "recherche": "éditeur Zenith et Captain'flip",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Poulplay",
+    "nom_brut": "Poulplay",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Petite séries",
+    "refuse": "",
+    "commentaire": "production française",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Projet CarTylion",
+    "nom_brut": "Projet CarTylion",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Médieval fantastique / ambiance / Dark fantasy",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇨🇦 Randolph",
+    "nom_brut": "Randolph",
+    "drapeau": "🇨🇦",
+    "roles": [],
+    "cibles": [],
+    "emails": [
+      "info@randolph.ca"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇩🇪 Ravensburger",
+    "nom_brut": "Ravensburger",
+    "drapeau": "🇩🇪",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "service.fr@ravensburger.com"
+    ],
+    "liens": [],
+    "recherche": "Classique et Puzzle",
+    "refuse": "jeux solo",
+    "commentaire": "Jeux Ravensburger France",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇧🇪 Repos production",
+    "nom_brut": "Repos production",
+    "drapeau": "🇧🇪",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "voir asmodée",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Rose noire édition",
+    "nom_brut": "Rose noire édition",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "letscreate@wearerosenoire.com"
+    ],
+    "liens": [],
+    "recherche": "univers originaux et fort de sens",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Rossignol édition",
+    "nom_brut": "Rossignol édition",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇪🇸 Salt and peppers games",
+    "nom_brut": "Salt and peppers games",
+    "drapeau": "🇪🇸",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "jeux condensés, les affrontements tactiques et les formats à deux ou petit comité. Ils privilégient la tension entre joueurs, la lecture du jeu adverse et les mécaniques d'opportunité dépouillées de tout superflu.",
+    "refuse": "",
+    "commentaire": "éditeur espagnol",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇩🇪 Schmidt",
+    "nom_brut": "Schmidt",
+    "drapeau": "🇩🇪",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "créer en 1907 (c'est important)",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇨🇦 Scorpion masqué",
+    "nom_brut": "Scorpion masqué",
+    "drapeau": "🇨🇦",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie"
+    ],
+    "emails": [
+      "prototypes@scorpionmasque.com"
+    ],
+    "liens": [],
+    "recherche": "Ambiance, déduction, coopératif.",
+    "refuse": "",
+    "commentaire": "éditeur canadien",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Shakos",
+    "nom_brut": "Shakos",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Wargame (et sa promotion au \"tout public\")",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Sit down",
+    "nom_brut": "Sit down",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Smile life",
+    "nom_brut": "Smile life",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 space cowboys",
+    "nom_brut": "space cowboys",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "voir asmodée",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Spiral éditions",
+    "nom_brut": "Spiral éditions",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Studio H",
+    "nom_brut": "Studio H",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "contact@studio-h-games.com"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Studio Twin games",
+    "nom_brut": "Studio Twin games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "Twinples / magie",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Subverti",
+    "nom_brut": "Subverti",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "pro@subverti.com"
+    ],
+    "liens": [],
+    "recherche": "thèmes engagés / jeux modernes",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Superlude",
+    "nom_brut": "Superlude",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Supermeeple",
+    "nom_brut": "Supermeeple",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "info@supermeeple.com",
+      "philippe@supermeeple.com"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "réédition de classique",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Sweet november",
+    "nom_brut": "Sweet november",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "\" Chaque jeu raconte une histoire\"",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Sylex éditions",
+    "nom_brut": "Sylex éditions",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "contact@sylex-edition.com"
+    ],
+    "liens": [],
+    "recherche": "Profondeur en univers immersif -> simplement complexe / thématique très forte",
+    "refuse": "jeu abstrait",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 TF1 Games",
+    "nom_brut": "TF1 Games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "dérivé d'émission télé",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 The flying games",
+    "nom_brut": "The flying games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 The freaky 42",
+    "nom_brut": "The freaky 42",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [
+      "contact@thefreaky42.com"
+    ],
+    "liens": [],
+    "recherche": "aucune limite / intellectuellement amusant",
+    "refuse": "",
+    "commentaire": "ecoresponsable",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Tiki édition",
+    "nom_brut": "Tiki édition",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Tribuo",
+    "nom_brut": "Tribuo",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "distrib"
+    ],
+    "cibles": [],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Two manta",
+    "nom_brut": "Two manta",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [],
+    "liens": [
+      "https://www.twomanta.fr/contact/"
+    ],
+    "recherche": "forte intéraction / adéquation thème et mécanique",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 U token to me",
+    "nom_brut": "U token to me",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇺🇸 Unstable games",
+    "nom_brut": "Unstable games",
+    "drapeau": "🇺🇸",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "famille",
+      "initie"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "jeux de cartes compétitifs à attaques directes, éliminations et coups fourrés",
+    "refuse": "",
+    "commentaire": "éditeur US",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Victoire",
+    "nom_brut": "Victoire",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "immersion / ambiance -> créé du nouveau joueur",
+    "refuse": "",
+    "commentaire": "",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
+  },
+  {
+    "nom": "🇫🇷 Wilson jeux",
+    "nom_brut": "Wilson jeux",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "distrib"
+    ],
+    "cibles": [],
+    "emails": [
+      "jean-marie.leandri@wilsonjeux.fr"
+    ],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "uniquement distributeur",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 210,
-        "mail": "jean-marie.leandri@wilsonjeux.fr",
-        "mail_2": "",
-        "catalog_janv_26": true,
-        "check_clic": true,
-        "reponse": "",
-        "probleme": "Transférer"
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": true,
+    "cliqueLien": true
   },
   {
-    "id": "ent_197",
-    "nom": "World-wide games",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "Thème Sportif",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 World-wide games",
+    "nom_brut": "World-wide games",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "auto-edition"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [
+      "https://www.worldwidegames.fr/contact/"
+    ],
+    "recherche": "Thème Sportif",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 211,
-        "mail": "https://www.worldwidegames.fr/contact/",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_198",
-    "nom": "Yeast Games",
-    "roles": {
-      "editeur": false,
-      "auto_edition": true,
-      "distrib": true
-    },
-    "flag_g": "!",
-    "recherche_connue": "Jeux sérieux ou décalés, mais non-conforme",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇺🇸 Yeast Games",
+    "nom_brut": "Yeast Games",
+    "drapeau": "🇺🇸",
+    "roles": [
+      "auto-edition",
+      "distrib"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [
+      "https://yeastgames.com/contact-2/"
+    ],
+    "recherche": "Jeux sérieux ou décalés, mais non-conforme",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 212,
-        "mail": "https://yeastgames.com/contact-2/",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_199",
-    "nom": "Yoka bytsume",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Yoka bytsume",
+    "nom_brut": "Yoka bytsume",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "personnage de manga et anime",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 213,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_200",
-    "nom": "Zenagame",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "!",
-    "recherche_connue": "",
-    "cibles": {
-      "enfant": true,
-      "famille": true,
-      "initie": true,
-      "expert": true
-    },
+    "nom": "🇫🇷 Zenagame",
+    "nom_brut": "Zenagame",
+    "drapeau": "🇫🇷",
+    "roles": [
+      "editeur"
+    ],
+    "cibles": [
+      "enfant",
+      "famille",
+      "initie",
+      "expert"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "",
+    "refuse": "",
     "commentaire": "",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 214,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
-    ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   },
   {
-    "id": "ent_201",
-    "nom": "Zoch Verlag",
-    "roles": {
-      "editeur": true,
-      "auto_edition": false,
-      "distrib": false
-    },
-    "flag_g": "",
-    "recherche_connue": "jeux d'adresse, de rapidité et de manipulation de dés décalée.",
-    "cibles": {
-      "enfant": false,
-      "famille": true,
-      "initie": false,
-      "expert": false
-    },
-    "commentaire": "éditeur allemand",
-    "ne_plus_deranger": "",
-    "contacts": [
-      {
-        "excel_row": 215,
-        "mail": "",
-        "mail_2": "",
-        "catalog_janv_26": false,
-        "check_clic": false,
-        "reponse": "",
-        "probleme": ""
-      }
+    "nom": "🇩🇪 Zoch Verlag",
+    "nom_brut": "Zoch Verlag",
+    "drapeau": "🇩🇪",
+    "roles": [
+      "editeur"
     ],
-    "notes_terrain": [],
-    "sorties_12m_comptage": {
-      "statut": "NON_CHARGE",
-      "message": "Aucune donnée de sorties sur 12 mois glissants chargée. Décompte exhaustif (sans moyenne) requis.",
-      "mecaniques_total": {},
-      "themes_total": {}
-    }
+    "cibles": [
+      "famille"
+    ],
+    "emails": [],
+    "liens": [],
+    "recherche": "jeux d'adresse, de rapidité et de manipulation de dés décalée.",
+    "refuse": "",
+    "commentaire": "éditeur allemand",
+    "catalogueEnvoyeJanv26": false,
+    "cliqueLien": false
   }
 ];
