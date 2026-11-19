@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Radar Ludique — Designer</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --card-2: #0b1220;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --ok: #22c55e;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding-bottom: 84px;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+    }
+    h1 { margin: 0; font-size: 1.1rem; }
+    .sub { color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
+    main { padding: 14px 16px; max-width: 900px; margin: 0 auto; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    input, select, textarea, button {
+      font-family: inherit;
+      font-size: 0.95rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card-2);
+      color: var(--text);
+      padding: 8px 10px;
+    }
+    input, select, textarea { width: 100%; }
+    button {
+      cursor: pointer;
+      background: #0284c7;
+      border-color: #0284c7;
+      font-weight: 600;
+    }
+    button.secondary { background: var(--card-2); border-color: var(--border); font-weight: 500; }
+    button.danger { background: #991b1b; border-color: #ef4444; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      margin-right: 4px;
+      margin-top: 4px;
+      background: #334155;
+    }
+    .badge.terrain { background: #78350f; color: #fde68a; border: 1px solid var(--warn); }
+    .badge.alert { background: #7f1d1d; color: #fecaca; border: 1px solid var(--danger); }
+    .badge.ok { background: #14532d; color: #bbf7d0; border: 1px solid var(--ok); }
+    .muted { color: var(--muted); font-size: 0.85rem; }
+    .box-missing {
+      border: 1px dashed var(--warn);
+      background: rgba(245, 158, 11, 0.08);
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 8px;
+      font-size: 0.85rem;
+    }
+    nav.bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background: var(--card-2);
+      border-top: 1px solid var(--border);
+      z-index: 20;
+    }
+    nav.bottom-nav button {
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 10px 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    nav.bottom-nav button.active {
+      color: var(--accent);
+      border-top: 2px solid var(--accent);
+    }
+    label { display: block; font-size: 0.82rem; color: var(--muted); margin: 8px 0 4px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Radar Ludique — Designer</h1>
+    <div class="sub" id="status-bar">Initialisation...</div>
+  </header>
+
+  <main>
+    <!-- ONGLET 1 : EDITEURS -->
+    <section id="tab-editeurs" class="panel active">
+      <div class="card">
+        <div class="row" style="justify-content: space-between;">
+          <strong>Éditeurs, Auto-édition & Distributeurs</strong>
+          <div class="row">
+            <button class="secondary" onclick="exportStateJSON()">Exporter JSON</button>
+            <button class="danger" onclick="resetLocalState()">Réinitialiser local</button>
+          </div>
+        </div>
+        <label for="search-editeur">Recherche (nom, thème/recherche, commentaire, mail)</label>
+        <input id="search-editeur" type="text" placeholder="Ex. Bombyx, enquête, Asmodee..." oninput="renderEditeurs()" />
+
+        <div class="row" style="margin-top: 10px;">
+          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-editeur" style="width:auto;" onchange="renderEditeurs()" /> Éditeur</label>
+          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-auto" style="width:auto;" onchange="renderEditeurs()" /> Auto-édition</label>
+          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-distrib" style="width:auto;" onchange="renderEditeurs()" /> Distrib</label>
+          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-enfant" style="width:auto;" onchange="renderEditeurs()" /> Enfant</label>
+          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-famille" style="width:auto;" onchange="renderEditeurs()" /> Famille</label>
+          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-initie" style="width:auto;" onchange="renderEditeurs()" /> Initié</label>
+          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-expert" style="width:auto;" onchange="renderEditeurs()" /> Expert</label>
+        </div>
+      </div>
+
+      <div id="editeurs-list"></div>
+    </section>
+
+    <!-- ONGLET 2 : MATCHING & ANTI-DOUBLON >= 75% -->
+    <section id="tab-matching" class="panel">
+      <div class="card">
+        <strong>Matching Prototype & Vérification d'existence ($\ge 75\%$)</strong>
+        <p class="muted">Fenêtre éditeurs par défaut : 6 ou 12 mois glissants (option élargie disponible). Le contrôle d'antériorité ($\ge 75\%$) vérifie l'ensemble du catalogue chargé pour éviter de réinventer l'eau chaude.</p>
+
+        <label for="m-fenetre">Fenêtre d'analyse éditeurs</label>
+        <select id="m-fenetre">
+          <option value="6">6 derniers mois glissants</option>
+          <option value="12" selected>12 derniers mois glissants</option>
+          <option value="ALL">Historique complet disponible</option>
+        </select>
+
+        <label for="m-cible">Cible visée</label>
+        <select id="m-cible">
+          <option value="">Toutes cibles</option>
+          <option value="enfant">Enfant</option>
+          <option value="famille" selected>Famille</option>
+          <option value="initie">Initié</option>
+          <option value="expert">Expert</option>
+        </select>
+
+        <label for="m-mots">Mécaniques / Thèmes / Mots-clés du prototype (séparés par des virgules)</label>
+        <input id="m-mots" type="text" placeholder="Ex. jeu de plis, draft, coopération, nature, enquête" />
+
+        <div style="margin-top: 12px;">
+          <button onclick="runMatching()">Analyser le matching & vérifier l'existence ($\ge 75\%$)</button>
+        </div>
+      </div>
+
+      <div id="matching-results"></div>
+    </section>
+
+    <!-- ONGLET 3 : RADAR TENDANCES (2-5 ANS) -->
+    <section id="tab-tendances" class="panel">
+      <div class="card">
+        <strong>Radar Tendances (Signaux forts, faibles & horizon 2–5 ans)</strong>
+        <p class="muted">Analyse déclenchée à la demande (pas de tâche de fond automatique). Restitue les signaux, la conclusion prospective et signale explicitement les données publiques manquantes.</p>
+
+        <label for="t-sujet">Axe / Mécanique / Thème à inspecter (optionnel)</label>
+        <input id="t-sujet" type="text" placeholder="Ex. asymétrie, solo/coop, boîtes compactes, éco-conception..." />
+
+        <div style="margin-top: 12px;">
+          <button onclick="runTendances()">Lancer l'analyse des signaux & conclusion</button>
+        </div>
+      </div>
+
+      <div id="tendances-results"></div>
+    </section>
+
+    <!-- ONGLET 4 : ACTU LUDIQUE -->
+    <section id="tab-actu" class="panel">
+      <div class="card">
+        <strong>Fil Actu Ludique (FR & Mondial)</strong>
+        <label for="a-periode">Période d'affichage</label>
+        <select id="a-periode" onchange="renderActu()">
+          <option value="jour">Aujourd'hui</option>
+          <option value="semaine" selected>Cette semaine</option>
+          <option value="mois">Ce mois-ci</option>
+          <option value="annee">Cette année</option>
+        </select>
+        <div class="box-missing">
+          <strong>État des flux :</strong> Aucun flux RSS externe n'est encore connecté en direct dans cette V1 locale (les navigateurs bloquent parfois certains flux sans relais/proxy). Les entrées ci-dessous sont des emplacements de structure prêts à recevoir tes flux validés.
+        </div>
+      </div>
+      <div id="actu-list"></div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button id="btn-editeurs" class="active" onclick="switchTab('editeurs')">Éditeurs</button>
+    <button id="btn-matching" onclick="switchTab('matching')">Matching</button>
+    <button id="btn-tendances" onclick="switchTab('tendances')">Tendances</button>
+    <button id="btn-actu" onclick="switchTab('actu')">Actu</button>
+  </nav>
+
+  <script src="data.js"></script>
+  <script>
+    const STORAGE_KEY = "radar_ludique_state_v1";
+
+    // Catalogue de référence pour le test de similarité >= 75% (vide tant qu'un jeu externe n'est pas chargé)
+    const JEUX_REFERENCE = [];
+
+    function loadState() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {
+          return structuredClone(INITIAL_ENTITIES);
+        }
+      }
+      return structuredClone(INITIAL_ENTITIES);
+    }
+
+    let state = loadState();
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateStatusBar();
+    }
+
+    function updateStatusBar() {
+      const totalContacts = state.reduce((acc, item) => acc + (item.contacts ? item.contacts.length : 0), 0);
+      const totalTerrainNotes = state.reduce((acc, item) => acc + (item.notes_terrain ? item.notes_terrain.length : 0), 0);
+      document.getElementById("status-bar").textContent =
+        `${state.length} structures • ${totalContacts} contacts • ${totalTerrainNotes} note(s) terrain`;
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll(".panel").forEach((p) => p.classList.remove("active"));
+      document.querySelectorAll("nav.bottom-nav button").forEach((b) => b.classList.remove("active"));
+      document.getElementById(`tab-${tabName}`).classList.add("active");
+      document.getElementById(`btn-${tabName}`).classList.add("active");
+    }
+
+    function escapeHTML(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function renderEditeurs() {
+      const q = (document.getElementById("search-editeur").value || "").trim().toLowerCase();
+      const fEd = document.getElementById("f-editeur").checked;
+      const fAuto = document.getElementById("f-auto").checked;
+      const fDist = document.getElementById("f-distrib").checked;
+      const fEnf = document.getElementById("f-enfant").checked;
+      const fFam = document.getElementById("f-famille").checked;
+      const fIni = document.getElementById("f-initie").checked;
+      const fExp = document.getElementById("f-expert").checked;
+
+      const filtered = state.filter((item) => {
+        if (fEd && !item.roles.editeur) return false;
+        if (fAuto && !item.roles.auto_edition) return false;
+        if (fDist && !item.roles.distrib) return false;
+        if (fEnf && !item.cibles.enfant) return false;
+        if (fFam && !item.cibles.famille) return false;
+        if (fIni && !item.cibles.initie) return false;
+        if (fExp && !item.cibles.expert) return false;
+
+        if (!q) return true;
+        const contactsText = (item.contacts || [])
+          .map((c) => `${c.mail} ${c.mail_2} ${c.reponse} ${c.probleme}`)
+          .join(" ");
+        const terrainText = (item.notes_terrain || []).map((n) => n.texte).join(" ");
+        const hay = `${item.nom} ${item.recherche_connue} ${item.commentaire} ${item.ne_plus_deranger} ${contactsText} ${terrainText}`.toLowerCase();
+        return hay.includes(q);
+      });
+
+      const container = document.getElementById("editeurs-list");
+      container.innerHTML = `<p class="muted">${filtered.length} résultat(s) affiché(s) sur ${state.length}</p>`;
+
+      filtered.slice(0, 60).forEach((item) => {
+        const rolesBadges = [
+          item.roles.editeur ? `<span class="badge ok">Éditeur</span>` : "",
+          item.roles.auto_edition ? `<span class="badge">Auto-édition</span>` : "",
+          item.roles.distrib ? `<span class="badge">Distributeur</span>` : "",
+          item.ne_plus_deranger ? `<span class="badge alert">Alerte / Ne pas déranger</span>` : ""
+        ].join("");
+
+        const ciblesBadges = [
+          item.cibles.enfant ? `<span class="badge">Enfant</span>` : "",
+          item.cibles.famille ? `<span class="badge">Famille</span>` : "",
+          item.cibles.initie ? `<span class="badge">Initié</span>` : "",
+          item.cibles.expert ? `<span class="badge">Expert</span>` : ""
+        ].join("");
+
+        const contactsHTML = (item.contacts || []).map((c) => `
+          <div style="border-top:1px solid var(--border); padding-top:6px; margin-top:6px; font-size:0.84rem;">
+            ${c.mail ? `<div>Contact : <strong>${escapeHTML(c.mail)}</strong></div>` : `<div class="muted">Contact : non renseigné</div>`}
+            ${c.mail_2 ? `<div>2nd contact : <strong>${escapeHTML(c.mail_2)}</strong></div>` : ""}
+            <div class="muted">Catalogue janv. 26 : ${c.catalog_janv_26 ? "Oui" : "Non"} • Clic lien : ${c.check_clic ? "Oui" : "Non"}</div>
+            ${c.probleme ? `<div style="color:#fca5a5;">Problème : ${escapeHTML(c.probleme)}</div>` : ""}
+            ${c.reponse ? `<div style="color:#86efac;">Réponse : ${escapeHTML(c.reponse)}</div>` : ""}
+          </div>
+        `).join("");
+
+        const terrainHTML = (item.notes_terrain || []).map((n) => `
+          <div style="background:rgba(245,158,11,0.12); border-left:3px solid var(--warn); padding:6px 8px; margin-top:6px; border-radius:6px; font-size:0.84rem;">
+            <span class="badge terrain">TERRAIN / MANUEL</span> <span class="muted">${escapeHTML(n.date)}</span>
+            <div>${escapeHTML(n.texte)}</div>
+          </div>
+        `).join("");
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="row" style="justify-content: space-between;">
+            <strong style="font-size:1rem;">${escapeHTML(item.nom)}</strong>
+            <span class="muted">#${escapeHTML(item.id)}</span>
+          </div>
+          <div style="margin:4px 0;">${rolesBadges} ${ciblesBadges}</div>
+          ${item.ne_plus_deranger ? `<div style="color:#fca5a5; font-size:0.85rem; margin-top:6px;"><strong>Blocage / Alerte :</strong> ${escapeHTML(item.ne_plus_deranger)}</div>` : ""}
+          <div style="margin-top:8px; font-size:0.88rem;">
+            <strong>Ligne / Recherches connues :</strong> ${item.recherche_connue ? escapeHTML(item.recherche_connue) : `<span class="muted">Non renseigné</span>`}
+          </div>
+          ${item.commentaire ? `<div style="margin-top:4px; font-size:0.85rem;"><strong>Commentaire :</strong> ${escapeHTML(item.commentaire)}</div>` : ""}
+
+          <div class="box-missing">
+            <strong>Sorties & décompte exhaustif (12 mois glissants) :</strong><br/>
+            ${escapeHTML(item.sorties_12m_comptage.message)}
+          </div>
+
+          <div style="margin-top:8px;">
+            <strong style="font-size:0.88rem;">Contacts (${(item.contacts || []).length})</strong>
+            ${contactsHTML}
+          </div>
+
+          <div style="margin-top:10px;">
+            <strong style="font-size:0.88rem;">Notes terrain & critères forcés</strong>
+            ${terrainHTML || `<div class="muted" style="font-size:0.8rem;">Aucune note terrain enregistrée.</div>`}
+            <div style="margin-top:6px;">
+              <input id="note-input-${item.id}" type="text" placeholder="Ex. Rencontre salon : demande un jeu de plis..." />
+              <button class="secondary" style="margin-top:6px;" onclick="addTerrainNote('${item.id}')">+ Ajouter note terrain</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      if (filtered.length > 60) {
+        const info = document.createElement("p");
+        info.className = "muted";
+        info.textContent = `Affichage limité à 60 fiches pour la fluidité mobile (${filtered.length - 60} autres masquées par le filtre de recherche).`;
+        container.appendChild(info);
+      }
+    }
+
+    function addTerrainNote(id) {
+      const input = document.getElementById(`note-input-${id}`);
+      const txt = (input.value || "").trim();
+      if (!txt) return;
+      const target = state.find((e) => e.id === id);
+      if (!target) return;
+      if (!target.notes_terrain) target.notes_terrain = [];
+      target.notes_terrain.push({
+        date: new Date().toLocaleString("fr-FR"),
+        source: "TERRAIN_MANUEL",
+        texte: txt
+      });
+      input.value = "";
+      saveState();
+      renderEditeurs();
+    }
+
+    function runMatching() {
+      const cible = document.getElementById("m-cible").value;
+      const fenetre = document.getElementById("m-fenetre").value;
+      const mots = (document.getElementById("m-mots").value || "")
+        .split(",")
+        .map((s) => s.trim().toLowerCase())
+        .filter(Boolean);
+
+      const resBox = document.getElementById("matching-results");
+
+      // 1. Contrôle d'existence >= 75%
+      let existenceHTML = "";
+      if (JEUX_REFERENCE.length === 0) {
+        existenceHTML = `
+          <div class="card">
+            <strong>Contrôle d'existence ($\ge 75\%$)</strong>
+            <div class="box-missing">
+              <strong>Donnée manquante :</strong> Aucun catalogue de jeux de référence n'est encore chargé dans <code>JEUX_REFERENCE</code>. Impossible de calculer un taux de similarité $\ge 75\%$ de manière fiable sans catalogue de référence.
+            </div>
+          </div>
+        `;
+      } else {
+        const matches = JEUX_REFERENCE.map((jeu) => {
+          const tags = (jeu.tags || []).map((t) => t.toLowerCase());
+          const hits = mots.filter((m) => tags.some((t) => t.includes(m)));
+          const score = mots.length > 0 ? Math.round((hits.length / mots.length) * 100) : 0;
+          return { jeu, score, hits };
+        }).filter((m) => m.score >= 75);
+        existenceHTML = `
+          <div class="card">
+            <strong>Jeux proches détectés ($\ge 75\%$)</strong>
+            ${matches.length === 0
+              ? `<p class="muted">Aucun jeu proche à $\ge 75\%$ trouvé sur les critères saisis.</p>`
+              : matches.map((m) => `<div><strong>${escapeHTML(m.jeu.titre)}</strong> — ${m.score}% (correspondances : ${escapeHTML(m.hits.join(", "))})</div>`).join("")}
+          </div>
+        `;
+      }
+
+      // 2. Suggestions d'éditeurs
+      const scored = state
+        .filter((e) => !e.ne_plus_deranger)
+        .map((e) => {
+          let score = 0;
+          const reasons = [];
+          if (cible && e.cibles && e.cibles[cible]) {
+            score += 40;
+            reasons.push(`Cible ${cible} cochée`);
+          }
+          const blob = `${e.recherche_connue} ${e.commentaire} ${(e.notes_terrain || []).map((n) => n.texte).join(" ")}`.toLowerCase();
+          const matchedWords = mots.filter((m) => blob.includes(m));
+          if (mots.length > 0 && matchedWords.length > 0) {
+            const pts = Math.round((matchedWords.length / mots.length) * 60);
+            score += pts;
+            reasons.push(`Mots-clés correspondants (${pts} pts) : ${matchedWords.join(", ")}`);
+          }
+          return { entity: e, score, reasons };
+        })
+        .filter((item) => item.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 15);
+
+      const editeursHTML = `
+        <div class="card">
+          <strong>Pistes d'éditeurs (fenêtre sélectionnée : ${escapeHTML(fenetre)})</strong>
+          <p class="muted">Les données de sorties réelles sur 6/12 mois ne sont pas encore chargées : ce score repose sur les cibles déclarées, les recherches connues et les notes terrain.</p>
+          ${scored.length === 0
+            ? `<p class="muted">Aucune correspondance trouvée avec ces critères.</p>`
+            : scored.map((s) => `
+              <div style="border-top:1px solid var(--border); padding-top:8px; margin-top:8px;">
+                <strong>${escapeHTML(s.entity.nom)}</strong> — <span class="badge ok">${s.score} pts</span>
+                <div class="muted" style="margin-top:4px;">Pourquoi ça match : ${escapeHTML(s.reasons.join(" • "))}</div>
+              </div>
+            `).join("")}
+        </div>
+      `;
+
+      resBox.innerHTML = existenceHTML + editeursHTML;
+    }
+
+    function runTendances() {
+      const sujet = (document.getElementById("t-sujet").value || "").trim();
+      const box = document.getElementById("tendances-results");
+      box.innerHTML = `
+        <div class="card">
+          <strong>Résultat de l'analyse — ${sujet ? escapeHTML(sujet) : "Vue globale"}</strong>
+          <div class="box-missing">
+            <strong>Éléments manquants / non connectés :</strong>
+            <ul style="margin:6px 0 0 18px; padding:0;">
+              <li>Flux structurés des comités/sélections (Nuremberg, Essen, Cannes) non encore importés.</li>
+              <li>Historique des sorties 12 mois glissants (décompte exhaustif sans moyenne) non encore chargé.</li>
+              <li>Palmarès des concours de prototypes et données distributeurs/boutiques non encore reliés.</li>
+            </ul>
+          </div>
+          <div style="margin-top:10px;">
+            <strong>Signaux forts :</strong> <em>En attente de données sources vérifiées (aucun signal inventé).</em>
+          </div>
+          <div style="margin-top:8px;">
+            <strong>Signaux faibles (horizon 2–5 ans) :</strong> <em>En attente de données sources vérifiées.</em>
+          </div>
+          <div style="margin-top:8px;">
+            <strong>Conclusion / Synthèse :</strong> Impossible de conclure solidement tant que les sources ci-dessus sont absentes.
+          </div>
+        </div>
+      `;
+    }
+
+    function renderActu() {
+      const periode = document.getElementById("a-periode").value;
+      const labels = {
+        jour: "Aujourd'hui",
+        semaine: "Cette semaine",
+        mois: "Ce mois-ci",
+        annee: "Cette année"
+      };
+      document.getElementById("actu-list").innerHTML = `
+        <div class="card">
+          <strong>Période : ${labels[periode]}</strong>
+          <p class="muted">Aucun article chargé pour le moment. Une fois les flux RSS francophones et internationaux branchés, ils s'afficheront ici filtrés par période.</p>
+        </div>
+      `;
+    }
+
+    function exportStateJSON() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "radar-ludique-export.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function resetLocalState() {
+      if (!confirm("Effacer les modifications locales et revenir à l'import Excel initial ?")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      state = loadState();
+      renderEditeurs();
+      updateStatusBar();
+    }
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      });
+    }
+
+    updateStatusBar();
+    renderEditeurs();
+    renderActu();
+  </script>
+</body>
+</html>
