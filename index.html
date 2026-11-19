@@ -76,10 +76,40 @@
       margin-right: 4px;
       margin-top: 4px;
       background: #334155;
+      color: #f8fafc;
     }
     .badge.terrain { background: #78350f; color: #fde68a; border: 1px solid var(--warn); }
     .badge.alert { background: #7f1d1d; color: #fecaca; border: 1px solid var(--danger); }
     .badge.ok { background: #14532d; color: #bbf7d0; border: 1px solid var(--ok); }
+    .badge.c-enfant { background: #831843; color: #fbcfe8; border: 1px solid #f472b6; }
+    .badge.c-famille { background: #1e3a8a; color: #bfdbfe; border: 1px solid #60a5fa; }
+    .badge.c-initie { background: #4c1d95; color: #ddd6fe; border: 1px solid #a78bfa; }
+    .badge.c-expert { background: #7c2d12; color: #fed7aa; border: 1px solid #fb923c; }
+    .box-search {
+      background: rgba(34, 197, 94, 0.08);
+      border-left: 3px solid var(--ok);
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-top: 8px;
+      font-size: 0.88rem;
+    }
+    .box-refuse {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 3px solid var(--danger);
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-top: 6px;
+      font-size: 0.88rem;
+      color: #fecaca;
+    }
+    .box-contacts {
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 8px;
+      font-size: 0.84rem;
+    }
     .muted { color: var(--muted); font-size: 0.85rem; }
     .box-missing {
       border: 1px dashed var(--warn);
@@ -88,6 +118,12 @@
       padding: 10px;
       margin-top: 8px;
       font-size: 0.85rem;
+    }
+    .toast-msg {
+      color: #86efac;
+      font-size: 0.82rem;
+      margin-top: 6px;
+      font-weight: 600;
     }
     nav.bottom-nav {
       position: fixed;
@@ -133,8 +169,8 @@
             <button class="danger" onclick="resetLocalState()">Réinitialiser local</button>
           </div>
         </div>
-        <label for="search-editeur">Recherche (nom, thème/recherche, commentaire, mail)</label>
-        <input id="search-editeur" type="text" placeholder="Ex. Bombyx, enquête, Asmodee..." oninput="renderEditeurs()" />
+        <label for="search-editeur">Recherche (nom, recherche, refus, commentaire, mail, lien, note)</label>
+        <input id="search-editeur" type="text" placeholder="Ex. Bombyx, enquête, abstrait, Asmodee..." oninput="renderEditeurs()" />
 
         <div class="row" style="margin-top: 10px;">
           <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-editeur" style="width:auto;" onchange="renderEditeurs()" /> Éditeur</label>
@@ -153,8 +189,8 @@
     <!-- ONGLET 2 : MATCHING & ANTI-DOUBLON >= 75% -->
     <section id="tab-matching" class="panel">
       <div class="card">
-        <strong>Matching Prototype & Vérification d'existence ($\ge 75\%$)</strong>
-        <p class="muted">Fenêtre éditeurs par défaut : 6 ou 12 mois glissants (option élargie disponible). Le contrôle d'antériorité ($\ge 75\%$) vérifie l'ensemble du catalogue chargé pour éviter de réinventer l'eau chaude.</p>
+        <strong>Matching Prototype & Vérification d'existence (&ge; 75%)</strong>
+        <p class="muted">Fenêtre éditeurs par défaut : 6 ou 12 mois glissants (option élargie disponible). Le contrôle d'antériorité (&ge; 75%) vérifie l'ensemble du catalogue chargé pour éviter de réinventer l'eau chaude.</p>
 
         <label for="m-fenetre">Fenêtre d'analyse éditeurs</label>
         <select id="m-fenetre">
@@ -176,7 +212,7 @@
         <input id="m-mots" type="text" placeholder="Ex. jeu de plis, draft, coopération, nature, enquête" />
 
         <div style="margin-top: 12px;">
-          <button onclick="runMatching()">Analyser le matching & vérifier l'existence ($\ge 75\%$)</button>
+          <button onclick="runMatching()">Analyser le matching & vérifier l'existence (&ge; 75%)</button>
         </div>
       </div>
 
@@ -228,21 +264,82 @@
 
   <script src="data.js"></script>
   <script>
-    const STORAGE_KEY = "radar_ludique_state_v1";
-
-    // Catalogue de référence pour le test de similarité >= 75% (vide tant qu'un jeu externe n'est pas chargé)
+    const STORAGE_KEY = "radar_ludique_state_v2";
     const JEUX_REFERENCE = [];
+    const noteConfirmations = {};
+
+    function normalizeEntity(raw, index) {
+      const rolesArr = Array.isArray(raw.roles) ? raw.roles.map((r) => String(r).toLowerCase()) : [];
+      const ciblesArr = Array.isArray(raw.cibles) ? raw.cibles.map((c) => String(c).toLowerCase()) : [];
+
+      const rolesObj = typeof raw.roles === "object" && !Array.isArray(raw.roles) && raw.roles
+        ? raw.roles
+        : {
+            editeur: rolesArr.includes("editeur") || rolesArr.includes("éditeur"),
+            auto_edition: rolesArr.includes("auto-edition") || rolesArr.includes("auto_edition") || rolesArr.includes("auto-édition"),
+            distrib: rolesArr.includes("distrib") || rolesArr.includes("distributeur")
+          };
+
+      const ciblesObj = typeof raw.cibles === "object" && !Array.isArray(raw.cibles) && raw.cibles
+        ? raw.cibles
+        : {
+            enfant: ciblesArr.includes("enfant"),
+            famille: ciblesArr.includes("famille"),
+            initie: ciblesArr.includes("initie") || ciblesArr.includes("initié"),
+            expert: ciblesArr.includes("expert")
+          };
+
+      const slug = String(raw.id || raw.nom_brut || raw.nom || `item-${index}`)
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+
+      return {
+        id: raw.id || `${slug}-${index}`,
+        nom: raw.nom || `Structure #${index + 1}`,
+        drapeau: raw.drapeau || "",
+        roles: rolesObj,
+        cibles: ciblesObj,
+        recherche_connue: raw.recherche_connue ?? raw.recherche ?? "",
+        refuse: raw.refuse ?? "",
+        commentaire: raw.commentaire ?? "",
+        ne_plus_deranger: raw.ne_plus_deranger ?? "",
+        emails: Array.isArray(raw.emails) ? raw.emails : [],
+        liens: Array.isArray(raw.liens) ? raw.liens : [],
+        dernier_catalogue: raw.dernier_catalogue ?? (raw.catalogueEnvoyeJanv26 ? "Janvier 2026" : "Aucun"),
+        clique_lien: Boolean(raw.clique_lien ?? raw.cliqueLien),
+        contacts: Array.isArray(raw.contacts) ? raw.contacts : [],
+        notes_terrain: Array.isArray(raw.notes_terrain) ? raw.notes_terrain : [],
+        sorties_12m_comptage: raw.sorties_12m_comptage || {
+          message: "Donnée publique non encore chargée dans cette base."
+        }
+      };
+    }
+
+    function getSourceEntities() {
+      if (typeof editeurs !== "undefined" && Array.isArray(editeurs)) {
+        return editeurs.map(normalizeEntity);
+      }
+      if (typeof INITIAL_ENTITIES !== "undefined" && Array.isArray(INITIAL_ENTITIES)) {
+        return INITIAL_ENTITIES.map(normalizeEntity);
+      }
+      return [];
+    }
 
     function loadState() {
+      const base = getSourceEntities();
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         try {
-          return JSON.parse(saved);
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed.map(normalizeEntity);
+          }
         } catch (e) {
-          return structuredClone(INITIAL_ENTITIES);
+          return base.map((x) => ({ ...x }));
         }
       }
-      return structuredClone(INITIAL_ENTITIES);
+      return base.map((x) => ({ ...x }));
     }
 
     let state = loadState();
@@ -253,10 +350,14 @@
     }
 
     function updateStatusBar() {
-      const totalContacts = state.reduce((acc, item) => acc + (item.contacts ? item.contacts.length : 0), 0);
+      const totalContacts = state.reduce((acc, item) => {
+        const directCount = (item.emails ? item.emails.length : 0) + (item.liens ? item.liens.length : 0);
+        const legacyCount = item.contacts ? item.contacts.length : 0;
+        return acc + Math.max(directCount, legacyCount);
+      }, 0);
       const totalTerrainNotes = state.reduce((acc, item) => acc + (item.notes_terrain ? item.notes_terrain.length : 0), 0);
       document.getElementById("status-bar").textContent =
-        `${state.length} structures • ${totalContacts} contacts • ${totalTerrainNotes} note(s) terrain`;
+        `${state.length} structures • ${totalContacts} contact(s)/lien(s) • ${totalTerrainNotes} note(s) terrain`;
     }
 
     function switchTab(tabName) {
@@ -294,11 +395,13 @@
         if (fExp && !item.cibles.expert) return false;
 
         if (!q) return true;
+        const emailsText = (item.emails || []).join(" ");
+        const liensText = (item.liens || []).join(" ");
         const contactsText = (item.contacts || [])
-          .map((c) => `${c.mail} ${c.mail_2} ${c.reponse} ${c.probleme}`)
+          .map((c) => `${c.mail || ""} ${c.mail_2 || ""} ${c.reponse || ""} ${c.probleme || ""}`)
           .join(" ");
         const terrainText = (item.notes_terrain || []).map((n) => n.texte).join(" ");
-        const hay = `${item.nom} ${item.recherche_connue} ${item.commentaire} ${item.ne_plus_deranger} ${contactsText} ${terrainText}`.toLowerCase();
+        const hay = `${item.nom} ${item.recherche_connue} ${item.refuse} ${item.commentaire} ${item.ne_plus_deranger} ${emailsText} ${liensText} ${contactsText} ${terrainText}`.toLowerCase();
         return hay.includes(q);
       });
 
@@ -314,28 +417,47 @@
         ].join("");
 
         const ciblesBadges = [
-          item.cibles.enfant ? `<span class="badge">Enfant</span>` : "",
-          item.cibles.famille ? `<span class="badge">Famille</span>` : "",
-          item.cibles.initie ? `<span class="badge">Initié</span>` : "",
-          item.cibles.expert ? `<span class="badge">Expert</span>` : ""
+          item.cibles.enfant ? `<span class="badge c-enfant">Enfant</span>` : "",
+          item.cibles.famille ? `<span class="badge c-famille">Famille</span>` : "",
+          item.cibles.initie ? `<span class="badge c-initie">Initié</span>` : "",
+          item.cibles.expert ? `<span class="badge c-expert">Expert</span>` : ""
         ].join("");
 
-        const contactsHTML = (item.contacts || []).map((c) => `
-          <div style="border-top:1px solid var(--border); padding-top:6px; margin-top:6px; font-size:0.84rem;">
-            ${c.mail ? `<div>Contact : <strong>${escapeHTML(c.mail)}</strong></div>` : `<div class="muted">Contact : non renseigné</div>`}
-            ${c.mail_2 ? `<div>2nd contact : <strong>${escapeHTML(c.mail_2)}</strong></div>` : ""}
-            <div class="muted">Catalogue janv. 26 : ${c.catalog_janv_26 ? "Oui" : "Non"} • Clic lien : ${c.check_clic ? "Oui" : "Non"}</div>
-            ${c.probleme ? `<div style="color:#fca5a5;">Problème : ${escapeHTML(c.probleme)}</div>` : ""}
-            ${c.reponse ? `<div style="color:#86efac;">Réponse : ${escapeHTML(c.reponse)}</div>` : ""}
-          </div>
-        `).join("");
+        const mailsList = (item.emails || []).filter(Boolean);
+        const liensList = (item.liens || []).filter(Boolean);
+        const legacyContacts = item.contacts || [];
+
+        let contactBlockContent = "";
+        if (mailsList.length > 0) {
+          contactBlockContent += `<div><strong>Mails :</strong> ${mailsList.map((m) => escapeHTML(m)).join(" • ")}</div>`;
+        }
+        if (liensList.length > 0) {
+          contactBlockContent += `<div style="margin-top:4px;"><strong>Liens :</strong> ${liensList.map((l) => escapeHTML(l)).join(" • ")}</div>`;
+        }
+        if (legacyContacts.length > 0) {
+          contactBlockContent += legacyContacts.map((c) => `
+            <div style="margin-top:4px;">
+              ${c.mail ? `<span>${escapeHTML(c.mail)}</span>` : ""}
+              ${c.mail_2 ? ` • <span>${escapeHTML(c.mail_2)}</span>` : ""}
+              ${c.probleme ? `<div style="color:#fca5a5;">Problème : ${escapeHTML(c.probleme)}</div>` : ""}
+              ${c.reponse ? `<div style="color:#86efac;">Réponse : ${escapeHTML(c.reponse)}</div>` : ""}
+            </div>
+          `).join("");
+        }
+        if (!contactBlockContent) {
+          contactBlockContent = `<div class="muted">Aucun mail ni lien renseigné.</div>`;
+        }
 
         const terrainHTML = (item.notes_terrain || []).map((n) => `
           <div style="background:rgba(245,158,11,0.12); border-left:3px solid var(--warn); padding:6px 8px; margin-top:6px; border-radius:6px; font-size:0.84rem;">
-            <span class="badge terrain">TERRAIN / MANUEL</span> <span class="muted">${escapeHTML(n.date)}</span>
+            <span class="badge terrain">NOTE TERRAIN</span> <span class="muted">${escapeHTML(n.date)}</span>
             <div>${escapeHTML(n.texte)}</div>
           </div>
         `).join("");
+
+        const confirmText = noteConfirmations[item.id]
+          ? `<div class="toast-msg">${escapeHTML(noteConfirmations[item.id])}</div>`
+          : "";
 
         const card = document.createElement("div");
         card.className = "card";
@@ -346,27 +468,34 @@
           </div>
           <div style="margin:4px 0;">${rolesBadges} ${ciblesBadges}</div>
           ${item.ne_plus_deranger ? `<div style="color:#fca5a5; font-size:0.85rem; margin-top:6px;"><strong>Blocage / Alerte :</strong> ${escapeHTML(item.ne_plus_deranger)}</div>` : ""}
-          <div style="margin-top:8px; font-size:0.88rem;">
-            <strong>Ligne / Recherches connues :</strong> ${item.recherche_connue ? escapeHTML(item.recherche_connue) : `<span class="muted">Non renseigné</span>`}
-          </div>
-          ${item.commentaire ? `<div style="margin-top:4px; font-size:0.85rem;"><strong>Commentaire :</strong> ${escapeHTML(item.commentaire)}</div>` : ""}
 
-          <div class="box-missing">
-            <strong>Sorties & décompte exhaustif (12 mois glissants) :</strong><br/>
-            ${escapeHTML(item.sorties_12m_comptage.message)}
+          <div class="box-search">
+            <strong>Recherche / Ligne éditoriale :</strong> ${item.recherche_connue ? escapeHTML(item.recherche_connue) : `<span class="muted">Non renseigné</span>`}
           </div>
 
-          <div style="margin-top:8px;">
-            <strong style="font-size:0.88rem;">Contacts (${(item.contacts || []).length})</strong>
-            ${contactsHTML}
+          ${item.refuse ? `
+            <div class="box-refuse">
+              <strong>Refuse / Interdit :</strong> ${escapeHTML(item.refuse)}
+            </div>
+          ` : ""}
+
+          ${item.commentaire ? `<div style="margin-top:8px; font-size:0.85rem;"><strong>Commentaire :</strong> ${escapeHTML(item.commentaire)}</div>` : ""}
+
+          <div class="box-contacts">
+            <strong>Contact & Suivi</strong>
+            <div style="margin-top:4px;">${contactBlockContent}</div>
+            <div class="muted" style="margin-top:6px;">
+              Dernier catalogue : <strong>${escapeHTML(item.dernier_catalogue)}</strong> • Clic lien : <strong>${item.clique_lien ? "Oui" : "Non"}</strong>
+            </div>
           </div>
 
           <div style="margin-top:10px;">
-            <strong style="font-size:0.88rem;">Notes terrain & critères forcés</strong>
+            <strong style="font-size:0.88rem;">Notes terrain</strong>
             ${terrainHTML || `<div class="muted" style="font-size:0.8rem;">Aucune note terrain enregistrée.</div>`}
             <div style="margin-top:6px;">
-              <input id="note-input-${item.id}" type="text" placeholder="Ex. Rencontre salon : demande un jeu de plis..." />
+              <input id="note-input-${item.id}" type="text" placeholder="Ex. Rencontre salon : demande un jeu de plis..." onkeydown="if(event.key==='Enter'){addTerrainNote('${item.id}');}" />
               <button class="secondary" style="margin-top:6px;" onclick="addTerrainNote('${item.id}')">+ Ajouter note terrain</button>
+              ${confirmText}
             </div>
           </div>
         `;
@@ -383,6 +512,7 @@
 
     function addTerrainNote(id) {
       const input = document.getElementById(`note-input-${id}`);
+      if (!input) return;
       const txt = (input.value || "").trim();
       if (!txt) return;
       const target = state.find((e) => e.id === id);
@@ -393,6 +523,7 @@
         source: "TERRAIN_MANUEL",
         texte: txt
       });
+      noteConfirmations[id] = "Note terrain enregistrée en local.";
       input.value = "";
       saveState();
       renderEditeurs();
@@ -408,14 +539,13 @@
 
       const resBox = document.getElementById("matching-results");
 
-      // 1. Contrôle d'existence >= 75%
       let existenceHTML = "";
       if (JEUX_REFERENCE.length === 0) {
         existenceHTML = `
           <div class="card">
-            <strong>Contrôle d'existence ($\ge 75\%$)</strong>
+            <strong>Contrôle d'existence (&ge; 75%)</strong>
             <div class="box-missing">
-              <strong>Donnée manquante :</strong> Aucun catalogue de jeux de référence n'est encore chargé dans <code>JEUX_REFERENCE</code>. Impossible de calculer un taux de similarité $\ge 75\%$ de manière fiable sans catalogue de référence.
+              <strong>Donnée manquante :</strong> Aucun catalogue de jeux de référence n'est encore chargé dans <code>JEUX_REFERENCE</code>. Impossible de calculer un taux de similarité &ge; 75% de manière fiable sans catalogue de référence.
             </div>
           </div>
         `;
@@ -428,15 +558,14 @@
         }).filter((m) => m.score >= 75);
         existenceHTML = `
           <div class="card">
-            <strong>Jeux proches détectés ($\ge 75\%$)</strong>
+            <strong>Jeux proches détectés (&ge; 75%)</strong>
             ${matches.length === 0
-              ? `<p class="muted">Aucun jeu proche à $\ge 75\%$ trouvé sur les critères saisis.</p>`
+              ? `<p class="muted">Aucun jeu proche à &ge; 75% trouvé sur les critères saisis.</p>`
               : matches.map((m) => `<div><strong>${escapeHTML(m.jeu.titre)}</strong> — ${m.score}% (correspondances : ${escapeHTML(m.hits.join(", "))})</div>`).join("")}
           </div>
         `;
       }
 
-      // 2. Suggestions d'éditeurs
       const scored = state
         .filter((e) => !e.ne_plus_deranger)
         .map((e) => {
@@ -531,7 +660,7 @@
     }
 
     function resetLocalState() {
-      if (!confirm("Effacer les modifications locales et revenir à l'import Excel initial ?")) return;
+      if (!confirm("Effacer les modifications locales et revenir aux données de base ?")) return;
       localStorage.removeItem(STORAGE_KEY);
       state = loadState();
       renderEditeurs();
