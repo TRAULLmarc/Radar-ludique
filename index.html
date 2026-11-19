@@ -251,26 +251,48 @@
 
     <section id="tab-matching" class="panel">
       <div class="card">
-        <strong>Matching Prototype & Vérification d'existence (&ge; 75%)</strong>
-        <p class="muted">Fenêtre éditeurs par défaut : 6 ou 12 mois glissants (option élargie disponible).</p>
-        <label for="m-fenetre">Fenêtre d'analyse éditeurs</label>
-        <select id="m-fenetre">
-          <option value="6">6 derniers mois glissants</option>
-          <option value="12" selected>12 derniers mois glissants</option>
-          <option value="ALL">Historique complet disponible</option>
-        </select>
-        <label for="m-cible">Cible visée</label>
-        <select id="m-cible">
-          <option value="">Toutes cibles</option>
-          <option value="enfant">Enfant</option>
-          <option value="famille" selected>Famille</option>
-          <option value="initie">Initié</option>
-          <option value="expert">Expert</option>
-        </select>
+        <strong>Matching Prototype → Éditeurs</strong>
+        <p class="muted">Renseigne les infos de ton prototype pour classer les éditeurs selon leurs recherches, leurs commentaires et leurs interdits.</p>
+
+        <div class="row">
+          <div style="flex:1; min-width:140px;">
+            <label for="m-joueurs">Joueurs (ex. 2-4)</label>
+            <input id="m-joueurs" type="text" placeholder="Ex. 2-4 ou 3-5" />
+          </div>
+          <div style="flex:1; min-width:140px;">
+            <label for="m-duree">Durée (ex. 30-45 min)</label>
+            <input id="m-duree" type="text" placeholder="Ex. 30-45 min" />
+          </div>
+          <div style="flex:1; min-width:160px;">
+            <label for="m-cible">Cible visée</label>
+            <select id="m-cible">
+              <option value="">Toutes cibles</option>
+              <option value="enfant">Enfant</option>
+              <option value="famille" selected>Famille</option>
+              <option value="initie">Initié</option>
+              <option value="expert">Expert</option>
+            </select>
+          </div>
+        </div>
+
         <label for="m-mots">Mécaniques / Thèmes / Mots-clés (séparés par des virgules)</label>
-        <input id="m-mots" type="text" placeholder="Ex. jeu de plis, draft, coopération, nature, enquête" />
-        <div style="margin-top: 12px;">
+        <input id="m-mots" type="text" placeholder="Ex. jeu de plis, draft, coopération, enquête, nature" />
+
+        <label for="m-materiel">Format / Contrainte matérielle (optionnel)</label>
+        <input id="m-materiel" type="text" placeholder="Ex. cartes uniquement, petite boîte, tuiles" />
+
+        <div class="row" style="margin-top: 10px;">
+          <label style="margin:0; display:inline-flex; gap:6px; align-items:center;">
+            <input type="checkbox" id="m-only-editeur" style="width:auto;" checked /> Uniquement les structures « Éditeur »
+          </label>
+          <label style="margin:0; display:inline-flex; gap:6px; align-items:center;">
+            <input type="checkbox" id="m-hide-refused" style="width:auto;" checked /> Écarter les éditeurs qui refusent un de mes mots-clés
+          </label>
+        </div>
+
+        <div class="row" style="margin-top: 12px;">
           <button onclick="runMatching()">Analyser le matching</button>
+          <button class="secondary" onclick="resetMatching()">Réinitialiser</button>
         </div>
       </div>
       <div id="matching-results"></div>
@@ -278,27 +300,16 @@
 
     <section id="tab-tendances" class="panel">
       <div class="card">
-        <strong>Radar Tendances (Signaux forts, faibles & horizon 2–5 ans)</strong>
-        <label for="t-sujet">Axe / Mécanique / Thème à inspecter</label>
-        <input id="t-sujet" type="text" placeholder="Ex. asymétrie, solo/coop, boîtes compactes..." />
-        <div style="margin-top: 12px;">
-          <button onclick="runTendances()">Lancer l'analyse</button>
-        </div>
+        <strong>Radar Tendances</strong>
+        <div class="box-missing">Cet onglet sera configuré juste après la validation du Matching.</div>
       </div>
       <div id="tendances-results"></div>
     </section>
 
     <section id="tab-actu" class="panel">
       <div class="card">
-        <strong>Fil Actu Ludique (FR & Mondial)</strong>
-        <label for="a-periode">Période d'affichage</label>
-        <select id="a-periode" onchange="renderActu()">
-          <option value="jour">Aujourd'hui</option>
-          <option value="semaine" selected>Cette semaine</option>
-          <option value="mois">Ce mois-ci</option>
-          <option value="annee">Cette année</option>
-        </select>
-        <div class="box-missing">Aucun flux RSS connecté pour le moment.</div>
+        <strong>Fil Actu Ludique</strong>
+        <div class="box-missing">Cet onglet sera branché ensuite sur les flux d'actualités ludiques.</div>
       </div>
       <div id="actu-list"></div>
     </section>
@@ -980,65 +991,102 @@
       }
     }
 
+    function resetMatching() {
+      document.getElementById("m-joueurs").value = "";
+      document.getElementById("m-duree").value = "";
+      document.getElementById("m-cible").value = "famille";
+      document.getElementById("m-mots").value = "";
+      document.getElementById("m-materiel").value = "";
+      document.getElementById("m-only-editeur").checked = true;
+      document.getElementById("m-hide-refused").checked = true;
+      document.getElementById("matching-results").innerHTML = "";
+    }
+
     function runMatching() {
       const cible = document.getElementById("m-cible").value;
-      const fenetre = document.getElementById("m-fenetre").value;
+      const joueurs = (document.getElementById("m-joueurs").value || "").trim().toLowerCase();
+      const duree = (document.getElementById("m-duree").value || "").trim().toLowerCase();
+      const materiel = (document.getElementById("m-materiel").value || "").trim().toLowerCase();
+      const onlyEditeur = document.getElementById("m-only-editeur").checked;
+      const hideRefused = document.getElementById("m-hide-refused").checked;
       const mots = (document.getElementById("m-mots").value || "")
         .split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
 
       const scored = state
+        .filter((e) => !onlyEditeur || (e.roles && e.roles.editeur))
         .map((e) => {
           let score = 0;
           const reasons = [];
-          if (cible && e.cibles && e.cibles[cible]) {
-            score += 40;
-            reasons.push(`Cible ${cible}`);
-          }
+          const warnings = [];
+
           const commentsBlob = (e.commentaires_dates || []).map((c) => c.texte).join(" ");
-          const blob = `${e.recherche_connue} ${commentsBlob}`.toLowerCase();
-          const matchedWords = mots.filter((m) => blob.includes(m));
-          if (mots.length > 0 && matchedWords.length > 0) {
-            const pts = Math.round((matchedWords.length / mots.length) * 60);
-            score += pts;
-            reasons.push(`Mots-clés (${pts} pts) : ${matchedWords.join(", ")}`);
+          const searchBlob = `${e.recherche_connue} ${commentsBlob}`.toLowerCase();
+          const refuseBlob = String(e.refuse || "").toLowerCase();
+
+          if (cible && e.cibles && e.cibles[cible]) {
+            score += 35;
+            reasons.push(`Cible ${cible} cochée`);
           }
-          return { entity: e, score, reasons };
+
+          if (mots.length > 0) {
+            const matchedWords = mots.filter((m) => searchBlob.includes(m));
+            if (matchedWords.length > 0) {
+              const pts = Math.round((matchedWords.length / mots.length) * 45);
+              score += pts;
+              reasons.push(`Mots-clés trouvés (${pts} pts) : ${matchedWords.join(", ")}`);
+            }
+            const refusedMatches = mots.filter((m) => refuseBlob.includes(m));
+            if (refusedMatches.length > 0) {
+              score -= 40;
+              warnings.push(`Refus mentionné : ${refusedMatches.join(", ")}`);
+            }
+          }
+
+          const extraTokens = [joueurs, duree, materiel].filter(Boolean);
+          if (extraTokens.length > 0) {
+            const extraMatches = extraTokens.filter((t) => searchBlob.includes(t));
+            if (extraMatches.length > 0) {
+              const pts = Math.min(20, extraMatches.length * 10);
+              score += pts;
+              reasons.push(`Précisions alignées : ${extraMatches.join(", ")}`);
+            }
+            const extraRefused = extraTokens.filter((t) => refuseBlob.includes(t));
+            if (extraRefused.length > 0) {
+              score -= 30;
+              warnings.push(`Contrainte refusée : ${extraRefused.join(", ")}`);
+            }
+          }
+
+          return {
+            entity: e,
+            score: Math.max(0, Math.min(100, score)),
+            reasons,
+            warnings
+          };
         })
-        .filter((item) => item.score > 0)
+        .filter((item) => {
+          if (hideRefused && item.warnings.length > 0) return false;
+          return item.score > 0;
+        })
         .sort((a, b) => b.score - a.score)
-        .slice(0, 15);
+        .slice(0, 20);
 
       document.getElementById("matching-results").innerHTML = `
         <div class="card">
-          <strong>Pistes d'éditeurs (fenêtre : ${escapeHTML(fenetre)})</strong>
+          <strong>Résultats du matching (${scored.length} piste(s) retenue(s))</strong>
           ${scored.length === 0
-            ? `<p class="muted">Aucune correspondance trouvée.</p>`
+            ? `<p class="muted" style="margin-top:8px;">Aucun éditeur ne ressort avec ces critères. Essaie d'élargir tes mots-clés ou de décocher l'option d'exclusion des refus.</p>`
             : scored.map((s) => `
-              <div style="border-top:1px solid var(--border); padding-top:8px; margin-top:8px;">
-                <strong>${escapeHTML(s.entity.nom)}</strong> — <span class="badge ok">${s.score} pts</span>
-                <div class="muted" style="margin-top:4px;">${escapeHTML(s.reasons.join(" • "))}</div>
+              <div style="border-top:1px solid var(--border); padding-top:10px; margin-top:10px;">
+                <div class="row" style="justify-content: space-between;">
+                  <strong>${escapeHTML(s.entity.nom)}</strong>
+                  <span class="badge ${s.score >= 70 ? "ok" : s.score >= 40 ? "terrain" : ""}">${s.score} %</span>
+                </div>
+                <div class="muted" style="margin-top:4px;">${escapeHTML(s.reasons.join(" • ") || "Correspondance partielle")}</div>
+                ${s.warnings.length > 0 ? `<div class="err-msg" style="margin-top:4px;">${escapeHTML(s.warnings.join(" • "))}</div>` : ""}
+                ${s.entity.recherche_connue ? `<div style="font-size:0.84rem; margin-top:4px;"><strong>Recherche :</strong> ${escapeHTML(s.entity.recherche_connue)}</div>` : ""}
               </div>
             `).join("")}
-        </div>
-      `;
-    }
-
-    function runTendances() {
-      const sujet = (document.getElementById("t-sujet").value || "").trim();
-      document.getElementById("tendances-results").innerHTML = `
-        <div class="card">
-          <strong>Analyse — ${sujet ? escapeHTML(sujet) : "Vue globale"}</strong>
-          <div class="box-missing">Les sources externes (salons, sorties 12 mois, palmarès) ne sont pas encore connectées.</div>
-        </div>
-      `;
-    }
-
-    function renderActu() {
-      const periode = document.getElementById("a-periode").value;
-      document.getElementById("actu-list").innerHTML = `
-        <div class="card">
-          <strong>Période : ${escapeHTML(periode)}</strong>
-          <p class="muted">Aucun flux RSS chargé pour le moment.</p>
         </div>
       `;
     }
@@ -1063,7 +1111,6 @@
     renderAuthUI();
     updateStatusBar();
     renderEditeurs();
-    renderActu();
     syncFromSupabase();
   </script>
 </body>
