@@ -51,7 +51,7 @@
     .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     input, select, textarea, button {
       font-family: inherit;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--card-2);
@@ -67,6 +67,8 @@
     }
     button.secondary { background: var(--card-2); border-color: var(--border); font-weight: 500; }
     button.danger { background: #991b1b; border-color: #ef4444; }
+    button.warn-btn { background: #92400e; border-color: var(--warn); }
+    button.small { padding: 4px 8px; font-size: 0.78rem; width: auto; }
     .badge {
       display: inline-block;
       padding: 2px 8px;
@@ -110,6 +112,29 @@
       margin-top: 8px;
       font-size: 0.84rem;
     }
+    .box-comments {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      border-left: 3px solid var(--warn);
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .comment-entry {
+      background: rgba(245, 158, 11, 0.12);
+      border-left: 3px solid var(--warn);
+      padding: 6px 8px;
+      margin-top: 6px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+    }
+    .edit-box {
+      background: var(--card-2);
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 10px;
+    }
     .muted { color: var(--muted); font-size: 0.85rem; }
     .box-missing {
       border: 1px dashed var(--warn);
@@ -121,6 +146,12 @@
     }
     .toast-msg {
       color: #86efac;
+      font-size: 0.82rem;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+    .err-msg {
+      color: #fca5a5;
       font-size: 0.82rem;
       margin-top: 6px;
       font-weight: 600;
@@ -154,22 +185,54 @@
 </head>
 <body>
   <header>
-    <h1>Radar Ludique — Designer</h1>
-    <div class="sub" id="status-bar">Initialisation...</div>
+    <div class="row" style="justify-content: space-between;">
+      <div>
+        <h1>Radar Ludique — Designer</h1>
+        <div class="sub" id="status-bar">Initialisation...</div>
+      </div>
+      <div id="auth-area" class="row"></div>
+    </div>
   </header>
 
   <main>
-    <!-- ONGLET 1 : EDITEURS -->
     <section id="tab-editeurs" class="panel active">
       <div class="card">
         <div class="row" style="justify-content: space-between;">
           <strong>Éditeurs, Auto-édition & Distributeurs</strong>
-          <div class="row">
-            <button class="secondary" onclick="exportStateJSON()">Exporter JSON</button>
-            <button class="danger" onclick="resetLocalState()">Réinitialiser local</button>
+          <div class="row" id="admin-top-actions"></div>
+        </div>
+        <div id="add-structure-panel" style="display:none; margin-top:10px;" class="edit-box">
+          <strong>Nouvelle structure</strong>
+          <label>Nom (ex. 🇫🇷 Studio Exemple)</label>
+          <input id="new-nom" type="text" placeholder="🇫🇷 Nom de la structure" />
+          <div class="row" style="margin-top:8px;">
+            <div style="flex:1; min-width:120px;">
+              <label>Drapeau</label>
+              <input id="new-drapeau" type="text" placeholder="🇫🇷" />
+            </div>
+            <div style="flex:2; min-width:180px;">
+              <label>Recherche / Ligne éditoriale</label>
+              <input id="new-recherche" type="text" placeholder="Mécaniques, thèmes..." />
+            </div>
+          </div>
+          <label>Refuse</label>
+          <input id="new-refuse" type="text" placeholder="Ce que la structure refuse" />
+          <div class="row" style="margin-top:8px;">
+            <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="new-r-ed" style="width:auto;" checked /> Éditeur</label>
+            <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="new-r-auto" style="width:auto;" /> Auto-édition</label>
+            <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="new-r-dist" style="width:auto;" /> Distrib</label>
+            <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="new-c-enf" style="width:auto;" /> Enfant</label>
+            <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="new-c-fam" style="width:auto;" /> Famille</label>
+            <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="new-c-ini" style="width:auto;" /> Initié</label>
+            <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="new-c-exp" style="width:auto;" /> Expert</label>
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <button onclick="createStructure()">Créer et publier</button>
+            <button class="secondary" onclick="toggleAddStructure(false)">Annuler</button>
           </div>
         </div>
-        <label for="search-editeur">Recherche (nom, recherche, refus, commentaire, mail, lien, note)</label>
+
+        <label for="search-editeur">Recherche (nom, recherche, refus, commentaire, mail, lien)</label>
         <input id="search-editeur" type="text" placeholder="Ex. Bombyx, enquête, abstrait, Asmodee..." oninput="renderEditeurs()" />
 
         <div class="row" style="margin-top: 10px;">
@@ -186,19 +249,16 @@
       <div id="editeurs-list"></div>
     </section>
 
-    <!-- ONGLET 2 : MATCHING & ANTI-DOUBLON >= 75% -->
     <section id="tab-matching" class="panel">
       <div class="card">
         <strong>Matching Prototype & Vérification d'existence (&ge; 75%)</strong>
-        <p class="muted">Fenêtre éditeurs par défaut : 6 ou 12 mois glissants (option élargie disponible). Le contrôle d'antériorité (&ge; 75%) vérifie l'ensemble du catalogue chargé pour éviter de réinventer l'eau chaude.</p>
-
+        <p class="muted">Fenêtre éditeurs par défaut : 6 ou 12 mois glissants (option élargie disponible).</p>
         <label for="m-fenetre">Fenêtre d'analyse éditeurs</label>
         <select id="m-fenetre">
           <option value="6">6 derniers mois glissants</option>
           <option value="12" selected>12 derniers mois glissants</option>
           <option value="ALL">Historique complet disponible</option>
         </select>
-
         <label for="m-cible">Cible visée</label>
         <select id="m-cible">
           <option value="">Toutes cibles</option>
@@ -207,36 +267,27 @@
           <option value="initie">Initié</option>
           <option value="expert">Expert</option>
         </select>
-
-        <label for="m-mots">Mécaniques / Thèmes / Mots-clés du prototype (séparés par des virgules)</label>
+        <label for="m-mots">Mécaniques / Thèmes / Mots-clés (séparés par des virgules)</label>
         <input id="m-mots" type="text" placeholder="Ex. jeu de plis, draft, coopération, nature, enquête" />
-
         <div style="margin-top: 12px;">
-          <button onclick="runMatching()">Analyser le matching & vérifier l'existence (&ge; 75%)</button>
+          <button onclick="runMatching()">Analyser le matching</button>
         </div>
       </div>
-
       <div id="matching-results"></div>
     </section>
 
-    <!-- ONGLET 3 : RADAR TENDANCES (2-5 ANS) -->
     <section id="tab-tendances" class="panel">
       <div class="card">
         <strong>Radar Tendances (Signaux forts, faibles & horizon 2–5 ans)</strong>
-        <p class="muted">Analyse déclenchée à la demande (pas de tâche de fond automatique). Restitue les signaux, la conclusion prospective et signale explicitement les données publiques manquantes.</p>
-
-        <label for="t-sujet">Axe / Mécanique / Thème à inspecter (optionnel)</label>
-        <input id="t-sujet" type="text" placeholder="Ex. asymétrie, solo/coop, boîtes compactes, éco-conception..." />
-
+        <label for="t-sujet">Axe / Mécanique / Thème à inspecter</label>
+        <input id="t-sujet" type="text" placeholder="Ex. asymétrie, solo/coop, boîtes compactes..." />
         <div style="margin-top: 12px;">
-          <button onclick="runTendances()">Lancer l'analyse des signaux & conclusion</button>
+          <button onclick="runTendances()">Lancer l'analyse</button>
         </div>
       </div>
-
       <div id="tendances-results"></div>
     </section>
 
-    <!-- ONGLET 4 : ACTU LUDIQUE -->
     <section id="tab-actu" class="panel">
       <div class="card">
         <strong>Fil Actu Ludique (FR & Mondial)</strong>
@@ -247,9 +298,7 @@
           <option value="mois">Ce mois-ci</option>
           <option value="annee">Cette année</option>
         </select>
-        <div class="box-missing">
-          <strong>État des flux :</strong> Aucun flux RSS externe n'est encore connecté en direct dans cette V1 locale (les navigateurs bloquent parfois certains flux sans relais/proxy). Les entrées ci-dessous sont des emplacements de structure prêts à recevoir tes flux validés.
-        </div>
+        <div class="box-missing">Aucun flux RSS connecté pour le moment.</div>
       </div>
       <div id="actu-list"></div>
     </section>
@@ -263,17 +312,32 @@
   </nav>
 
   <script src="data.js"></script>
+  <script src="vampirize-init.js"></script>
   <script>
+    const SUPABASE_URL = "https://izsjxvpgevxszqmasjlk.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_dagt7loMaybYdZG_eNDt-A_RrLHWs1X";
     const STORAGE_KEY = "radar_ludique_state_v2";
-    const JEUX_REFERENCE = [];
-    const noteConfirmations = {};
+    const SESSION_KEY = "radar_ludique_sb_session";
+
+    const feedbackById = {};
+    const editingIds = new Set();
+    let authSession = null;
+    let isAdmin = false;
+
+    function isSupabaseConfigured() {
+      return SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length > 10;
+    }
 
     function normalizeEntity(raw, index) {
       const rolesArr = Array.isArray(raw.roles) ? raw.roles.map((r) => String(r).toLowerCase()) : [];
       const ciblesArr = Array.isArray(raw.cibles) ? raw.cibles.map((c) => String(c).toLowerCase()) : [];
 
       const rolesObj = typeof raw.roles === "object" && !Array.isArray(raw.roles) && raw.roles
-        ? raw.roles
+        ? {
+            editeur: Boolean(raw.roles.editeur),
+            auto_edition: Boolean(raw.roles.auto_edition),
+            distrib: Boolean(raw.roles.distrib)
+          }
         : {
             editeur: rolesArr.includes("editeur") || rolesArr.includes("éditeur"),
             auto_edition: rolesArr.includes("auto-edition") || rolesArr.includes("auto_edition") || rolesArr.includes("auto-édition"),
@@ -281,7 +345,12 @@
           };
 
       const ciblesObj = typeof raw.cibles === "object" && !Array.isArray(raw.cibles) && raw.cibles
-        ? raw.cibles
+        ? {
+            enfant: Boolean(raw.cibles.enfant),
+            famille: Boolean(raw.cibles.famille),
+            initie: Boolean(raw.cibles.initie),
+            expert: Boolean(raw.cibles.expert)
+          }
         : {
             enfant: ciblesArr.includes("enfant"),
             famille: ciblesArr.includes("famille"),
@@ -294,6 +363,37 @@
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-|-$/g, "");
 
+      const mergedComments = [];
+      if (raw.commentaire && String(raw.commentaire).trim()) {
+        mergedComments.push({
+          id: `legacy-comment-${index}`,
+          date: "Initial",
+          texte: String(raw.commentaire).trim()
+        });
+      }
+      if (Array.isArray(raw.commentaires_dates)) {
+        raw.commentaires_dates.forEach((c, idx) => {
+          if (c && c.texte) {
+            mergedComments.push({
+              id: c.id || `c-${index}-${idx}`,
+              date: c.date || new Date().toLocaleString("fr-FR"),
+              texte: String(c.texte)
+            });
+          }
+        });
+      }
+      if (Array.isArray(raw.notes_terrain)) {
+        raw.notes_terrain.forEach((n, idx) => {
+          if (n && n.texte) {
+            mergedComments.push({
+              id: n.id || `note-${index}-${idx}`,
+              date: n.date || new Date().toLocaleString("fr-FR"),
+              texte: String(n.texte)
+            });
+          }
+        });
+      }
+
       return {
         id: raw.id || `${slug}-${index}`,
         nom: raw.nom || `Structure #${index + 1}`,
@@ -303,31 +403,16 @@
         recherche_connue: raw.recherche_connue ?? raw.recherche ?? "",
         refuse: raw.refuse ?? "",
         commentaire: raw.commentaire ?? "",
+        commentaires_dates: mergedComments,
         ne_plus_deranger: raw.ne_plus_deranger ?? "",
         emails: Array.isArray(raw.emails) ? raw.emails : [],
         liens: Array.isArray(raw.liens) ? raw.liens : [],
         dernier_catalogue: raw.dernier_catalogue ?? (raw.catalogueEnvoyeJanv26 ? "Janvier 2026" : "Aucun"),
-        clique_lien: Boolean(raw.clique_lien ?? raw.cliqueLien),
-        contacts: Array.isArray(raw.contacts) ? raw.contacts : [],
-        notes_terrain: Array.isArray(raw.notes_terrain) ? raw.notes_terrain : [],
-        sorties_12m_comptage: raw.sorties_12m_comptage || {
-          message: "Donnée publique non encore chargée dans cette base."
-        }
+        clique_lien: Boolean(raw.clique_lien ?? raw.cliqueLien)
       };
     }
 
-    function getSourceEntities() {
-      if (typeof editeurs !== "undefined" && Array.isArray(editeurs)) {
-        return editeurs.map(normalizeEntity);
-      }
-      if (typeof INITIAL_ENTITIES !== "undefined" && Array.isArray(INITIAL_ENTITIES)) {
-        return INITIAL_ENTITIES.map(normalizeEntity);
-      }
-      return [];
-    }
-
-    function loadState() {
-      const base = getSourceEntities();
+    function getLocalFallbackEntities() {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         try {
@@ -335,29 +420,259 @@
           if (Array.isArray(parsed) && parsed.length > 0) {
             return parsed.map(normalizeEntity);
           }
-        } catch (e) {
-          return base.map((x) => ({ ...x }));
-        }
+        } catch (e) {}
       }
-      return base.map((x) => ({ ...x }));
+      if (typeof editeurs !== "undefined" && Array.isArray(editeurs)) {
+        return editeurs.map(normalizeEntity);
+      }
+      return [];
     }
 
-    let state = loadState();
+    let state = getLocalFallbackEntities();
 
-    function saveState() {
+    function saveLocalCache() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       updateStatusBar();
     }
 
-    function updateStatusBar() {
-      const totalContacts = state.reduce((acc, item) => {
-        const directCount = (item.emails ? item.emails.length : 0) + (item.liens ? item.liens.length : 0);
-        const legacyCount = item.contacts ? item.contacts.length : 0;
-        return acc + Math.max(directCount, legacyCount);
-      }, 0);
-      const totalTerrainNotes = state.reduce((acc, item) => acc + (item.notes_terrain ? item.notes_terrain.length : 0), 0);
+    function loadSavedSession() {
+      try {
+        const raw = localStorage.getItem(SESSION_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.access_token) {
+          authSession = parsed;
+          isAdmin = true;
+          return parsed;
+        }
+      } catch (e) {}
+      return null;
+    }
+
+    function saveSession(sessionObj) {
+      authSession = sessionObj;
+      isAdmin = Boolean(sessionObj && sessionObj.access_token);
+      if (sessionObj) {
+        localStorage.setItem(SESSION_KEY, JSON.stringify(sessionObj));
+      } else {
+        localStorage.removeItem(SESSION_KEY);
+      }
+      renderAuthUI();
+      renderEditeurs();
+    }
+
+    async function sbFetch(path, options = {}) {
+      const headers = {
+        "apikey": SUPABASE_ANON_KEY,
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      };
+      if (authSession && authSession.access_token) {
+        headers["Authorization"] = `Bearer ${authSession.access_token}`;
+      } else {
+        headers["Authorization"] = `Bearer ${SUPABASE_ANON_KEY}`;
+      }
+      const res = await fetch(`${SUPABASE_URL}${path}`, {
+        ...options,
+        headers
+      });
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(errText || `HTTP ${res.status}`);
+      }
+      const text = await res.text();
+      return text ? JSON.parse(text) : null;
+    }
+
+    async function loginAdmin() {
+      const email = prompt("E-mail de ton compte admin Supabase :");
+      if (!email) return;
+      const password = prompt("Mot de passe admin :");
+      if (!password) return;
+      try {
+        const data = await sbFetch("/auth/v1/token?grant_type=password", {
+          method: "POST",
+          body: JSON.stringify({ email: email.trim(), password })
+        });
+        saveSession(data);
+        alert("Connexion admin active. Tes modifications seront publiées automatiquement.");
+      } catch (e) {
+        alert("Échec de connexion admin : " + e.message);
+      }
+    }
+
+    async function logoutAdmin() {
+      if (authSession && authSession.access_token) {
+        try {
+          await sbFetch("/auth/v1/logout", { method: "POST" });
+        } catch (e) {}
+      }
+      saveSession(null);
+      alert("Déconnecté : mode lecture seule actif.");
+    }
+
+    async function syncFromSupabase() {
+      if (!isSupabaseConfigured()) return;
+      try {
+        const rows = await sbFetch("/rest/v1/structures?select=id,sort_order,payload&order=sort_order.asc");
+        if (Array.isArray(rows) && rows.length > 0) {
+          state = rows.map((r, idx) => normalizeEntity({ ...r.payload, id: r.id }, idx));
+          saveLocalCache();
+          renderEditeurs();
+        } else if (isAdmin && state.length > 0) {
+          await seedInitialToSupabase();
+        }
+      } catch (e) {
+        updateStatusBar("Lecture locale (Supabase non joint)");
+      }
+    }
+
+    async function seedInitialToSupabase() {
+      if (!isAdmin || !isSupabaseConfigured()) return;
+      const batch = state.map((item, index) => ({
+        id: item.id,
+        sort_order: index,
+        payload: item,
+        updated_at: new Date().toISOString()
+      }));
+      await sbFetch("/rest/v1/structures?on_conflict=id", {
+        method: "POST",
+        headers: { "Prefer": "resolution=merge-duplicates,return=minimal" },
+        body: JSON.stringify(batch)
+      });
+    }
+
+    async function publishEntity(entity, indexHint = null) {
+      saveLocalCache();
+      if (!isSupabaseConfigured()) {
+        feedbackById[entity.id] = "Sauvegardé en local (configure ta clé anon Supabase pour publier).";
+        return;
+      }
+      if (!isAdmin) {
+        feedbackById[entity.id] = "Mode lecture seule : connecte-toi en admin pour publier.";
+        return;
+      }
+      const sortOrder = indexHint !== null ? indexHint : Math.max(0, state.findIndex((x) => x.id === entity.id));
+      await sbFetch("/rest/v1/structures?on_conflict=id", {
+        method: "POST",
+        headers: { "Prefer": "resolution=merge-duplicates,return=minimal" },
+        body: JSON.stringify([{
+          id: entity.id,
+          sort_order: sortOrder,
+          payload: entity,
+          updated_at: new Date().toISOString()
+        }])
+      });
+      feedbackById[entity.id] = "Publié en direct sur Supabase.";
+    }
+
+    async function deleteStructure(id) {
+      if (!isAdmin) {
+        alert("Connexion admin requise pour supprimer une structure.");
+        return;
+      }
+      const target = state.find((e) => e.id === id);
+      if (!target) return;
+      if (!confirm(`Supprimer définitivement la structure "${target.nom}" ?`)) return;
+
+      state = state.filter((e) => e.id !== id);
+      saveLocalCache();
+      if (isSupabaseConfigured()) {
+        try {
+          await sbFetch(`/rest/v1/structures?id=eq.${encodeURIComponent(id)}`, {
+            method: "DELETE",
+            headers: { "Prefer": "return=minimal" }
+          });
+        } catch (e) {
+          alert("Erreur suppression Supabase : " + e.message);
+        }
+      }
+      renderEditeurs();
+    }
+
+    function toggleAddStructure(show) {
+      if (!isAdmin) {
+        alert("Connexion admin requise pour ajouter une structure.");
+        return;
+      }
+      document.getElementById("add-structure-panel").style.display = show ? "block" : "none";
+    }
+
+    async function createStructure() {
+      if (!isAdmin) return;
+      const nom = (document.getElementById("new-nom").value || "").trim();
+      if (!nom) {
+        alert("Le nom de la structure est obligatoire.");
+        return;
+      }
+      const drapeau = (document.getElementById("new-drapeau").value || "").trim();
+      const recherche = (document.getElementById("new-recherche").value || "").trim();
+      const refuse = (document.getElementById("new-refuse").value || "").trim();
+      const slug = nom.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "structure";
+      const newItem = normalizeEntity({
+        id: `${slug}-${Date.now()}`,
+        nom,
+        drapeau,
+        roles: {
+          editeur: document.getElementById("new-r-ed").checked,
+          auto_edition: document.getElementById("new-r-auto").checked,
+          distrib: document.getElementById("new-r-dist").checked
+        },
+        cibles: {
+          enfant: document.getElementById("new-c-enf").checked,
+          famille: document.getElementById("new-c-fam").checked,
+          initie: document.getElementById("new-c-ini").checked,
+          expert: document.getElementById("new-c-exp").checked
+        },
+        recherche_connue: recherche,
+        refuse,
+        commentaires_dates: []
+      }, state.length);
+
+      state.unshift(newItem);
+      try {
+        await publishEntity(newItem, 0);
+        document.getElementById("new-nom").value = "";
+        document.getElementById("new-drapeau").value = "";
+        document.getElementById("new-recherche").value = "";
+        document.getElementById("new-refuse").value = "";
+        toggleAddStructure(false);
+        renderEditeurs();
+      } catch (e) {
+        alert("Erreur publication Supabase : " + e.message);
+      }
+    }
+
+    function renderAuthUI() {
+      const authArea = document.getElementById("auth-area");
+      const topActions = document.getElementById("admin-top-actions");
+
+      if (isAdmin) {
+        const userEmail = authSession?.user?.email || "Admin";
+        authArea.innerHTML = `
+          <span class="badge ok">Admin : ${escapeHTML(userEmail)}</span>
+          <button class="secondary small" onclick="logoutAdmin()">Déconnexion</button>
+        `;
+        topActions.innerHTML = `
+          <button class="small" onclick="toggleAddStructure(true)">+ Nouvelle structure</button>
+          <button class="secondary small" onclick="exportStateJSON()">Export JSON</button>
+        `;
+      } else {
+        authArea.innerHTML = `
+          <span class="badge">Lecture seule</span>
+          <button class="secondary small" onclick="loginAdmin()">Connexion Admin</button>
+        `;
+        topActions.innerHTML = `
+          <button class="secondary small" onclick="exportStateJSON()">Export JSON</button>
+        `;
+      }
+    }
+
+    function updateStatusBar(extra = "") {
+      const totalComments = state.reduce((acc, item) => acc + (item.commentaires_dates ? item.commentaires_dates.length : 0), 0);
+      const modeLabel = isAdmin ? "Mode Admin (auto-publication)" : "Mode Lecture seule";
       document.getElementById("status-bar").textContent =
-        `${state.length} structures • ${totalContacts} contact(s)/lien(s) • ${totalTerrainNotes} note(s) terrain`;
+        `${state.length} structures • ${totalComments} commentaire(s) • ${modeLabel}${extra ? " • " + extra : ""}`;
     }
 
     function switchTab(tabName) {
@@ -373,6 +688,101 @@
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
+    }
+
+    function toggleEdit(id) {
+      if (!isAdmin) {
+        alert("Connexion admin requise pour modifier une structure.");
+        return;
+      }
+      if (editingIds.has(id)) {
+        editingIds.delete(id);
+      } else {
+        editingIds.add(id);
+      }
+      renderEditeurs();
+    }
+
+    async function saveStructureEdit(id) {
+      if (!isAdmin) return;
+      const target = state.find((e) => e.id === id);
+      if (!target) return;
+
+      target.nom = (document.getElementById(`edit-nom-${id}`).value || "").trim() || target.nom;
+      target.drapeau = (document.getElementById(`edit-drapeau-${id}`).value || "").trim();
+      target.roles = {
+        editeur: document.getElementById(`edit-r-ed-${id}`).checked,
+        auto_edition: document.getElementById(`edit-r-auto-${id}`).checked,
+        distrib: document.getElementById(`edit-r-dist-${id}`).checked
+      };
+      target.cibles = {
+        enfant: document.getElementById(`edit-c-enf-${id}`).checked,
+        famille: document.getElementById(`edit-c-fam-${id}`).checked,
+        initie: document.getElementById(`edit-c-ini-${id}`).checked,
+        expert: document.getElementById(`edit-c-exp-${id}`).checked
+      };
+      target.recherche_connue = document.getElementById(`edit-recherche-${id}`).value || "";
+      target.refuse = document.getElementById(`edit-refuse-${id}`).value || "";
+      target.emails = (document.getElementById(`edit-emails-${id}`).value || "")
+        .split(",").map((s) => s.trim()).filter(Boolean);
+      target.liens = (document.getElementById(`edit-liens-${id}`).value || "")
+        .split(",").map((s) => s.trim()).filter(Boolean);
+      target.dernier_catalogue = (document.getElementById(`edit-cat-${id}`).value || "").trim() || "Aucun";
+      target.clique_lien = document.getElementById(`edit-clic-${id}`).checked;
+
+      try {
+        await publishEntity(target);
+        editingIds.delete(id);
+        renderEditeurs();
+      } catch (e) {
+        feedbackById[id] = "Erreur publication : " + e.message;
+        renderEditeurs();
+      }
+    }
+
+    async function addDatedComment(id) {
+      if (!isAdmin) {
+        alert("Connexion admin requise pour ajouter un commentaire.");
+        return;
+      }
+      const input = document.getElementById(`comment-input-${id}`);
+      if (!input) return;
+      const txt = (input.value || "").trim();
+      if (!txt) return;
+      const target = state.find((e) => e.id === id);
+      if (!target) return;
+      if (!Array.isArray(target.commentaires_dates)) target.commentaires_dates = [];
+
+      target.commentaires_dates.push({
+        id: `c-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        date: new Date().toLocaleString("fr-FR"),
+        texte: txt
+      });
+      input.value = "";
+
+      try {
+        await publishEntity(target);
+      } catch (e) {
+        feedbackById[id] = "Erreur publication : " + e.message;
+      }
+      renderEditeurs();
+    }
+
+    async function deleteDatedComment(entityId, commentId) {
+      if (!isAdmin) {
+        alert("Connexion admin requise pour supprimer un commentaire.");
+        return;
+      }
+      const target = state.find((e) => e.id === entityId);
+      if (!target) return;
+      target.commentaires_dates = (target.commentaires_dates || []).filter((c) => c.id !== commentId);
+
+      try {
+        await publishEntity(target);
+      } catch (e) {
+        feedbackById[entityId] = "Erreur publication : " + e.message;
+      }
+      renderEditeurs();
     }
 
     function renderEditeurs() {
@@ -395,13 +805,8 @@
         if (fExp && !item.cibles.expert) return false;
 
         if (!q) return true;
-        const emailsText = (item.emails || []).join(" ");
-        const liensText = (item.liens || []).join(" ");
-        const contactsText = (item.contacts || [])
-          .map((c) => `${c.mail || ""} ${c.mail_2 || ""} ${c.reponse || ""} ${c.probleme || ""}`)
-          .join(" ");
-        const terrainText = (item.notes_terrain || []).map((n) => n.texte).join(" ");
-        const hay = `${item.nom} ${item.recherche_connue} ${item.refuse} ${item.commentaire} ${item.ne_plus_deranger} ${emailsText} ${liensText} ${contactsText} ${terrainText}`.toLowerCase();
+        const commentsText = (item.commentaires_dates || []).map((c) => `${c.date} ${c.texte}`).join(" ");
+        const hay = `${item.nom} ${item.recherche_connue} ${item.refuse} ${commentsText} ${(item.emails || []).join(" ")} ${(item.liens || []).join(" ")}`.toLowerCase();
         return hay.includes(q);
       });
 
@@ -412,8 +817,7 @@
         const rolesBadges = [
           item.roles.editeur ? `<span class="badge ok">Éditeur</span>` : "",
           item.roles.auto_edition ? `<span class="badge">Auto-édition</span>` : "",
-          item.roles.distrib ? `<span class="badge">Distributeur</span>` : "",
-          item.ne_plus_deranger ? `<span class="badge alert">Alerte / Ne pas déranger</span>` : ""
+          item.roles.distrib ? `<span class="badge">Distributeur</span>` : ""
         ].join("");
 
         const ciblesBadges = [
@@ -425,8 +829,6 @@
 
         const mailsList = (item.emails || []).filter(Boolean);
         const liensList = (item.liens || []).filter(Boolean);
-        const legacyContacts = item.contacts || [];
-
         let contactBlockContent = "";
         if (mailsList.length > 0) {
           contactBlockContent += `<div><strong>Mails :</strong> ${mailsList.map((m) => escapeHTML(m)).join(" • ")}</div>`;
@@ -434,29 +836,62 @@
         if (liensList.length > 0) {
           contactBlockContent += `<div style="margin-top:4px;"><strong>Liens :</strong> ${liensList.map((l) => escapeHTML(l)).join(" • ")}</div>`;
         }
-        if (legacyContacts.length > 0) {
-          contactBlockContent += legacyContacts.map((c) => `
-            <div style="margin-top:4px;">
-              ${c.mail ? `<span>${escapeHTML(c.mail)}</span>` : ""}
-              ${c.mail_2 ? ` • <span>${escapeHTML(c.mail_2)}</span>` : ""}
-              ${c.probleme ? `<div style="color:#fca5a5;">Problème : ${escapeHTML(c.probleme)}</div>` : ""}
-              ${c.reponse ? `<div style="color:#86efac;">Réponse : ${escapeHTML(c.reponse)}</div>` : ""}
-            </div>
-          `).join("");
-        }
         if (!contactBlockContent) {
           contactBlockContent = `<div class="muted">Aucun mail ni lien renseigné.</div>`;
         }
 
-        const terrainHTML = (item.notes_terrain || []).map((n) => `
-          <div style="background:rgba(245,158,11,0.12); border-left:3px solid var(--warn); padding:6px 8px; margin-top:6px; border-radius:6px; font-size:0.84rem;">
-            <span class="badge terrain">NOTE TERRAIN</span> <span class="muted">${escapeHTML(n.date)}</span>
-            <div>${escapeHTML(n.texte)}</div>
+        const commentsHTML = (item.commentaires_dates || []).map((c) => `
+          <div class="comment-entry">
+            <div class="row" style="justify-content: space-between;">
+              <div>
+                <span class="badge terrain">COMMENTAIRE</span>
+                <span class="muted">${escapeHTML(c.date)}</span>
+              </div>
+              ${isAdmin ? `<button class="danger small" onclick="deleteDatedComment('${escapeHTML(item.id)}', '${escapeHTML(c.id)}')">Supprimer</button>` : ""}
+            </div>
+            <div style="margin-top:4px;">${escapeHTML(c.texte)}</div>
           </div>
         `).join("");
 
-        const confirmText = noteConfirmations[item.id]
-          ? `<div class="toast-msg">${escapeHTML(noteConfirmations[item.id])}</div>`
+        const isEditing = isAdmin && editingIds.has(item.id);
+        const editFormHTML = isEditing ? `
+          <div class="edit-box">
+            <strong>Modifier la structure</strong>
+            <label>Nom</label>
+            <input id="edit-nom-${escapeHTML(item.id)}" type="text" value="${escapeHTML(item.nom)}" />
+            <label>Drapeau</label>
+            <input id="edit-drapeau-${escapeHTML(item.id)}" type="text" value="${escapeHTML(item.drapeau)}" />
+            <div class="row" style="margin-top:8px;">
+              <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="edit-r-ed-${escapeHTML(item.id)}" style="width:auto;" ${item.roles.editeur ? "checked" : ""} /> Éditeur</label>
+              <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="edit-r-auto-${escapeHTML(item.id)}" style="width:auto;" ${item.roles.auto_edition ? "checked" : ""} /> Auto-édition</label>
+              <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="edit-r-dist-${escapeHTML(item.id)}" style="width:auto;" ${item.roles.distrib ? "checked" : ""} /> Distrib</label>
+              <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="edit-c-enf-${escapeHTML(item.id)}" style="width:auto;" ${item.cibles.enfant ? "checked" : ""} /> Enfant</label>
+              <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="edit-c-fam-${escapeHTML(item.id)}" style="width:auto;" ${item.cibles.famille ? "checked" : ""} /> Famille</label>
+              <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="edit-c-ini-${escapeHTML(item.id)}" style="width:auto;" ${item.cibles.initie ? "checked" : ""} /> Initié</label>
+              <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="edit-c-exp-${escapeHTML(item.id)}" style="width:auto;" ${item.cibles.expert ? "checked" : ""} /> Expert</label>
+            </div>
+            <label>Recherche / Ligne éditoriale</label>
+            <textarea id="edit-recherche-${escapeHTML(item.id)}" rows="2">${escapeHTML(item.recherche_connue)}</textarea>
+            <label>Refuse / Interdit</label>
+            <textarea id="edit-refuse-${escapeHTML(item.id)}" rows="2">${escapeHTML(item.refuse)}</textarea>
+            <label>Mails (séparés par des virgules)</label>
+            <input id="edit-emails-${escapeHTML(item.id)}" type="text" value="${escapeHTML(mailsList.join(", "))}" />
+            <label>Liens (séparés par des virgules)</label>
+            <input id="edit-liens-${escapeHTML(item.id)}" type="text" value="${escapeHTML(liensList.join(", "))}" />
+            <label>Dernier catalogue</label>
+            <input id="edit-cat-${escapeHTML(item.id)}" type="text" value="${escapeHTML(item.dernier_catalogue)}" />
+            <div style="margin-top:8px;">
+              <label style="margin:0; display:inline-flex; gap:6px; align-items:center;"><input type="checkbox" id="edit-clic-${escapeHTML(item.id)}" style="width:auto;" ${item.clique_lien ? "checked" : ""} /> Clic lien effectué</label>
+            </div>
+            <div class="row" style="margin-top:10px;">
+              <button onclick="saveStructureEdit('${escapeHTML(item.id)}')">Enregistrer & Publier</button>
+              <button class="secondary" onclick="toggleEdit('${escapeHTML(item.id)}')">Annuler</button>
+            </div>
+          </div>
+        ` : "";
+
+        const msg = feedbackById[item.id]
+          ? `<div class="${feedbackById[item.id].startsWith("Erreur") ? "err-msg" : "toast-msg"}">${escapeHTML(feedbackById[item.id])}</div>`
           : "";
 
         const card = document.createElement("div");
@@ -464,10 +899,13 @@
         card.innerHTML = `
           <div class="row" style="justify-content: space-between;">
             <strong style="font-size:1rem;">${escapeHTML(item.nom)}</strong>
-            <span class="muted">#${escapeHTML(item.id)}</span>
+            <div class="row">
+              <span class="muted">#${escapeHTML(item.id)}</span>
+              ${isAdmin ? `<button class="secondary small" onclick="toggleEdit('${escapeHTML(item.id)}')">Modifier</button>` : ""}
+              ${isAdmin ? `<button class="danger small" onclick="deleteStructure('${escapeHTML(item.id)}')">Supprimer</button>` : ""}
+            </div>
           </div>
           <div style="margin:4px 0;">${rolesBadges} ${ciblesBadges}</div>
-          ${item.ne_plus_deranger ? `<div style="color:#fca5a5; font-size:0.85rem; margin-top:6px;"><strong>Blocage / Alerte :</strong> ${escapeHTML(item.ne_plus_deranger)}</div>` : ""}
 
           <div class="box-search">
             <strong>Recherche / Ligne éditoriale :</strong> ${item.recherche_connue ? escapeHTML(item.recherche_connue) : `<span class="muted">Non renseigné</span>`}
@@ -479,8 +917,6 @@
             </div>
           ` : ""}
 
-          ${item.commentaire ? `<div style="margin-top:8px; font-size:0.85rem;"><strong>Commentaire :</strong> ${escapeHTML(item.commentaire)}</div>` : ""}
-
           <div class="box-contacts">
             <strong>Contact & Suivi</strong>
             <div style="margin-top:4px;">${contactBlockContent}</div>
@@ -489,15 +925,19 @@
             </div>
           </div>
 
-          <div style="margin-top:10px;">
-            <strong style="font-size:0.88rem;">Notes terrain</strong>
-            ${terrainHTML || `<div class="muted" style="font-size:0.8rem;">Aucune note terrain enregistrée.</div>`}
-            <div style="margin-top:6px;">
-              <input id="note-input-${item.id}" type="text" placeholder="Ex. Rencontre salon : demande un jeu de plis..." onkeydown="if(event.key==='Enter'){addTerrainNote('${item.id}');}" />
-              <button class="secondary" style="margin-top:6px;" onclick="addTerrainNote('${item.id}')">+ Ajouter note terrain</button>
-              ${confirmText}
-            </div>
+          <div class="box-comments">
+            <strong style="color:#fde68a;">Commentaires</strong>
+            ${commentsHTML || `<div class="muted" style="font-size:0.8rem; margin-top:4px;">Aucun commentaire enregistré.</div>`}
+            ${isAdmin ? `
+              <div style="margin-top:8px;">
+                <input id="comment-input-${escapeHTML(item.id)}" type="text" placeholder="Ajouter un commentaire daté..." onkeydown="if(event.key==='Enter'){addDatedComment('${escapeHTML(item.id)}');}" />
+                <button class="warn-btn small" style="margin-top:6px;" onclick="addDatedComment('${escapeHTML(item.id)}')">+ Ajouter commentaire daté</button>
+              </div>
+            ` : ""}
           </div>
+
+          ${editFormHTML}
+          ${msg}
         `;
         container.appendChild(card);
       });
@@ -505,82 +945,32 @@
       if (filtered.length > 60) {
         const info = document.createElement("p");
         info.className = "muted";
-        info.textContent = `Affichage limité à 60 fiches pour la fluidité mobile (${filtered.length - 60} autres masquées par le filtre de recherche).`;
+        info.textContent = `Affichage limité à 60 fiches pour la fluidité (${filtered.length - 60} autres masquées par les filtres).`;
         container.appendChild(info);
       }
-    }
-
-    function addTerrainNote(id) {
-      const input = document.getElementById(`note-input-${id}`);
-      if (!input) return;
-      const txt = (input.value || "").trim();
-      if (!txt) return;
-      const target = state.find((e) => e.id === id);
-      if (!target) return;
-      if (!target.notes_terrain) target.notes_terrain = [];
-      target.notes_terrain.push({
-        date: new Date().toLocaleString("fr-FR"),
-        source: "TERRAIN_MANUEL",
-        texte: txt
-      });
-      noteConfirmations[id] = "Note terrain enregistrée en local.";
-      input.value = "";
-      saveState();
-      renderEditeurs();
     }
 
     function runMatching() {
       const cible = document.getElementById("m-cible").value;
       const fenetre = document.getElementById("m-fenetre").value;
       const mots = (document.getElementById("m-mots").value || "")
-        .split(",")
-        .map((s) => s.trim().toLowerCase())
-        .filter(Boolean);
-
-      const resBox = document.getElementById("matching-results");
-
-      let existenceHTML = "";
-      if (JEUX_REFERENCE.length === 0) {
-        existenceHTML = `
-          <div class="card">
-            <strong>Contrôle d'existence (&ge; 75%)</strong>
-            <div class="box-missing">
-              <strong>Donnée manquante :</strong> Aucun catalogue de jeux de référence n'est encore chargé dans <code>JEUX_REFERENCE</code>. Impossible de calculer un taux de similarité &ge; 75% de manière fiable sans catalogue de référence.
-            </div>
-          </div>
-        `;
-      } else {
-        const matches = JEUX_REFERENCE.map((jeu) => {
-          const tags = (jeu.tags || []).map((t) => t.toLowerCase());
-          const hits = mots.filter((m) => tags.some((t) => t.includes(m)));
-          const score = mots.length > 0 ? Math.round((hits.length / mots.length) * 100) : 0;
-          return { jeu, score, hits };
-        }).filter((m) => m.score >= 75);
-        existenceHTML = `
-          <div class="card">
-            <strong>Jeux proches détectés (&ge; 75%)</strong>
-            ${matches.length === 0
-              ? `<p class="muted">Aucun jeu proche à &ge; 75% trouvé sur les critères saisis.</p>`
-              : matches.map((m) => `<div><strong>${escapeHTML(m.jeu.titre)}</strong> — ${m.score}% (correspondances : ${escapeHTML(m.hits.join(", "))})</div>`).join("")}
-          </div>
-        `;
-      }
+        .split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
 
       const scored = state
-        .filter((e) => !e.ne_plus_deranger)
         .map((e) => {
           let score = 0;
           const reasons = [];
           if (cible && e.cibles && e.cibles[cible]) {
             score += 40;
-            reasons.push(`Cible ${cible} cochée`);
+            reasons.push(`Cible ${cible}`);
           }
-          const blob = `${e.recherche_connue} ${e.commentaire} ${(e.notes_terrain || []).map((n) => n.texte).join(" ")}`.toLowerCase();
+          const commentsBlob = (e.commentaires_dates || []).map((c) => c.texte).join(" ");
+          const blob = `${e.recherche_connue} ${commentsBlob}`.toLowerCase();
           const matchedWords = mots.filter((m) => blob.includes(m));
           if (mots.length > 0 && matchedWords.length > 0) {
             const pts = Math.round((matchedWords.length / mots.length) * 60);
             score += pts;
-            reasons.push(`Mots-clés correspondants (${pts} pts) : ${matchedWords.join(", ")}`);
+            reasons.push(`Mots-clés (${pts} pts) : ${matchedWords.join(", ")}`);
           }
           return { entity: e, score, reasons };
         })
@@ -588,63 +978,37 @@
         .sort((a, b) => b.score - a.score)
         .slice(0, 15);
 
-      const editeursHTML = `
+      document.getElementById("matching-results").innerHTML = `
         <div class="card">
-          <strong>Pistes d'éditeurs (fenêtre sélectionnée : ${escapeHTML(fenetre)})</strong>
-          <p class="muted">Les données de sorties réelles sur 6/12 mois ne sont pas encore chargées : ce score repose sur les cibles déclarées, les recherches connues et les notes terrain.</p>
+          <strong>Pistes d'éditeurs (fenêtre : ${escapeHTML(fenetre)})</strong>
           ${scored.length === 0
-            ? `<p class="muted">Aucune correspondance trouvée avec ces critères.</p>`
+            ? `<p class="muted">Aucune correspondance trouvée.</p>`
             : scored.map((s) => `
               <div style="border-top:1px solid var(--border); padding-top:8px; margin-top:8px;">
                 <strong>${escapeHTML(s.entity.nom)}</strong> — <span class="badge ok">${s.score} pts</span>
-                <div class="muted" style="margin-top:4px;">Pourquoi ça match : ${escapeHTML(s.reasons.join(" • "))}</div>
+                <div class="muted" style="margin-top:4px;">${escapeHTML(s.reasons.join(" • "))}</div>
               </div>
             `).join("")}
         </div>
       `;
-
-      resBox.innerHTML = existenceHTML + editeursHTML;
     }
 
     function runTendances() {
       const sujet = (document.getElementById("t-sujet").value || "").trim();
-      const box = document.getElementById("tendances-results");
-      box.innerHTML = `
+      document.getElementById("tendances-results").innerHTML = `
         <div class="card">
-          <strong>Résultat de l'analyse — ${sujet ? escapeHTML(sujet) : "Vue globale"}</strong>
-          <div class="box-missing">
-            <strong>Éléments manquants / non connectés :</strong>
-            <ul style="margin:6px 0 0 18px; padding:0;">
-              <li>Flux structurés des comités/sélections (Nuremberg, Essen, Cannes) non encore importés.</li>
-              <li>Historique des sorties 12 mois glissants (décompte exhaustif sans moyenne) non encore chargé.</li>
-              <li>Palmarès des concours de prototypes et données distributeurs/boutiques non encore reliés.</li>
-            </ul>
-          </div>
-          <div style="margin-top:10px;">
-            <strong>Signaux forts :</strong> <em>En attente de données sources vérifiées (aucun signal inventé).</em>
-          </div>
-          <div style="margin-top:8px;">
-            <strong>Signaux faibles (horizon 2–5 ans) :</strong> <em>En attente de données sources vérifiées.</em>
-          </div>
-          <div style="margin-top:8px;">
-            <strong>Conclusion / Synthèse :</strong> Impossible de conclure solidement tant que les sources ci-dessus sont absentes.
-          </div>
+          <strong>Analyse — ${sujet ? escapeHTML(sujet) : "Vue globale"}</strong>
+          <div class="box-missing">Les sources externes (salons, sorties 12 mois, palmarès) ne sont pas encore connectées.</div>
         </div>
       `;
     }
 
     function renderActu() {
       const periode = document.getElementById("a-periode").value;
-      const labels = {
-        jour: "Aujourd'hui",
-        semaine: "Cette semaine",
-        mois: "Ce mois-ci",
-        annee: "Cette année"
-      };
       document.getElementById("actu-list").innerHTML = `
         <div class="card">
-          <strong>Période : ${labels[periode]}</strong>
-          <p class="muted">Aucun article chargé pour le moment. Une fois les flux RSS francophones et internationaux branchés, ils s'afficheront ici filtrés par période.</p>
+          <strong>Période : ${escapeHTML(periode)}</strong>
+          <p class="muted">Aucun flux RSS chargé pour le moment.</p>
         </div>
       `;
     }
@@ -659,23 +1023,18 @@
       URL.revokeObjectURL(url);
     }
 
-    function resetLocalState() {
-      if (!confirm("Effacer les modifications locales et revenir aux données de base ?")) return;
-      localStorage.removeItem(STORAGE_KEY);
-      state = loadState();
-      renderEditeurs();
-      updateStatusBar();
-    }
-
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker.register("./sw.js").catch(() => {});
       });
     }
 
+    loadSavedSession();
+    renderAuthUI();
     updateStatusBar();
     renderEditeurs();
     renderActu();
+    syncFromSupabase();
   </script>
 </body>
 </html>
