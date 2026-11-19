@@ -1,4 +1,4 @@
-const CACHE_NAME = "radar-ludique-v3";
+const CACHE_NAME = "radar-ludique-v4";
 const ASSETS = ["./", "./index.html", "./data.js", "./vampirize-init.js", "./manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {
