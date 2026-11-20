@@ -82,7 +82,6 @@
     button.secondary { background: var(--card-2); border-color: var(--border); font-weight: 500; }
     button.danger { background: #991b1b; border-color: #ef4444; }
     button.warn-btn { background: #92400e; border-color: var(--warn); }
-    button.ok-btn { background: #15803d; border-color: var(--ok); }
     button.small { padding: 4px 8px; font-size: 0.78rem; width: auto; }
     .badge {
       display: inline-block;
@@ -96,31 +95,11 @@
       color: #f8fafc;
     }
     .badge.terrain { background: #78350f; color: #fde68a; border: 1px solid var(--warn); }
-    .badge.alert { background: #7f1d1d; color: #fecaca; border: 1px solid var(--danger); }
     .badge.ok { background: #14532d; color: #bbf7d0; border: 1px solid var(--ok); }
-    .badge.pub { background: #0c4a6e; color: #bae6fd; border: 1px solid var(--accent); }
-    .badge.wiki { background: #312e81; color: #e0e7ff; border: 1px solid #818cf8; }
     .badge.c-enfant { background: #831843; color: #fbcfe8; border: 1px solid #f472b6; }
     .badge.c-famille { background: #1e3a8a; color: #bfdbfe; border: 1px solid #60a5fa; }
     .badge.c-initie { background: #4c1d95; color: #ddd6fe; border: 1px solid #a78bfa; }
     .badge.c-expert { background: #7c2d12; color: #fed7aa; border: 1px solid #fb923c; }
-    .box-public {
-      background: rgba(56, 189, 248, 0.08);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      border-left: 3px solid var(--accent);
-      border-radius: 10px;
-      padding: 10px;
-      margin-top: 10px;
-    }
-    .box-sync-fail {
-      background: rgba(239, 68, 68, 0.12);
-      border: 1px solid rgba(239, 68, 68, 0.5);
-      border-radius: 8px;
-      padding: 8px 10px;
-      margin-top: 8px;
-      font-size: 0.82rem;
-      color: #fecaca;
-    }
     .box-own {
       background: rgba(15, 23, 42, 0.55);
       border: 1px solid var(--border);
@@ -282,11 +261,11 @@
               <input id="new-drapeau" type="text" placeholder="🇫🇷" />
             </div>
             <div style="flex:2; min-width:180px;">
-              <label>Recherche / Ligne éditoriale (Nos critères)</label>
+              <label>Recherche / Ligne éditoriale</label>
               <input id="new-recherche" type="text" placeholder="Mécaniques, thèmes..." />
             </div>
           </div>
-          <label>Refuse (Nos critères)</label>
+          <label>Refuse</label>
           <input id="new-refuse" type="text" placeholder="Ce que la structure refuse" />
           <div class="row" style="margin-top:8px;">
             <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="new-r-ed" style="width:auto;" checked /> Éditeur</label>
@@ -303,7 +282,7 @@
           </div>
         </div>
 
-        <label for="search-editeur">Recherche (nom, données publiques, nos critères, commentaire, mail, lien)</label>
+        <label for="search-editeur">Recherche (nom, recherche, refus, commentaire, mail, lien)</label>
         <input id="search-editeur" type="text" placeholder="Ex. Bombyx, enquête, abstrait, Asmodee..." oninput="onFilterChanged()" />
 
         <div class="row" style="margin-top: 10px;">
@@ -323,7 +302,7 @@
     <section id="tab-matching" class="panel">
       <div class="card">
         <strong>Matching Prototype → Éditeurs (Quel est le bon interlocuteur pour mon proto ?)</strong>
-        <p class="muted">Compare ton pitch et tes critères choisis dans la base avec les données publiques datées et tes critères terrain.</p>
+        <p class="muted">Compare ton pitch et tes critères choisis dans la base avec les lignes éditoriales, refus et commentaires enregistrés.</p>
 
         <div class="row">
           <div style="flex:1; min-width:160px;">
@@ -349,7 +328,7 @@
         <label for="m-pitch">Pitch / Description du prototype (mécanique, thème, ambiance, format, joueurs, durée)</label>
         <textarea id="m-pitch" rows="3" placeholder="Ex. Jeu de plis malin et rapide à 3-4 joueurs, ambiance nature, cartes uniquement, accessible en famille mais avec de vrais choix tactiques..."></textarea>
 
-        <label>Critères issus de ta base (données publiques & nos critères détectés dans les fiches)</label>
+        <label>Critères issus de ta base</label>
         <input id="m-critere-filter" type="text" placeholder="Filtrer la liste des critères de la base (ex. enquête, draft, 2J, tuiles...)" oninput="renderBaseCriteriaSelector()" />
         <div id="m-criteria-selector" class="criteria-box"></div>
         <div id="m-selected-criteria" class="muted" style="margin-top:6px;">Aucun critère de base sélectionné.</div>
@@ -374,21 +353,21 @@
     <section id="tab-existant" class="panel">
       <div class="card">
         <strong>Existant & Proximité (Mon proto existe-t-il ? De quoi se rapproche-t-il ?)</strong>
-        <div class="box-missing">Étape 2 : sera connecté à la base mondiale ouverte BoardGameGeek pour comparer ton prototype aux jeux déjà sortis.</div>
+        <div class="box-missing">Prochaine étape possible : comparaison aux jeux déjà sortis et à leurs proximités mécaniques/thématiques.</div>
       </div>
     </section>
 
     <section id="tab-tendances" class="panel">
       <div class="card">
         <strong>Signaux faibles & Demain (Quels sont les signaux faibles et de quoi demain sera fait ?)</strong>
-        <div class="box-missing">Étape 4 : croisera les attentes/refus de tes ~199 éditeurs avec les mécaniques et financements émergents.</div>
+        <div class="box-missing">Croisera les attentes/refus de tes structures avec les signaux émergents du marché.</div>
       </div>
     </section>
 
     <section id="tab-actu" class="panel">
       <div class="card">
         <strong>Marché actuel & Fil Actu (Quel marché actuel ?)</strong>
-        <div class="box-missing">Étape 3 : sera branché sur les flux RSS ludiques officiels et sorties récentes.</div>
+        <div class="box-missing">Flux RSS ludiques officiels et sorties récentes pour suivre le marché et repérer d'éventuelles pistes éditoriales.</div>
       </div>
     </section>
   </main>
@@ -412,7 +391,6 @@
 
     const feedbackById = {};
     const editingIds = new Set();
-    const editingPublicIds = new Set();
     const selectedCriteria = new Set();
     let displayLimit = PAGE_SIZE;
     let authSession = null;
@@ -420,17 +398,6 @@
 
     function isSupabaseConfigured() {
       return SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length > 10;
-    }
-
-    function inferOriginFromUrl(urlStr) {
-      const lower = String(urlStr || "").toLowerCase();
-      if (!lower) return "Saisie manuelle";
-      if (lower.includes("wikipedia.org")) return "Wikipédia";
-      if (lower.includes("boardgamegeek.com")) return "BoardGameGeek";
-      if (lower.includes("trictrac.net")) return "Tric Trac";
-      if (lower.includes("myludo.fr")) return "MyLudo";
-      if (lower.startsWith("http")) return "Site officiel";
-      return "Web externe";
     }
 
     function normalizeEntity(raw, index) {
@@ -502,25 +469,12 @@
         pushUniqueComment(`legacy-comment-${index}`, "Initial", raw.commentaire);
       }
 
-      const publicObj = (typeof raw.donnees_publiques === "object" && raw.donnees_publiques) ? raw.donnees_publiques : {};
-      const sourceVal = String(publicObj.source ?? raw.public_source ?? "").trim();
-
       return {
         id: raw.id || `${slug}-${index}`,
         nom: raw.nom || `Structure #${index + 1}`,
         drapeau: raw.drapeau || "",
         roles: rolesObj,
         cibles: ciblesObj,
-        donnees_publiques: {
-          recherche: String(publicObj.recherche ?? raw.public_recherche ?? "").trim(),
-          refuse: String(publicObj.refuse ?? raw.public_refuse ?? "").trim(),
-          source: sourceVal,
-          origin: String(publicObj.origin ?? "").trim() || (sourceVal ? inferOriginFromUrl(sourceVal) : ""),
-          maj: String(publicObj.maj ?? raw.public_maj ?? "").trim(),
-          sync_status: String(publicObj.sync_status ?? "").trim(),
-          sync_fail_date: String(publicObj.sync_fail_date ?? "").trim(),
-          sync_fail_reason: String(publicObj.sync_fail_reason ?? "").trim()
-        },
         recherche_connue: raw.recherche_connue ?? raw.recherche ?? "",
         refuse: raw.refuse ?? "",
         commentaire: raw.commentaire ?? "",
@@ -791,16 +745,6 @@
           initie: document.getElementById("new-c-ini").checked,
           expert: document.getElementById("new-c-exp").checked
         },
-        donnees_publiques: {
-          recherche: "",
-          refuse: "",
-          source: "",
-          origin: "",
-          maj: "",
-          sync_status: "",
-          sync_fail_date: "",
-          sync_fail_reason: ""
-        },
         recherche_connue: recherche,
         refuse,
         commentaires_dates: []
@@ -868,91 +812,6 @@
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
-    }
-
-    function togglePublicEdit(id) {
-      if (!isAdmin) {
-        alert("Connexion admin requise pour modifier les données publiques.");
-        return;
-      }
-      if (editingPublicIds.has(id)) {
-        editingPublicIds.delete(id);
-      } else {
-        editingPublicIds.add(id);
-      }
-      renderEditeurs();
-    }
-
-    async function savePublicData(id) {
-      if (!isAdmin) {
-        alert("Connexion admin requise pour enregistrer les données publiques.");
-        return;
-      }
-      const target = state.find((e) => e.id === id);
-      if (!target) return;
-
-      const pubRecherche = (document.getElementById(`pub-recherche-${id}`)?.value || "").trim();
-      const pubRefuse = (document.getElementById(`pub-refuse-${id}`)?.value || "").trim();
-      const pubSource = (document.getElementById(`pub-source-${id}`)?.value || "").trim();
-      const pubOrigin = (document.getElementById(`pub-origin-${id}`)?.value || "").trim() || inferOriginFromUrl(pubSource);
-
-      const resume = `Valider l'enregistrement des Données publiques pour ${target.nom} ?\n\n• Origine : ${pubOrigin}\n• Recherche : ${pubRecherche || "(vide)"}\n• Refus : ${pubRefuse || "(vide)"}\n• Source : ${pubSource || "(vide)"}`;
-      if (!confirm(resume)) return;
-
-      const nowStr = new Date().toLocaleString("fr-FR");
-      target.donnees_publiques = {
-        recherche: pubRecherche,
-        refuse: pubRefuse,
-        source: pubSource,
-        origin: pubOrigin,
-        maj: nowStr,
-        sync_status: "ok",
-        sync_fail_date: "",
-        sync_fail_reason: ""
-      };
-
-      try {
-        await publishEntity(target);
-        editingPublicIds.delete(id);
-        feedbackById[id] = `Données publiques validées (${nowStr} • ${pubOrigin}).`;
-        renderEditeurs();
-      } catch (e) {
-        feedbackById[id] = "Erreur publication : " + e.message;
-        renderEditeurs();
-      }
-    }
-
-    async function markPublicSyncFailed(id) {
-      if (!isAdmin) {
-        alert("Connexion admin requise.");
-        return;
-      }
-      const target = state.find((e) => e.id === id);
-      if (!target) return;
-
-      const reason = prompt(
-        `Raison de l'échec de synchronisation pour ${target.nom} (optionnel) :`,
-        "Aucune donnée publique exploitable trouvée."
-      );
-      if (reason === null) return;
-
-      const nowStr = new Date().toLocaleString("fr-FR");
-      const currentPub = target.donnees_publiques || {};
-      target.donnees_publiques = {
-        ...currentPub,
-        sync_status: "failed",
-        sync_fail_date: nowStr,
-        sync_fail_reason: String(reason || "Aucune donnée publique exploitable trouvée.").trim()
-      };
-
-      try {
-        await publishEntity(target);
-        editingPublicIds.delete(id);
-        renderEditeurs();
-      } catch (e) {
-        feedbackById[id] = "Erreur publication : " + e.message;
-        renderEditeurs();
-      }
     }
 
     function toggleEdit(id) {
@@ -1092,9 +951,8 @@
         if (fExp && !item.cibles.expert) return false;
 
         if (!q) return true;
-        const pub = item.donnees_publiques || {};
         const commentsText = (item.commentaires_dates || []).map((c) => `${c.date} ${c.texte}`).join(" ");
-        const hay = `${item.nom} ${pub.recherche || ""} ${pub.refuse || ""} ${pub.source || ""} ${pub.origin || ""} ${item.recherche_connue} ${item.refuse} ${commentsText} ${(item.emails || []).join(" ")} ${(item.liens || []).join(" ")}`.toLowerCase();
+        const hay = `${item.nom} ${item.recherche_connue} ${item.refuse} ${commentsText} ${(item.emails || []).join(" ")} ${(item.liens || []).join(" ")}`.toLowerCase();
         return hay.includes(q);
       });
 
@@ -1116,88 +974,7 @@
           item.cibles.expert ? `<span class="badge c-expert">Expert</span>` : ""
         ].join("");
 
-        const pub = item.donnees_publiques || {
-          recherche: "",
-          refuse: "",
-          source: "",
-          origin: "",
-          maj: "",
-          sync_status: "",
-          sync_fail_date: "",
-          sync_fail_reason: ""
-        };
-        const isEditingPublic = isAdmin && editingPublicIds.has(item.id);
         const liensList = (item.liens || []).filter(Boolean);
-
-        const originBadgeClass = pub.origin === "Wikipédia" ? "wiki" : "pub";
-        const originBadgeHTML = pub.origin
-          ? `<span class="badge ${originBadgeClass}">Origine : ${escapeHTML(pub.origin)}</span>`
-          : "";
-
-        const failBannerHTML = pub.sync_status === "failed" ? `
-          <div class="box-sync-fail">
-            <div class="row" style="justify-content: space-between;">
-              <span class="badge alert">Echec de la synchronisation</span>
-              <span class="muted" style="font-size:0.76rem;">Tentative le ${escapeHTML(pub.sync_fail_date || "date inconnue")}</span>
-            </div>
-            ${pub.sync_fail_reason ? `<div style="margin-top:4px;">${escapeHTML(pub.sync_fail_reason)}</div>` : ""}
-          </div>
-        ` : "";
-
-        const publicBoxHTML = `
-          <div class="box-public">
-            <div class="row" style="justify-content: space-between;">
-              <div>
-                <span class="badge pub">DONNÉES PUBLIQUES (INTERNET)</span>
-                ${originBadgeHTML}
-                ${pub.maj
-                  ? `<span class="muted" style="font-size:0.78rem;">Validé le ${escapeHTML(pub.maj)}</span>`
-                  : `<span class="muted" style="font-size:0.78rem;">Aucune donnée validée</span>`}
-              </div>
-              ${isAdmin ? `
-                <div class="row">
-                  <button type="button" class="secondary small" onclick="togglePublicEdit('${escapeHTML(item.id)}')">
-                    ${isEditingPublic ? "Fermer" : "Renseigner / Éditer"}
-                  </button>
-                  <button type="button" class="danger small" onclick="markPublicSyncFailed('${escapeHTML(item.id)}')">
-                    Marquer échec
-                  </button>
-                </div>
-              ` : ""}
-            </div>
-
-            ${failBannerHTML}
-
-            ${!isEditingPublic ? `
-              <div style="margin-top:8px; font-size:0.88rem;">
-                <strong>Recherche / Ligne publique :</strong> ${pub.recherche ? escapeHTML(pub.recherche) : `<span class="muted">Non renseigné</span>`}
-              </div>
-              ${pub.refuse ? `
-                <div class="box-refuse" style="margin-top:6px;">
-                  <strong>Refus (Internet) :</strong> ${escapeHTML(pub.refuse)}
-                </div>
-              ` : `<div class="muted" style="font-size:0.82rem; margin-top:4px;">Refus (Internet) : non renseigné</div>`}
-              ${pub.source ? `
-                <div class="muted" style="font-size:0.78rem; margin-top:6px;">
-                  <strong>Source :</strong> ${escapeHTML(pub.source)}
-                </div>
-              ` : ""}
-            ` : `
-              <label>Origine de l'information (ex. Site officiel, Wikipédia, Saisie manuelle)</label>
-              <input id="pub-origin-${escapeHTML(item.id)}" type="text" value="${escapeHTML(pub.origin || "Site officiel")}" />
-              <label>Recherche / Ligne revendiquée (Internet)</label>
-              <textarea id="pub-recherche-${escapeHTML(item.id)}" rows="2" placeholder="Ce que l'éditeur indique rechercher sur son site ou en ligne...">${escapeHTML(pub.recherche)}</textarea>
-              <label>Refus revendiqués (Internet)</label>
-              <textarea id="pub-refuse-${escapeHTML(item.id)}" rows="2" placeholder="Ce que l'éditeur indique refuser ou ne pas éditer...">${escapeHTML(pub.refuse)}</textarea>
-              <label>Lien source</label>
-              <input id="pub-source-${escapeHTML(item.id)}" type="text" value="${escapeHTML(pub.source)}" placeholder="Ex. URL du site officiel ou page Wikipédia..." />
-              <div class="row" style="margin-top:10px;">
-                <button type="button" class="ok-btn small" onclick="savePublicData('${escapeHTML(item.id)}')">Valider & Enregistrer</button>
-              </div>
-            `}
-          </div>
-        `;
-
         const mailsList = (item.emails || []).filter(Boolean);
         let contactBlockContent = "";
         if (mailsList.length > 0) {
@@ -1226,7 +1003,7 @@
         const isEditing = isAdmin && editingIds.has(item.id);
         const editFormHTML = isEditing ? `
           <div class="edit-box">
-            <strong>Modifier la fiche & Nos critères</strong>
+            <strong>Modifier la fiche</strong>
             <label>Nom</label>
             <input id="edit-nom-${escapeHTML(item.id)}" type="text" value="${escapeHTML(item.nom)}" />
             <label>Drapeau</label>
@@ -1240,9 +1017,9 @@
               <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="edit-c-ini-${escapeHTML(item.id)}" style="width:auto;" ${item.cibles.initie ? "checked" : ""} /> Initié</label>
               <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="edit-c-exp-${escapeHTML(item.id)}" style="width:auto;" ${item.cibles.expert ? "checked" : ""} /> Expert</label>
             </div>
-            <label>Recherche / Ligne éditoriale (Nos critères)</label>
+            <label>Recherche / Ligne éditoriale</label>
             <textarea id="edit-recherche-${escapeHTML(item.id)}" rows="2">${escapeHTML(item.recherche_connue)}</textarea>
-            <label>Refuse / Interdit (Nos critères)</label>
+            <label>Refuse / Interdit</label>
             <textarea id="edit-refuse-${escapeHTML(item.id)}" rows="2">${escapeHTML(item.refuse)}</textarea>
             <label>Mails (séparés par des virgules)</label>
             <input id="edit-emails-${escapeHTML(item.id)}" type="text" value="${escapeHTML(mailsList.join(", "))}" />
@@ -1262,7 +1039,6 @@
 
         const ownBoxHTML = `
           <div class="box-own">
-            <span class="badge ok">NOS CRITÈRES (BASE / TERRAIN)</span>
             <div class="box-search">
               <strong>Recherche / Ligne éditoriale :</strong> ${item.recherche_connue ? escapeHTML(item.recherche_connue) : `<span class="muted">Non renseigné</span>`}
             </div>
@@ -1303,7 +1079,6 @@
           </div>
           <div style="margin:4px 0;">${rolesBadges} ${ciblesBadges}</div>
 
-          ${publicBoxHTML}
           ${ownBoxHTML}
 
           <div class="box-contacts">
@@ -1341,10 +1116,7 @@
       const splitPattern = /[\/|,;•\n]+/;
 
       state.forEach((item) => {
-        const pub = item.donnees_publiques || {};
         const sources = [
-          String(pub.recherche || ""),
-          String(pub.refuse || ""),
           String(item.recherche_connue || ""),
           String(item.refuse || "")
         ];
@@ -1496,12 +1268,9 @@
           const reasons = [];
           const warnings = [];
 
-          const pub = e.donnees_publiques || {};
           const commentsBlob = (e.commentaires_dates || []).map((c) => c.texte).join(" ");
-          const ownPosBlob = `${e.recherche_connue} ${commentsBlob}`.toLowerCase();
-          const pubPosBlob = String(pub.recherche || "").toLowerCase();
-          const ownRefuseBlob = String(e.refuse || "").toLowerCase();
-          const pubRefuseBlob = String(pub.refuse || "").toLowerCase();
+          const posBlob = `${e.recherche_connue} ${commentsBlob}`.toLowerCase();
+          const refuseBlob = String(e.refuse || "").toLowerCase();
 
           if (hasCible && e.cibles && e.cibles[cible]) {
             rawPoints += 25;
@@ -1509,43 +1278,29 @@
           }
 
           if (hasCriteria) {
-            const matchedOwn = criteriaList.filter((k) => ownPosBlob.includes(k));
-            const matchedPub = criteriaList.filter((k) => pubPosBlob.includes(k));
-            const unionMatched = Array.from(new Set([...matchedOwn, ...matchedPub]));
-            if (unionMatched.length > 0) {
-              rawPoints += (unionMatched.length / criteriaList.length) * 45;
-              const tags = unionMatched.map((k) => {
-                const src = [];
-                if (matchedPub.includes(k)) src.push(pub.origin || "Internet");
-                if (matchedOwn.includes(k)) src.push("Nous");
-                return `${k} (${src.join("+")})`;
-              });
-              reasons.push(`Critères base (${unionMatched.length}/${criteriaList.length}) : ${tags.join(", ")}`);
+            const matchedCrit = criteriaList.filter((k) => posBlob.includes(k));
+            if (matchedCrit.length > 0) {
+              rawPoints += (matchedCrit.length / criteriaList.length) * 45;
+              reasons.push(`Critères base (${matchedCrit.length}/${criteriaList.length}) : ${matchedCrit.join(", ")}`);
             }
-            const refusedOwn = criteriaList.filter((k) => ownRefuseBlob.includes(k));
-            const refusedPub = criteriaList.filter((k) => pubRefuseBlob.includes(k));
-            const unionRefused = Array.from(new Set([...refusedOwn, ...refusedPub]));
-            if (unionRefused.length > 0) {
+            const refusedCrit = criteriaList.filter((k) => refuseBlob.includes(k));
+            if (refusedCrit.length > 0) {
               rawPoints -= 40;
-              warnings.push(`Refus : ${unionRefused.join(", ")}`);
+              warnings.push(`Refus : ${refusedCrit.join(", ")}`);
             }
           }
 
           if (hasPitch) {
-            const matchedOwnPitch = pitchWords.filter((w) => ownPosBlob.includes(w));
-            const matchedPubPitch = pitchWords.filter((w) => pubPosBlob.includes(w));
-            const unionPitch = Array.from(new Set([...matchedOwnPitch, ...matchedPubPitch]));
-            if (unionPitch.length > 0) {
-              const ratio = Math.min(1, unionPitch.length / Math.min(pitchWords.length, 6));
+            const matchedPitch = pitchWords.filter((w) => posBlob.includes(w));
+            if (matchedPitch.length > 0) {
+              const ratio = Math.min(1, matchedPitch.length / Math.min(pitchWords.length, 6));
               rawPoints += ratio * 30;
-              reasons.push(`Pitch : ${unionPitch.slice(0, 6).join(", ")}`);
+              reasons.push(`Pitch : ${matchedPitch.slice(0, 6).join(", ")}`);
             }
-            const refusedOwnPitch = pitchWords.filter((w) => ownRefuseBlob.includes(w));
-            const refusedPubPitch = pitchWords.filter((w) => pubRefuseBlob.includes(w));
-            const unionRefPitch = Array.from(new Set([...refusedOwnPitch, ...refusedPubPitch]));
-            if (unionRefPitch.length > 0) {
+            const refusedPitch = pitchWords.filter((w) => refuseBlob.includes(w));
+            if (refusedPitch.length > 0) {
               rawPoints -= 30;
-              warnings.push(`Mot du pitch dans refus : ${unionRefPitch.join(", ")}`);
+              warnings.push(`Mot du pitch dans refus : ${refusedPitch.join(", ")}`);
             }
           }
 
@@ -1579,18 +1334,15 @@
           ${visible.length === 0
             ? `<p class="muted" style="margin-top:8px;">Aucun éditeur n'atteint ${seuil} % avec ces critères. Baisse le curseur (ex. 50 % ou 25 %) ou ajuste ton pitch/critères.</p>`
             : visible.map((s) => {
-              const pub = s.entity.donnees_publiques || {};
-              const freshness = pub.maj ? ` • MAJ ${escapeHTML(pub.maj)}` : "";
               return `
                 <div style="border-top:1px solid var(--border); padding-top:10px; margin-top:10px;">
                   <div class="row" style="justify-content: space-between;">
                     <strong>${escapeHTML(s.entity.nom)}</strong>
                     <span class="badge ${s.score >= 75 ? "ok" : s.score >= 50 ? "terrain" : ""}">${s.score} %</span>
                   </div>
-                  <div class="muted" style="margin-top:4px;">${escapeHTML(s.reasons.join(" • ") || "Correspondance partielle")}${freshness}</div>
+                  <div class="muted" style="margin-top:4px;">${escapeHTML(s.reasons.join(" • ") || "Correspondance partielle")}</div>
                   ${s.warnings.length > 0 ? `<div class="err-msg" style="margin-top:4px;">${escapeHTML(s.warnings.join(" • "))}</div>` : ""}
-                  ${pub.recherche ? `<div style="font-size:0.84rem; margin-top:4px;"><strong>Recherche (${escapeHTML(pub.origin || "Internet")}) :</strong> ${escapeHTML(pub.recherche)}</div>` : ""}
-                  ${s.entity.recherche_connue ? `<div style="font-size:0.84rem; margin-top:4px;"><strong>Recherche (Nous) :</strong> ${escapeHTML(s.entity.recherche_connue)}</div>` : ""}
+                  ${s.entity.recherche_connue ? `<div style="font-size:0.84rem; margin-top:4px;"><strong>Recherche :</strong> ${escapeHTML(s.entity.recherche_connue)}</div>` : ""}
                   ${s.entity.commentaires_dates && s.entity.commentaires_dates.length > 0
                     ? `<div class="muted" style="font-size:0.8rem; margin-top:4px;"><strong>Dernier commentaire :</strong> ${escapeHTML(s.entity.commentaires_dates[s.entity.commentaires_dates.length - 1].texte)}</div>`
                     : ""}
