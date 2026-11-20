@@ -392,17 +392,37 @@
             <button type="button" class="secondary small" onclick="toggleFeedManager()">Gérer les flux RSS</button>
           </div>
         </div>
-        <p class="muted" style="margin-top:6px;">Agrégation côté client des flux RSS ludiques configurés, avec détection automatique des structures connues de ta base.</p>
+        <p class="muted" style="margin-top:6px;">Fenêtre glissante bornée (30 jours par défaut) et plafonnée pour éviter toute saturation mémoire, avec détection des structures connues.</p>
 
         <div class="row" style="margin-top:8px;">
-          <div style="flex:2; min-width:200px;">
+          <div style="flex:2; min-width:190px;">
             <label for="rss-search">Filtrer les articles (mot-clé ou structure)</label>
-            <input id="rss-search" type="text" placeholder="Ex. extension, festival, Bombyx, financement..." oninput="renderRssArticles()" />
+            <input id="rss-search" type="text" placeholder="Ex. FIJ, Essen, Nuremberg, BGG, Bombyx..." oninput="renderRssArticles()" />
           </div>
-          <div style="flex:1; min-width:160px;">
+          <div style="flex:1; min-width:140px;">
+            <label for="rss-category-filter">Catégorie</label>
+            <select id="rss-category-filter" onchange="renderRssArticles()">
+              <option value="">Toutes catégories</option>
+              <option value="Médias & BGG">Médias & BGG</option>
+              <option value="Boutiques">Boutiques</option>
+              <option value="Festivals & Salons">Festivals & Salons</option>
+              <option value="Influenceurs">Influenceurs</option>
+              <option value="Autre">Autre</option>
+            </select>
+          </div>
+          <div style="flex:1; min-width:140px;">
             <label for="rss-source-filter">Source</label>
             <select id="rss-source-filter" onchange="renderRssArticles()">
               <option value="">Toutes les sources</option>
+            </select>
+          </div>
+          <div style="flex:1; min-width:130px;">
+            <label for="rss-window-days">Fenêtre temporelle</label>
+            <select id="rss-window-days" onchange="onRssWindowChanged()">
+              <option value="7">7 derniers jours</option>
+              <option value="30" selected>30 derniers jours</option>
+              <option value="90">90 derniers jours</option>
+              <option value="0">Tout (plafonné)</option>
             </select>
           </div>
         </div>
@@ -410,22 +430,33 @@
         <div id="rss-status" class="muted" style="margin-top:8px;">Aucun flux chargé pour le moment.</div>
 
         <div id="rss-manager" class="edit-box" style="display:none; margin-top:10px;">
-          <strong>Sources RSS configurées</strong>
-          <div id="rss-feeds-list" style="margin-top:6px;"></div>
+          <strong>Acteurs & Sources RSS configurés</strong>
+          <div class="muted" style="font-size:0.78rem; margin-top:2px;">Les salons sans flux RSS direct (FIJ Cannes, Nuremberg, Essen, festivals, boutiques ou influenceurs) utilisent des flux de recherche mots-clés ou des flux YouTube dédiés.</div>
+          <div id="rss-feeds-list" style="margin-top:8px;"></div>
 
           <div class="row" style="margin-top:10px;">
-            <div style="flex:1; min-width:150px;">
-              <label for="rss-new-name">Nom de la source</label>
-              <input id="rss-new-name" type="text" placeholder="Ex. Gus & Co" />
+            <div style="flex:1; min-width:140px;">
+              <label for="rss-new-name">Nom de l'acteur / source</label>
+              <input id="rss-new-name" type="text" placeholder="Ex. Chaîne YouTube Ludique" />
             </div>
-            <div style="flex:2; min-width:220px;">
+            <div style="flex:1; min-width:130px;">
+              <label for="rss-new-cat">Catégorie</label>
+              <select id="rss-new-cat">
+                <option value="Médias & BGG">Médias & BGG</option>
+                <option value="Boutiques">Boutiques</option>
+                <option value="Festivals & Salons">Festivals & Salons</option>
+                <option value="Influenceurs">Influenceurs</option>
+                <option value="Autre">Autre</option>
+              </select>
+            </div>
+            <div style="flex:2; min-width:210px;">
               <label for="rss-new-url">URL du flux RSS / Atom</label>
-              <input id="rss-new-url" type="url" placeholder="https://.../feed/" />
+              <input id="rss-new-url" type="url" placeholder="https://.../feed/ ou youtube.com/feeds/videos.xml?channel_id=..." />
             </div>
           </div>
           <div class="row" style="margin-top:8px;">
-            <button type="button" class="small" onclick="addRssFeed()">+ Ajouter ce flux</button>
-            <button type="button" class="secondary small" onclick="resetRssFeeds()">Réinitialiser les flux par défaut</button>
+            <button type="button" class="small" onclick="addRssFeed()">+ Ajouter cette source</button>
+            <button type="button" class="secondary small" onclick="resetRssFeeds()">Réinitialiser les acteurs par défaut</button>
           </div>
         </div>
       </div>
@@ -449,15 +480,25 @@
     const SUPABASE_ANON_KEY = "sb_publishable_dagt7loMaybYdZG_eNDt-A_RrLHWs1X";
     const STORAGE_KEY = "radar_ludique_state_v2";
     const SESSION_KEY = "radar_ludique_sb_session";
-    const RSS_FEEDS_KEY = "radar_ludique_rss_feeds_v1";
-    const RSS_CACHE_KEY = "radar_ludique_rss_cache_v1";
+    const RSS_FEEDS_KEY = "radar_ludique_rss_feeds_v2";
+    const RSS_CACHE_KEY = "radar_ludique_rss_cache_v2";
     const PAGE_SIZE = 60;
+    const MAX_CACHED_ARTICLES = 150;
+    const MAX_DISPLAYED_ARTICLES = 60;
 
     const DEFAULT_RSS_FEEDS = [
-      { id: "gus-co", name: "Gus & Co", url: "https://gusandco.net/feed/", enabled: true },
-      { id: "tric-trac", name: "Tric Trac", url: "https://www.trictrac.net/rss", enabled: true },
-      { id: "spielbox", name: "Spielbox", url: "https://spielbox.de/feed/", enabled: true },
-      { id: "dice-breaker", name: "Dicebreaker", url: "https://www.dicebreaker.com/feed", enabled: true }
+      { id: "bgg-news", name: "BoardGameGeek News", category: "Médias & BGG", url: "https://boardgamegeek.com/rss/blog/1", enabled: true },
+      { id: "bgg-annonces", name: "BoardGameGeek Annonces", category: "Médias & BGG", url: "https://boardgamegeek.com/rss/blogcategory/18", enabled: true },
+      { id: "gus-co", name: "Gus & Co", category: "Médias & BGG", url: "https://gusandco.net/feed/", enabled: true },
+      { id: "ludovox", name: "Ludovox", category: "Médias & BGG", url: "https://ludovox.fr/feed/", enabled: true },
+      { id: "tric-trac", name: "Tric Trac", category: "Médias & BGG", url: "https://www.trictrac.net/rss", enabled: true },
+      { id: "spielbox", name: "Spielbox", category: "Médias & BGG", url: "https://spielbox.de/feed/", enabled: true },
+      { id: "dicebreaker", name: "Dicebreaker", category: "Médias & BGG", url: "https://www.dicebreaker.com/feed", enabled: true },
+      { id: "le-passe-temps", name: "Le Passe Temps (veille)", category: "Boutiques", url: "https://news.google.com/rss/search?q=%22Le+Passe+Temps%22+jeu+de+societe&hl=fr&gl=FR&ceid=FR:fr", enabled: true },
+      { id: "fij-cannes", name: "FIJ Cannes (veille)", category: "Festivals & Salons", url: "https://news.google.com/rss/search?q=FIJ+Cannes+jeu+de+societe&hl=fr&gl=FR&ceid=FR:fr", enabled: true },
+      { id: "nuremberg-spielwarenmesse", name: "Nuremberg / Spielwarenmesse (veille)", category: "Festivals & Salons", url: "https://news.google.com/rss/search?q=Spielwarenmesse+Nuremberg+board+game&hl=en&gl=US&ceid=US:en", enabled: true },
+      { id: "spiel-essen", name: "SPIEL Essen (veille)", category: "Festivals & Salons", url: "https://news.google.com/rss/search?q=SPIEL+Essen+board+game&hl=en&gl=US&ceid=US:en", enabled: true },
+      { id: "festivals-ludiques", name: "Festivals ludiques (veille)", category: "Festivals & Salons", url: "https://news.google.com/rss/search?q=festival+jeux+de+societe&hl=fr&gl=FR&ceid=FR:fr", enabled: true }
     ];
 
     const feedbackById = {};
@@ -1461,7 +1502,15 @@
         const raw = localStorage.getItem(RSS_FEEDS_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed.map((f) => ({
+              id: f.id,
+              name: f.name,
+              category: f.category || "Autre",
+              url: f.url,
+              enabled: Boolean(f.enabled)
+            }));
+          }
         }
       } catch (e) {}
       return DEFAULT_RSS_FEEDS.map((f) => ({ ...f }));
@@ -1476,18 +1525,25 @@
         const raw = localStorage.getItem(RSS_CACHE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed.articles)) return parsed.articles;
+          if (Array.isArray(parsed.articles)) {
+            return parsed.articles.slice(0, MAX_CACHED_ARTICLES);
+          }
         }
       } catch (e) {}
       return [];
     }
 
     function saveRssCache(articles, meta = {}) {
+      const capped = articles.slice(0, MAX_CACHED_ARTICLES);
       localStorage.setItem(RSS_CACHE_KEY, JSON.stringify({
         updatedAt: new Date().toISOString(),
         meta,
-        articles
+        articles: capped
       }));
+    }
+
+    function onRssWindowChanged() {
+      renderRssArticles();
     }
 
     function toggleFeedManager() {
@@ -1511,6 +1567,7 @@
             <label style="margin:0; display:inline-flex; gap:6px; align-items:center;">
               <input type="checkbox" style="width:auto;" ${f.enabled ? "checked" : ""} onchange="toggleRssFeed('${escapeHTML(f.id)}')" />
               <strong>${escapeHTML(f.name)}</strong>
+              <span class="badge">${escapeHTML(f.category || "Autre")}</span>
             </label>
             <div class="muted" style="font-size:0.76rem; margin-left:22px;">${escapeHTML(f.url)}</div>
           </div>
@@ -1536,6 +1593,7 @@
 
     function addRssFeed() {
       const name = (document.getElementById("rss-new-name").value || "").trim();
+      const category = document.getElementById("rss-new-cat").value || "Autre";
       const rawUrl = (document.getElementById("rss-new-url").value || "").trim();
       const safeUrl = sanitizeUrl(rawUrl);
       if (!safeUrl) {
@@ -1544,7 +1602,7 @@
       }
       const finalName = name || new URL(safeUrl).hostname.replace(/^www\./, "");
       const id = `feed-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
-      rssFeeds.push({ id, name: finalName, url: safeUrl, enabled: true });
+      rssFeeds.push({ id, name: finalName, category, url: safeUrl, enabled: true });
       saveRssFeeds();
       document.getElementById("rss-new-name").value = "";
       document.getElementById("rss-new-url").value = "";
@@ -1575,8 +1633,12 @@
     }
 
     function parseXmlFeed(xmlText, feed) {
+      const cleanText = String(xmlText || "").replace(/^\uFEFF/, "").trim();
+      if (!cleanText || /^<!doctype html|^<html/i.test(cleanText)) {
+        throw new Error("Réponse HTML reçue au lieu d'un flux");
+      }
       const parser = new DOMParser();
-      const doc = parser.parseFromString(xmlText, "application/xml");
+      const doc = parser.parseFromString(cleanText, "application/xml");
       if (doc.querySelector("parsererror")) {
         throw new Error("XML invalide");
       }
@@ -1584,7 +1646,7 @@
       const items = [];
       const rssItems = Array.from(doc.querySelectorAll("item"));
       const atomEntries = Array.from(doc.querySelectorAll("entry"));
-      const nodes = rssItems.length > 0 ? rssItems : atomEntries;
+      const nodes = (rssItems.length > 0 ? rssItems : atomEntries).slice(0, 25);
 
       nodes.forEach((node, idx) => {
         const titleEl = node.querySelector("title");
@@ -1610,6 +1672,7 @@
           id: `${feed.id}-${link || title}-${idx}`,
           feedId: feed.id,
           source: feed.name,
+          category: feed.category || "Autre",
           title,
           link,
           summary,
@@ -1624,13 +1687,13 @@
     }
 
     async function fetchSingleFeed(feed) {
-      const proxies = [
+      const xmlProxies = [
         (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-        (u) => `https://corsproxy.io/?${encodeURIComponent(u)}`
+        (u) => `https://corsproxy.io/?url=${encodeURIComponent(u)}`
       ];
 
       let lastErr = null;
-      for (const buildProxyUrl of proxies) {
+      for (const buildProxyUrl of xmlProxies) {
         try {
           const resp = await fetch(buildProxyUrl(feed.url));
           if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
@@ -1640,6 +1703,35 @@
           lastErr = err;
         }
       }
+
+      try {
+        const jsonResp = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`);
+        if (!jsonResp.ok) throw new Error(`HTTP ${jsonResp.status}`);
+        const jsonData = await jsonResp.json();
+        if (jsonData.status === "ok" && Array.isArray(jsonData.items)) {
+          return jsonData.items.slice(0, 25).map((item, idx) => {
+            const parsedTime = item.pubDate ? Date.parse(item.pubDate) : NaN;
+            const timestamp = Number.isFinite(parsedTime) ? parsedTime : 0;
+            const rawSummary = stripHTML(item.description || item.content || "");
+            return {
+              id: `${feed.id}-${item.link || item.title || idx}`,
+              feedId: feed.id,
+              source: feed.name,
+              category: feed.category || "Autre",
+              title: stripHTML(item.title) || `Article #${idx + 1}`,
+              link: sanitizeUrl(item.link),
+              summary: rawSummary.length > 260 ? rawSummary.slice(0, 257).trim() + "…" : rawSummary,
+              timestamp,
+              dateLabel: timestamp > 0
+                ? new Date(timestamp).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" })
+                : "Date non précisée"
+            };
+          });
+        }
+      } catch (jsonErr) {
+        lastErr = jsonErr;
+      }
+
       throw lastErr || new Error("Flux indisponible");
     }
 
@@ -1657,7 +1749,7 @@
       if (!force && rssArticles.length > 0) {
         renderRssArticles();
         if (statusEl) {
-          statusEl.textContent = `${rssArticles.length} article(s) en cache local • Clique sur « Actualiser les flux » pour vérifier les nouveautés.`;
+          statusEl.textContent = `${rssArticles.length} article(s) en cache local (plafond ${MAX_CACHED_ARTICLES}) • Clique sur « Actualiser les flux » pour vérifier les nouveautés.`;
         }
         return;
       }
@@ -1686,7 +1778,8 @@
             seen.add(key);
             return true;
           })
-          .sort((a, b) => b.timestamp - a.timestamp);
+          .sort((a, b) => b.timestamp - a.timestamp)
+          .slice(0, MAX_CACHED_ARTICLES);
         saveRssCache(rssArticles, { errors });
       }
 
@@ -1697,7 +1790,7 @@
       if (statusEl) {
         const nowStr = new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
         const errSuffix = errors.length > 0 ? ` • Flux en erreur : ${errors.join(", ")}` : "";
-        statusEl.textContent = `${rssArticles.length} article(s) chargé(s) à ${nowStr}${errSuffix}`;
+        statusEl.textContent = `${rssArticles.length} article(s) en cache (max ${MAX_CACHED_ARTICLES}) à ${nowStr}${errSuffix}`;
       }
     }
 
@@ -1724,25 +1817,35 @@
       if (!container) return;
 
       const q = (document.getElementById("rss-search")?.value || "").trim().toLowerCase();
+      const categoryFilter = document.getElementById("rss-category-filter")?.value || "";
       const sourceFilter = document.getElementById("rss-source-filter")?.value || "";
+      const windowDays = Number(document.getElementById("rss-window-days")?.value ?? 30);
+      const cutoffTs = windowDays > 0 ? (Date.now() - windowDays * 24 * 60 * 60 * 1000) : 0;
 
       const filtered = rssArticles.filter((art) => {
+        if (cutoffTs > 0 && art.timestamp > 0 && art.timestamp < cutoffTs) return false;
+        if (categoryFilter && (art.category || "Autre") !== categoryFilter) return false;
         if (sourceFilter && art.source !== sourceFilter) return false;
         if (!q) return true;
-        const hay = `${art.title} ${art.summary} ${art.source}`.toLowerCase();
+        const hay = `${art.title} ${art.summary} ${art.source} ${art.category || ""}`.toLowerCase();
         return hay.includes(q);
       });
 
       if (filtered.length === 0) {
         container.innerHTML = `
           <div class="card">
-            <p class="muted">Aucun article à afficher avec les filtres ou flux actuels.</p>
+            <p class="muted">Aucun article à afficher sur cette fenêtre (${windowDays > 0 ? windowDays + " jours" : "tout"}) ou avec ces filtres.</p>
           </div>
         `;
         return;
       }
 
-      container.innerHTML = filtered.slice(0, 60).map((art) => {
+      const displayed = filtered.slice(0, MAX_DISPLAYED_ARTICLES);
+      const capNotice = filtered.length > MAX_DISPLAYED_ARTICLES
+        ? `<p class="muted">Affichage limité à ${MAX_DISPLAYED_ARTICLES} articles sur ${filtered.length} pour préserver la fluidité.</p>`
+        : `<p class="muted">${displayed.length} article(s) affiché(s) (${windowDays > 0 ? "fenêtre " + windowDays + " j" : "fenêtre complète"}).</p>`;
+
+      container.innerHTML = capNotice + displayed.map((art) => {
         const matchedStructures = detectMatchingStructures(`${art.title} ${art.summary}`);
         const structureBadges = matchedStructures.map((name) =>
           `<span class="badge info">Structure : ${escapeHTML(name)}</span>`
@@ -1751,7 +1854,10 @@
         return `
           <div class="card">
             <div class="row" style="justify-content: space-between;">
-              <span class="badge">${escapeHTML(art.source)}</span>
+              <div>
+                <span class="badge">${escapeHTML(art.source)}</span>
+                <span class="badge">${escapeHTML(art.category || "Autre")}</span>
+              </div>
               <span class="muted" style="font-size:0.78rem;">${escapeHTML(art.dateLabel)}</span>
             </div>
             <div style="margin-top:6px; font-size:0.98rem;">
