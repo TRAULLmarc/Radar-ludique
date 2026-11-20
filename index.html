@@ -38,6 +38,11 @@
     }
     h1 { margin: 0; font-size: 1.1rem; }
     .sub { color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
+    .radar-compass {
+      color: #bae6fd;
+      font-size: 0.74rem;
+      margin-top: 4px;
+    }
     main { padding: 14px 16px; max-width: 900px; margin: 0 auto; }
     .panel { display: none; }
     .panel.active { display: block; }
@@ -94,6 +99,7 @@
     .badge.alert { background: #7f1d1d; color: #fecaca; border: 1px solid var(--danger); }
     .badge.ok { background: #14532d; color: #bbf7d0; border: 1px solid var(--ok); }
     .badge.pub { background: #0c4a6e; color: #bae6fd; border: 1px solid var(--accent); }
+    .badge.wiki { background: #312e81; color: #e0e7ff; border: 1px solid #818cf8; }
     .badge.c-enfant { background: #831843; color: #fbcfe8; border: 1px solid #f472b6; }
     .badge.c-famille { background: #1e3a8a; color: #bfdbfe; border: 1px solid #60a5fa; }
     .badge.c-initie { background: #4c1d95; color: #ddd6fe; border: 1px solid #a78bfa; }
@@ -105,13 +111,6 @@
       border-radius: 10px;
       padding: 10px;
       margin-top: 10px;
-    }
-    .box-draft {
-      background: rgba(245, 158, 11, 0.14);
-      border: 1px solid var(--warn);
-      border-radius: 8px;
-      padding: 10px;
-      margin-top: 8px;
     }
     .box-sync-fail {
       background: rgba(239, 68, 68, 0.12);
@@ -233,7 +232,7 @@
       left: 0;
       right: 0;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       background: var(--card-2);
       border-top: 1px solid var(--border);
       z-index: 20;
@@ -243,8 +242,8 @@
       border-radius: 0;
       background: transparent;
       color: var(--muted);
-      padding: 10px 4px;
-      font-size: 0.75rem;
+      padding: 10px 2px;
+      font-size: 0.72rem;
       font-weight: 600;
     }
     nav.bottom-nav button.active {
@@ -260,6 +259,7 @@
       <div>
         <h1>Radar Ludique — Designer</h1>
         <div class="sub" id="status-bar">Initialisation...</div>
+        <div class="radar-compass">Marché actuel • Bon interlocuteur • Existant & proximité • Signaux faibles & demain</div>
       </div>
       <div id="auth-area" class="row"></div>
     </div>
@@ -304,16 +304,16 @@
         </div>
 
         <label for="search-editeur">Recherche (nom, données publiques, nos critères, commentaire, mail, lien)</label>
-        <input id="search-editeur" type="text" placeholder="Ex. Bombyx, enquête, abstrait, Asmodee..." oninput="renderEditeurs()" />
+        <input id="search-editeur" type="text" placeholder="Ex. Bombyx, enquête, abstrait, Asmodee..." oninput="onFilterChanged()" />
 
         <div class="row" style="margin-top: 10px;">
-          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-editeur" style="width:auto;" onchange="renderEditeurs()" /> Éditeur</label>
-          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-auto" style="width:auto;" onchange="renderEditeurs()" /> Auto-édition</label>
-          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-distrib" style="width:auto;" onchange="renderEditeurs()" /> Distrib</label>
-          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-enfant" style="width:auto;" onchange="renderEditeurs()" /> Enfant</label>
-          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-famille" style="width:auto;" onchange="renderEditeurs()" /> Famille</label>
-          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-initie" style="width:auto;" onchange="renderEditeurs()" /> Initié</label>
-          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-expert" style="width:auto;" onchange="renderEditeurs()" /> Expert</label>
+          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-editeur" style="width:auto;" onchange="onFilterChanged()" /> Éditeur</label>
+          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-auto" style="width:auto;" onchange="onFilterChanged()" /> Auto-édition</label>
+          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-distrib" style="width:auto;" onchange="onFilterChanged()" /> Distrib</label>
+          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-enfant" style="width:auto;" onchange="onFilterChanged()" /> Enfant</label>
+          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-famille" style="width:auto;" onchange="onFilterChanged()" /> Famille</label>
+          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-initie" style="width:auto;" onchange="onFilterChanged()" /> Initié</label>
+          <label style="margin:0; display:inline-flex; gap:4px; align-items:center;"><input type="checkbox" id="f-expert" style="width:auto;" onchange="onFilterChanged()" /> Expert</label>
         </div>
       </div>
 
@@ -322,8 +322,8 @@
 
     <section id="tab-matching" class="panel">
       <div class="card">
-        <strong>Matching Prototype → Éditeurs</strong>
-        <p class="muted">Compare ton pitch et tes critères choisis dans la base avec les données publiques (Internet) et tes critères (Base / Terrain).</p>
+        <strong>Matching Prototype → Éditeurs (Quel est le bon interlocuteur pour mon proto ?)</strong>
+        <p class="muted">Compare ton pitch et tes critères choisis dans la base avec les données publiques datées et tes critères terrain.</p>
 
         <div class="row">
           <div style="flex:1; min-width:160px;">
@@ -371,26 +371,32 @@
       <div id="matching-results"></div>
     </section>
 
+    <section id="tab-existant" class="panel">
+      <div class="card">
+        <strong>Existant & Proximité (Mon proto existe-t-il ? De quoi se rapproche-t-il ?)</strong>
+        <div class="box-missing">Étape 2 : sera connecté à la base mondiale ouverte BoardGameGeek pour comparer ton prototype aux jeux déjà sortis.</div>
+      </div>
+    </section>
+
     <section id="tab-tendances" class="panel">
       <div class="card">
-        <strong>Radar Tendances</strong>
-        <div class="box-missing">Cet onglet sera configuré juste après la validation des Données publiques et du Matching.</div>
+        <strong>Signaux faibles & Demain (Quels sont les signaux faibles et de quoi demain sera fait ?)</strong>
+        <div class="box-missing">Étape 4 : croisera les attentes/refus de tes ~199 éditeurs avec les mécaniques et financements émergents.</div>
       </div>
-      <div id="tendances-results"></div>
     </section>
 
     <section id="tab-actu" class="panel">
       <div class="card">
-        <strong>Fil Actu Ludique</strong>
-        <div class="box-missing">Cet onglet sera branché ensuite sur les flux d'actualités ludiques.</div>
+        <strong>Marché actuel & Fil Actu (Quel marché actuel ?)</strong>
+        <div class="box-missing">Étape 3 : sera branché sur les flux RSS ludiques officiels et sorties récentes.</div>
       </div>
-      <div id="actu-list"></div>
     </section>
   </main>
 
   <nav class="bottom-nav">
     <button id="btn-editeurs" class="active" onclick="switchTab('editeurs')">Éditeurs</button>
     <button id="btn-matching" onclick="switchTab('matching')">Matching</button>
+    <button id="btn-existant" onclick="switchTab('existant')">Existant</button>
     <button id="btn-tendances" onclick="switchTab('tendances')">Tendances</button>
     <button id="btn-actu" onclick="switchTab('actu')">Actu</button>
   </nav>
@@ -402,18 +408,29 @@
     const SUPABASE_ANON_KEY = "sb_publishable_dagt7loMaybYdZG_eNDt-A_RrLHWs1X";
     const STORAGE_KEY = "radar_ludique_state_v2";
     const SESSION_KEY = "radar_ludique_sb_session";
+    const PAGE_SIZE = 60;
 
     const feedbackById = {};
     const editingIds = new Set();
     const editingPublicIds = new Set();
-    const syncingIds = new Set();
-    const pendingPublicDrafts = {};
     const selectedCriteria = new Set();
+    let displayLimit = PAGE_SIZE;
     let authSession = null;
     let isAdmin = false;
 
     function isSupabaseConfigured() {
       return SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length > 10;
+    }
+
+    function inferOriginFromUrl(urlStr) {
+      const lower = String(urlStr || "").toLowerCase();
+      if (!lower) return "Saisie manuelle";
+      if (lower.includes("wikipedia.org")) return "Wikipédia";
+      if (lower.includes("boardgamegeek.com")) return "BoardGameGeek";
+      if (lower.includes("trictrac.net")) return "Tric Trac";
+      if (lower.includes("myludo.fr")) return "MyLudo";
+      if (lower.startsWith("http")) return "Site officiel";
+      return "Web externe";
     }
 
     function normalizeEntity(raw, index) {
@@ -486,6 +503,7 @@
       }
 
       const publicObj = (typeof raw.donnees_publiques === "object" && raw.donnees_publiques) ? raw.donnees_publiques : {};
+      const sourceVal = String(publicObj.source ?? raw.public_source ?? "").trim();
 
       return {
         id: raw.id || `${slug}-${index}`,
@@ -496,7 +514,8 @@
         donnees_publiques: {
           recherche: String(publicObj.recherche ?? raw.public_recherche ?? "").trim(),
           refuse: String(publicObj.refuse ?? raw.public_refuse ?? "").trim(),
-          source: String(publicObj.source ?? raw.public_source ?? "").trim(),
+          source: sourceVal,
+          origin: String(publicObj.origin ?? "").trim() || (sourceVal ? inferOriginFromUrl(sourceVal) : ""),
           maj: String(publicObj.maj ?? raw.public_maj ?? "").trim(),
           sync_status: String(publicObj.sync_status ?? "").trim(),
           sync_fail_date: String(publicObj.sync_fail_date ?? "").trim(),
@@ -776,6 +795,7 @@
           recherche: "",
           refuse: "",
           source: "",
+          origin: "",
           maj: "",
           sync_status: "",
           sync_fail_date: "",
@@ -850,119 +870,6 @@
         .replace(/"/g, "&quot;");
     }
 
-    async function recordSyncFailure(target, reasonText) {
-      const nowStr = new Date().toLocaleString("fr-FR");
-      const currentPub = target.donnees_publiques || {};
-      target.donnees_publiques = {
-        ...currentPub,
-        sync_status: "failed",
-        sync_fail_date: nowStr,
-        sync_fail_reason: String(reasonText || "Aucune donnée publique exploitable trouvée.").trim()
-      };
-      delete pendingPublicDrafts[target.id];
-      try {
-        await publishEntity(target);
-      } catch (e) {
-        feedbackById[target.id] = "Erreur lors de l'enregistrement de l'échec : " + e.message;
-      }
-      renderEditeurs();
-    }
-
-    async function syncPublicDataFromCloud(id) {
-      if (!isAdmin) {
-        alert("Connexion admin requise pour synchroniser les données publiques.");
-        return;
-      }
-      const target = state.find((e) => e.id === id);
-      if (!target || syncingIds.has(id)) return;
-
-      syncingIds.add(id);
-      delete pendingPublicDrafts[id];
-      renderEditeurs();
-
-      try {
-        const result = await sbFetch("/functions/v1/sync-editeur", {
-          method: "POST",
-          body: JSON.stringify({
-            id: target.id,
-            nom: target.nom,
-            drapeau: target.drapeau,
-            liens: target.liens || [],
-            emails: target.emails || []
-          })
-        });
-
-        syncingIds.delete(id);
-
-        if (!result || !result.success || (!result.recherche && !result.refuse)) {
-          await recordSyncFailure(
-            target,
-            (result && result.reason) ? result.reason : "Aucune donnée publique exploitable trouvée."
-          );
-          return;
-        }
-
-        pendingPublicDrafts[id] = {
-          recherche: String(result.recherche || "").trim(),
-          refuse: String(result.refuse || "").trim(),
-          source: String(result.source || "").trim(),
-          strategy: String(result.strategy || "").trim(),
-          fetchedAt: new Date().toLocaleString("fr-FR")
-        };
-        renderEditeurs();
-      } catch (err) {
-        syncingIds.delete(id);
-        await recordSyncFailure(
-          target,
-          `Relais Supabase indisponible ou bloqué (${err.message}).`
-        );
-      }
-    }
-
-    async function approvePublicDraft(id) {
-      if (!isAdmin) return;
-      const target = state.find((e) => e.id === id);
-      const draft = pendingPublicDrafts[id];
-      if (!target || !draft) return;
-
-      const finalRecherche = (document.getElementById(`draft-recherche-${id}`)?.value ?? draft.recherche).trim();
-      const finalRefuse = (document.getElementById(`draft-refuse-${id}`)?.value ?? draft.refuse).trim();
-      const finalSource = (document.getElementById(`draft-source-${id}`)?.value ?? draft.source).trim();
-
-      if (!finalRecherche && !finalRefuse) {
-        await recordSyncFailure(target, "Proposition vide rejetée lors de la validation.");
-        return;
-      }
-
-      const nowStr = new Date().toLocaleString("fr-FR");
-      target.donnees_publiques = {
-        recherche: finalRecherche,
-        refuse: finalRefuse,
-        source: finalSource,
-        maj: nowStr,
-        sync_status: "ok",
-        sync_fail_date: "",
-        sync_fail_reason: ""
-      };
-
-      delete pendingPublicDrafts[id];
-
-      try {
-        await publishEntity(target);
-        feedbackById[id] = `Données publiques validées et publiées (${nowStr}).`;
-      } catch (e) {
-        feedbackById[id] = "Erreur publication : " + e.message;
-      }
-      renderEditeurs();
-    }
-
-    async function rejectPublicDraft(id) {
-      if (!isAdmin) return;
-      const target = state.find((e) => e.id === id);
-      if (!target) return;
-      await recordSyncFailure(target, "Proposition rejetée manuellement (données jugées non pertinentes).");
-    }
-
     function togglePublicEdit(id) {
       if (!isAdmin) {
         alert("Connexion admin requise pour modifier les données publiques.");
@@ -987,8 +894,9 @@
       const pubRecherche = (document.getElementById(`pub-recherche-${id}`)?.value || "").trim();
       const pubRefuse = (document.getElementById(`pub-refuse-${id}`)?.value || "").trim();
       const pubSource = (document.getElementById(`pub-source-${id}`)?.value || "").trim();
+      const pubOrigin = (document.getElementById(`pub-origin-${id}`)?.value || "").trim() || inferOriginFromUrl(pubSource);
 
-      const resume = `Valider l'enregistrement des Données publiques pour ${target.nom} ?\n\n• Recherche : ${pubRecherche || "(vide)"}\n• Refus : ${pubRefuse || "(vide)"}\n• Source : ${pubSource || "(vide)"}`;
+      const resume = `Valider l'enregistrement des Données publiques pour ${target.nom} ?\n\n• Origine : ${pubOrigin}\n• Recherche : ${pubRecherche || "(vide)"}\n• Refus : ${pubRefuse || "(vide)"}\n• Source : ${pubSource || "(vide)"}`;
       if (!confirm(resume)) return;
 
       const nowStr = new Date().toLocaleString("fr-FR");
@@ -996,6 +904,7 @@
         recherche: pubRecherche,
         refuse: pubRefuse,
         source: pubSource,
+        origin: pubOrigin,
         maj: nowStr,
         sync_status: "ok",
         sync_fail_date: "",
@@ -1005,7 +914,40 @@
       try {
         await publishEntity(target);
         editingPublicIds.delete(id);
-        feedbackById[id] = `Données publiques validées et publiées (${nowStr}).`;
+        feedbackById[id] = `Données publiques validées (${nowStr} • ${pubOrigin}).`;
+        renderEditeurs();
+      } catch (e) {
+        feedbackById[id] = "Erreur publication : " + e.message;
+        renderEditeurs();
+      }
+    }
+
+    async function markPublicSyncFailed(id) {
+      if (!isAdmin) {
+        alert("Connexion admin requise.");
+        return;
+      }
+      const target = state.find((e) => e.id === id);
+      if (!target) return;
+
+      const reason = prompt(
+        `Raison de l'échec de synchronisation pour ${target.nom} (optionnel) :`,
+        "Aucune donnée publique exploitable trouvée."
+      );
+      if (reason === null) return;
+
+      const nowStr = new Date().toLocaleString("fr-FR");
+      const currentPub = target.donnees_publiques || {};
+      target.donnees_publiques = {
+        ...currentPub,
+        sync_status: "failed",
+        sync_fail_date: nowStr,
+        sync_fail_reason: String(reason || "Aucune donnée publique exploitable trouvée.").trim()
+      };
+
+      try {
+        await publishEntity(target);
+        editingPublicIds.delete(id);
         renderEditeurs();
       } catch (e) {
         feedbackById[id] = "Erreur publication : " + e.message;
@@ -1116,6 +1058,20 @@
       renderEditeurs();
     }
 
+    function onFilterChanged() {
+      displayLimit = PAGE_SIZE;
+      renderEditeurs();
+    }
+
+    function showMoreEditeurs(showAll = false) {
+      if (showAll) {
+        displayLimit = state.length;
+      } else {
+        displayLimit += PAGE_SIZE;
+      }
+      renderEditeurs();
+    }
+
     function renderEditeurs() {
       const q = (document.getElementById("search-editeur").value || "").trim().toLowerCase();
       const fEd = document.getElementById("f-editeur").checked;
@@ -1138,14 +1094,15 @@
         if (!q) return true;
         const pub = item.donnees_publiques || {};
         const commentsText = (item.commentaires_dates || []).map((c) => `${c.date} ${c.texte}`).join(" ");
-        const hay = `${item.nom} ${pub.recherche || ""} ${pub.refuse || ""} ${pub.source || ""} ${item.recherche_connue} ${item.refuse} ${commentsText} ${(item.emails || []).join(" ")} ${(item.liens || []).join(" ")}`.toLowerCase();
+        const hay = `${item.nom} ${pub.recherche || ""} ${pub.refuse || ""} ${pub.source || ""} ${pub.origin || ""} ${item.recherche_connue} ${item.refuse} ${commentsText} ${(item.emails || []).join(" ")} ${(item.liens || []).join(" ")}`.toLowerCase();
         return hay.includes(q);
       });
 
+      const visibleSlice = filtered.slice(0, displayLimit);
       const container = document.getElementById("editeurs-list");
-      container.innerHTML = `<p class="muted">${filtered.length} résultat(s) affiché(s) sur ${state.length}</p>`;
+      container.innerHTML = `<p class="muted">${visibleSlice.length} fiche(s) affichée(s) sur ${filtered.length} correspondante(s) (${state.length} au total)</p>`;
 
-      filtered.slice(0, 60).forEach((item) => {
+      visibleSlice.forEach((item) => {
         const rolesBadges = [
           item.roles.editeur ? `<span class="badge ok">Éditeur</span>` : "",
           item.roles.auto_edition ? `<span class="badge">Auto-édition</span>` : "",
@@ -1163,15 +1120,19 @@
           recherche: "",
           refuse: "",
           source: "",
+          origin: "",
           maj: "",
           sync_status: "",
           sync_fail_date: "",
           sync_fail_reason: ""
         };
         const isEditingPublic = isAdmin && editingPublicIds.has(item.id);
-        const isSyncing = syncingIds.has(item.id);
-        const draft = pendingPublicDrafts[item.id] || null;
         const liensList = (item.liens || []).filter(Boolean);
+
+        const originBadgeClass = pub.origin === "Wikipédia" ? "wiki" : "pub";
+        const originBadgeHTML = pub.origin
+          ? `<span class="badge ${originBadgeClass}">Origine : ${escapeHTML(pub.origin)}</span>`
+          : "";
 
         const failBannerHTML = pub.sync_status === "failed" ? `
           <div class="box-sync-fail">
@@ -1183,53 +1144,33 @@
           </div>
         ` : "";
 
-        const draftPreviewHTML = (isAdmin && draft) ? `
-          <div class="box-draft">
-            <div class="row" style="justify-content: space-between;">
-              <span class="badge terrain">VALIDATION REQUISE (BROUILLON INTERNET)</span>
-              <span class="muted" style="font-size:0.75rem;">Récupéré le ${escapeHTML(draft.fetchedAt)}</span>
-            </div>
-            ${draft.strategy ? `<div class="muted" style="font-size:0.76rem; margin-top:4px;">Méthode : ${escapeHTML(draft.strategy)}</div>` : ""}
-            <label>Recherche proposée (vérifie avant de valider)</label>
-            <textarea id="draft-recherche-${escapeHTML(item.id)}" rows="2">${escapeHTML(draft.recherche)}</textarea>
-            <label>Refus proposé (vérifie avant de valider)</label>
-            <textarea id="draft-refuse-${escapeHTML(item.id)}" rows="2">${escapeHTML(draft.refuse)}</textarea>
-            <label>Source détectée</label>
-            <input id="draft-source-${escapeHTML(item.id)}" type="text" value="${escapeHTML(draft.source)}" />
-            <div class="row" style="margin-top:10px;">
-              <button type="button" class="ok-btn small" onclick="approvePublicDraft('${escapeHTML(item.id)}')">Valider & Enregistrer</button>
-              <button type="button" class="danger small" onclick="rejectPublicDraft('${escapeHTML(item.id)}')">Rejeter (Échec synchro)</button>
-            </div>
-          </div>
-        ` : "";
-
         const publicBoxHTML = `
           <div class="box-public">
             <div class="row" style="justify-content: space-between;">
               <div>
                 <span class="badge pub">DONNÉES PUBLIQUES (INTERNET)</span>
+                ${originBadgeHTML}
                 ${pub.maj
                   ? `<span class="muted" style="font-size:0.78rem;">Validé le ${escapeHTML(pub.maj)}</span>`
                   : `<span class="muted" style="font-size:0.78rem;">Aucune donnée validée</span>`}
               </div>
               ${isAdmin ? `
                 <div class="row">
-                  <button type="button" class="small" ${isSyncing ? "disabled" : ""} onclick="syncPublicDataFromCloud('${escapeHTML(item.id)}')">
-                    ${isSyncing ? "Recherche en cours..." : "Synchroniser (Internet)"}
-                  </button>
                   <button type="button" class="secondary small" onclick="togglePublicEdit('${escapeHTML(item.id)}')">
-                    ${isEditingPublic ? "Fermer" : "Éditer"}
+                    ${isEditingPublic ? "Fermer" : "Renseigner / Éditer"}
+                  </button>
+                  <button type="button" class="danger small" onclick="markPublicSyncFailed('${escapeHTML(item.id)}')">
+                    Marquer échec
                   </button>
                 </div>
               ` : ""}
             </div>
 
             ${failBannerHTML}
-            ${draftPreviewHTML}
 
             ${!isEditingPublic ? `
               <div style="margin-top:8px; font-size:0.88rem;">
-                <strong>Recherche (Internet) :</strong> ${pub.recherche ? escapeHTML(pub.recherche) : `<span class="muted">Non renseigné</span>`}
+                <strong>Recherche / Ligne publique :</strong> ${pub.recherche ? escapeHTML(pub.recherche) : `<span class="muted">Non renseigné</span>`}
               </div>
               ${pub.refuse ? `
                 <div class="box-refuse" style="margin-top:6px;">
@@ -1242,12 +1183,14 @@
                 </div>
               ` : ""}
             ` : `
-              <label>Recherche revendiquée (Internet)</label>
+              <label>Origine de l'information (ex. Site officiel, Wikipédia, Saisie manuelle)</label>
+              <input id="pub-origin-${escapeHTML(item.id)}" type="text" value="${escapeHTML(pub.origin || "Site officiel")}" />
+              <label>Recherche / Ligne revendiquée (Internet)</label>
               <textarea id="pub-recherche-${escapeHTML(item.id)}" rows="2" placeholder="Ce que l'éditeur indique rechercher sur son site ou en ligne...">${escapeHTML(pub.recherche)}</textarea>
               <label>Refus revendiqués (Internet)</label>
               <textarea id="pub-refuse-${escapeHTML(item.id)}" rows="2" placeholder="Ce que l'éditeur indique refuser ou ne pas éditer...">${escapeHTML(pub.refuse)}</textarea>
-              <label>Source / Lien public</label>
-              <input id="pub-source-${escapeHTML(item.id)}" type="text" value="${escapeHTML(pub.source)}" placeholder="Ex. Page soumission site officiel..." />
+              <label>Lien source</label>
+              <input id="pub-source-${escapeHTML(item.id)}" type="text" value="${escapeHTML(pub.source)}" placeholder="Ex. URL du site officiel ou page Wikipédia..." />
               <div class="row" style="margin-top:10px;">
                 <button type="button" class="ok-btn small" onclick="savePublicData('${escapeHTML(item.id)}')">Valider & Enregistrer</button>
               </div>
@@ -1377,11 +1320,19 @@
         container.appendChild(card);
       });
 
-      if (filtered.length > 60) {
-        const info = document.createElement("p");
-        info.className = "muted";
-        info.textContent = `Affichage limité à 60 fiches pour la fluidité (${filtered.length - 60} autres masquées par les filtres).`;
-        container.appendChild(info);
+      const remaining = filtered.length - visibleSlice.length;
+      if (remaining > 0) {
+        const pager = document.createElement("div");
+        pager.className = "card row";
+        pager.style.justifyContent = "space-between";
+        pager.innerHTML = `
+          <span class="muted">${remaining} fiche(s) restante(s) à afficher</span>
+          <div class="row">
+            <button type="button" class="secondary small" onclick="showMoreEditeurs(false)">Afficher +${Math.min(PAGE_SIZE, remaining)} fiches</button>
+            <button type="button" class="small" onclick="showMoreEditeurs(true)">Tout afficher (${filtered.length})</button>
+          </div>
+        `;
+        container.appendChild(pager);
       }
     }
 
@@ -1548,130 +1499,4 @@
           const pub = e.donnees_publiques || {};
           const commentsBlob = (e.commentaires_dates || []).map((c) => c.texte).join(" ");
           const ownPosBlob = `${e.recherche_connue} ${commentsBlob}`.toLowerCase();
-          const pubPosBlob = String(pub.recherche || "").toLowerCase();
-          const ownRefuseBlob = String(e.refuse || "").toLowerCase();
-          const pubRefuseBlob = String(pub.refuse || "").toLowerCase();
-
-          if (hasCible && e.cibles && e.cibles[cible]) {
-            rawPoints += 25;
-            reasons.push(`Cible ${cible}`);
-          }
-
-          if (hasCriteria) {
-            const matchedOwn = criteriaList.filter((k) => ownPosBlob.includes(k));
-            const matchedPub = criteriaList.filter((k) => pubPosBlob.includes(k));
-            const unionMatched = Array.from(new Set([...matchedOwn, ...matchedPub]));
-            if (unionMatched.length > 0) {
-              rawPoints += (unionMatched.length / criteriaList.length) * 45;
-              const tags = unionMatched.map((k) => {
-                const src = [];
-                if (matchedPub.includes(k)) src.push("Internet");
-                if (matchedOwn.includes(k)) src.push("Nous");
-                return `${k} (${src.join("+")})`;
-              });
-              reasons.push(`Critères base (${unionMatched.length}/${criteriaList.length}) : ${tags.join(", ")}`);
-            }
-            const refusedOwn = criteriaList.filter((k) => ownRefuseBlob.includes(k));
-            const refusedPub = criteriaList.filter((k) => pubRefuseBlob.includes(k));
-            const unionRefused = Array.from(new Set([...refusedOwn, ...refusedPub]));
-            if (unionRefused.length > 0) {
-              rawPoints -= 40;
-              warnings.push(`Refus : ${unionRefused.join(", ")}`);
-            }
-          }
-
-          if (hasPitch) {
-            const matchedOwnPitch = pitchWords.filter((w) => ownPosBlob.includes(w));
-            const matchedPubPitch = pitchWords.filter((w) => pubPosBlob.includes(w));
-            const unionPitch = Array.from(new Set([...matchedOwnPitch, ...matchedPubPitch]));
-            if (unionPitch.length > 0) {
-              const ratio = Math.min(1, unionPitch.length / Math.min(pitchWords.length, 6));
-              rawPoints += ratio * 30;
-              reasons.push(`Pitch : ${unionPitch.slice(0, 6).join(", ")}`);
-            }
-            const refusedOwnPitch = pitchWords.filter((w) => ownRefuseBlob.includes(w));
-            const refusedPubPitch = pitchWords.filter((w) => pubRefuseBlob.includes(w));
-            const unionRefPitch = Array.from(new Set([...refusedOwnPitch, ...refusedPubPitch]));
-            if (unionRefPitch.length > 0) {
-              rawPoints -= 30;
-              warnings.push(`Mot du pitch dans refus : ${unionRefPitch.join(", ")}`);
-            }
-          }
-
-          const pct = maxPossible > 0
-            ? Math.max(0, Math.min(100, Math.round((rawPoints / maxPossible) * 100)))
-            : 0;
-
-          return {
-            entity: e,
-            score: pct,
-            reasons,
-            warnings
-          };
-        });
-
-      const visible = evaluated
-        .filter((item) => {
-          if (hideRefused && item.warnings.length > 0) return false;
-          return item.score >= seuil;
-        })
-        .sort((a, b) => b.score - a.score || a.entity.nom.localeCompare(b.entity.nom, "fr"));
-
-      const belowCount = evaluated.length - visible.length;
-
-      document.getElementById("matching-results").innerHTML = `
-        <div class="card">
-          <div class="row" style="justify-content: space-between;">
-            <strong>${visible.length} éditeur(s) à &ge; ${seuil} %</strong>
-            <span class="muted">${belowCount} fiche(s) sous le seuil ou écartée(s)</span>
-          </div>
-          ${visible.length === 0
-            ? `<p class="muted" style="margin-top:8px;">Aucun éditeur n'atteint ${seuil} % avec ces critères. Baisse le curseur (ex. 50 % ou 25 %) ou ajuste ton pitch/critères.</p>`
-            : visible.map((s) => {
-              const pub = s.entity.donnees_publiques || {};
-              return `
-                <div style="border-top:1px solid var(--border); padding-top:10px; margin-top:10px;">
-                  <div class="row" style="justify-content: space-between;">
-                    <strong>${escapeHTML(s.entity.nom)}</strong>
-                    <span class="badge ${s.score >= 75 ? "ok" : s.score >= 50 ? "terrain" : ""}">${s.score} %</span>
-                  </div>
-                  <div class="muted" style="margin-top:4px;">${escapeHTML(s.reasons.join(" • ") || "Correspondance partielle")}</div>
-                  ${s.warnings.length > 0 ? `<div class="err-msg" style="margin-top:4px;">${escapeHTML(s.warnings.join(" • "))}</div>` : ""}
-                  ${pub.recherche ? `<div style="font-size:0.84rem; margin-top:4px;"><strong>Recherche (Internet) :</strong> ${escapeHTML(pub.recherche)}</div>` : ""}
-                  ${s.entity.recherche_connue ? `<div style="font-size:0.84rem; margin-top:4px;"><strong>Recherche (Nous) :</strong> ${escapeHTML(s.entity.recherche_connue)}</div>` : ""}
-                  ${s.entity.commentaires_dates && s.entity.commentaires_dates.length > 0
-                    ? `<div class="muted" style="font-size:0.8rem; margin-top:4px;"><strong>Dernier commentaire :</strong> ${escapeHTML(s.entity.commentaires_dates[s.entity.commentaires_dates.length - 1].texte)}</div>`
-                    : ""}
-                </div>
-              `;
-            }).join("")}
-        </div>
-      `;
-    }
-
-    function exportStateJSON() {
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "radar-ludique-export.json";
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js").catch(() => {});
-      });
-    }
-
-    loadSavedSession();
-    renderAuthUI();
-    updateStatusBar();
-    renderEditeurs();
-    renderBaseCriteriaSelector();
-    updateSeuilLabel(false);
-    syncFromSupabase();
-  </script>
-</body>
-</html>
+          const pubPosBlob = String(pub.recherche ||
