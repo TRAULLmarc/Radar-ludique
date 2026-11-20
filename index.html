@@ -185,6 +185,22 @@
       color: #fff;
       font-weight: 600;
     }
+    .summary-box {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-left: 4px solid var(--accent);
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+    .summary-box ul {
+      margin: 8px 0;
+      padding-left: 18px;
+      line-height: 1.45;
+    }
+    .summary-box li {
+      margin-bottom: 6px;
+    }
     .muted { color: var(--muted); font-size: 0.85rem; }
     .box-missing {
       border: 1px dashed var(--warn);
@@ -230,7 +246,7 @@
       left: 0;
       right: 0;
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       background: var(--card-2);
       border-top: 1px solid var(--border);
       z-index: 20;
@@ -241,7 +257,7 @@
       background: transparent;
       color: var(--muted);
       padding: 10px 2px;
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       font-weight: 600;
     }
     nav.bottom-nav button.active {
@@ -257,7 +273,7 @@
       <div>
         <h1>Radar Ludique — Designer</h1>
         <div class="sub" id="status-bar">Initialisation...</div>
-        <div class="radar-compass">Marché actuel • Bon interlocuteur • Existant & proximité • Signaux faibles & demain</div>
+        <div class="radar-compass">Marché actuel • Bon interlocuteur • Existant & proximité</div>
       </div>
       <div id="auth-area" class="row"></div>
     </div>
@@ -376,62 +392,52 @@
       </div>
     </section>
 
-    <section id="tab-tendances" class="panel">
-      <div class="card">
-        <strong>Signaux faibles & Demain (Quels sont les signaux faibles et de quoi demain sera fait ?)</strong>
-        <div class="box-missing">Croisera les attentes/refus de tes structures avec les signaux émergents du marché.</div>
-      </div>
-    </section>
-
     <section id="tab-actu" class="panel">
       <div class="card">
         <div class="row" style="justify-content: space-between;">
-          <strong>Marché actuel & Fil Actu (Flux RSS)</strong>
+          <strong>Marché actuel — Résumé ciblé par information</strong>
           <div class="row">
             <button type="button" class="small" id="btn-refresh-rss" onclick="refreshRssFeeds(true)">Actualiser les flux</button>
-            <button type="button" class="secondary small" onclick="toggleFeedManager()">Gérer les flux RSS</button>
+            <button type="button" class="secondary small" onclick="toggleFeedManager()">Gérer les flux (option)</button>
           </div>
         </div>
-        <p class="muted" style="margin-top:6px;">Fenêtre glissante bornée (30 jours par défaut) et plafonnée pour éviter toute saturation mémoire, avec détection des structures connues.</p>
+        <p class="muted" style="margin-top:6px;">Choisis une information à la fois : synthèse courte appuyée sur les titres/extraits collectés + liens vers les articles sources.</p>
 
         <div class="row" style="margin-top:8px;">
-          <div style="flex:2; min-width:190px;">
-            <label for="rss-search">Filtrer les articles (mot-clé ou structure)</label>
-            <input id="rss-search" type="text" placeholder="Ex. FIJ, Essen, Nuremberg, BGG, Bombyx..." oninput="renderRssArticles()" />
-          </div>
-          <div style="flex:1; min-width:140px;">
-            <label for="rss-category-filter">Catégorie</label>
-            <select id="rss-category-filter" onchange="renderRssArticles()">
-              <option value="">Toutes catégories</option>
-              <option value="Médias & BGG">Médias & BGG</option>
-              <option value="Boutiques">Boutiques</option>
-              <option value="Festivals & Salons">Festivals & Salons</option>
-              <option value="Influenceurs">Influenceurs</option>
-              <option value="Autre">Autre</option>
+          <div style="flex:2; min-width:210px;">
+            <label for="info-mode">Information voulue (1 mode à la fois)</label>
+            <select id="info-mode" onchange="onInfoModeChanged()">
+              <option value="quoi_de_neuf_24h">Quoi de neuf (24h glissantes)</option>
+              <option value="sorties_officielles_24h">Dernières sorties officielles (24h, toutes structures)</option>
+              <option value="evenements_festivals">Événements & Festivals</option>
+              <option value="structure_base">Une structure de ma base (onglet Éditeurs)</option>
             </select>
           </div>
-          <div style="flex:1; min-width:140px;">
-            <label for="rss-source-filter">Source</label>
-            <select id="rss-source-filter" onchange="renderRssArticles()">
-              <option value="">Toutes les sources</option>
-            </select>
+
+          <div id="structure-picker-wrap" style="flex:2; min-width:210px; display:none;">
+            <label for="info-structure-select">Choisir une structure de la base</label>
+            <select id="info-structure-select" onchange="renderActuSummary()"></select>
           </div>
-          <div style="flex:1; min-width:130px;">
-            <label for="rss-window-days">Fenêtre temporelle</label>
-            <select id="rss-window-days" onchange="onRssWindowChanged()">
-              <option value="7">7 derniers jours</option>
-              <option value="30" selected>30 derniers jours</option>
-              <option value="90">90 derniers jours</option>
-              <option value="0">Tout (plafonné)</option>
+
+          <div style="flex:1; min-width:140px;">
+            <label for="info-window">Fenêtre temporelle</label>
+            <select id="info-window" onchange="renderActuSummary()">
+              <option value="1" selected>24h glissantes</option>
+              <option value="7">7 jours</option>
+              <option value="30">30 jours</option>
+              <option value="0">Tout le cache</option>
             </select>
           </div>
         </div>
+
+        <label for="info-keyword">Mot-clé complémentaire (optionnel)</label>
+        <input id="info-keyword" type="text" placeholder="Ex. plis, extension, coopératif, Kickstarter..." oninput="renderActuSummary()" />
 
         <div id="rss-status" class="muted" style="margin-top:8px;">Aucun flux chargé pour le moment.</div>
 
         <div id="rss-manager" class="edit-box" style="display:none; margin-top:10px;">
-          <strong>Acteurs & Sources RSS configurés</strong>
-          <div class="muted" style="font-size:0.78rem; margin-top:2px;">Les salons sans flux RSS direct (FIJ Cannes, Nuremberg, Essen, festivals, boutiques ou influenceurs) utilisent des flux de recherche mots-clés ou des flux YouTube dédiés.</div>
+          <strong>Gestion des flux RSS (optionnel)</strong>
+          <div class="muted" style="font-size:0.78rem; margin-top:2px;">Les acteurs sans flux RSS direct (FIJ, Nuremberg, Essen, festivals, boutiques, influenceurs) utilisent des flux de recherche mots-clés ou des flux YouTube.</div>
           <div id="rss-feeds-list" style="margin-top:8px;"></div>
 
           <div class="row" style="margin-top:10px;">
@@ -455,13 +461,13 @@
             </div>
           </div>
           <div class="row" style="margin-top:8px;">
-            <button type="button" class="small" onclick="addRssFeed()">+ Ajouter cette source</button>
-            <button type="button" class="secondary small" onclick="resetRssFeeds()">Réinitialiser les acteurs par défaut</button>
+            <button type="button" class="small" onclick="addRssFeed()">+ Ajouter ce flux</button>
+            <button type="button" class="secondary small" onclick="resetRssFeeds()">Réinitialiser les flux</button>
           </div>
         </div>
       </div>
 
-      <div id="rss-articles-list"></div>
+      <div id="actu-summary-output"></div>
     </section>
   </main>
 
@@ -469,7 +475,6 @@
     <button id="btn-editeurs" class="active" onclick="switchTab('editeurs')">Éditeurs</button>
     <button id="btn-matching" onclick="switchTab('matching')">Matching</button>
     <button id="btn-existant" onclick="switchTab('existant')">Existant</button>
-    <button id="btn-tendances" onclick="switchTab('tendances')">Tendances</button>
     <button id="btn-actu" onclick="switchTab('actu')">Actu</button>
   </nav>
 
@@ -484,7 +489,7 @@
     const RSS_CACHE_KEY = "radar_ludique_rss_cache_v2";
     const PAGE_SIZE = 60;
     const MAX_CACHED_ARTICLES = 150;
-    const MAX_DISPLAYED_ARTICLES = 60;
+    const MAX_SUMMARY_LINKS = 5;
 
     const DEFAULT_RSS_FEEDS = [
       { id: "bgg-news", name: "BoardGameGeek News", category: "Médias & BGG", url: "https://boardgamegeek.com/rss/blog/1", enabled: true },
@@ -628,9 +633,8 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       updateStatusBar();
       renderBaseCriteriaSelector();
-      if (rssArticles.length > 0) {
-        renderRssArticles();
-      }
+      populateStructurePicker();
+      renderActuSummary();
     }
 
     function loadSavedSession() {
@@ -922,9 +926,9 @@
       if (tabName === "matching") {
         renderBaseCriteriaSelector();
       } else if (tabName === "actu") {
+        populateStructurePicker();
         renderRssFeedsList();
-        renderRssSourceFilter();
-        renderRssArticles();
+        renderActuSummary();
         if (!rssHasAutoLoaded) {
           rssHasAutoLoaded = true;
           refreshRssFeeds(false);
@@ -1542,8 +1546,57 @@
       }));
     }
 
-    function onRssWindowChanged() {
-      renderRssArticles();
+    function getCleanStructureName(rawNom) {
+      return String(rawNom || "")
+        .replace(/[\u{1F1E6}-\u{1F1FF}]{2}/gu, "")
+        .replace(/[^\p{L}\p{N}\s'-]/gu, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function populateStructurePicker() {
+      const select = document.getElementById("info-structure-select");
+      if (!select) return;
+      const previous = select.value;
+      const options = state
+        .map((s) => ({ id: s.id, label: s.nom, clean: getCleanStructureName(s.nom) }))
+        .filter((s) => s.clean.length >= 2)
+        .sort((a, b) => a.clean.localeCompare(b.clean, "fr"));
+
+      select.innerHTML = options.map((o) =>
+        `<option value="${escapeHTML(o.id)}">${escapeHTML(o.label)}</option>`
+      ).join("");
+
+      if (previous && options.some((o) => o.id === previous)) {
+        select.value = previous;
+      }
+    }
+
+    function onInfoModeChanged() {
+      const mode = document.getElementById("info-mode")?.value || "quoi_de_neuf_24h";
+      const pickerWrap = document.getElementById("structure-picker-wrap");
+      const windowSelect = document.getElementById("info-window");
+
+      if (pickerWrap) {
+        pickerWrap.style.display = mode === "structure_base" ? "block" : "none";
+      }
+
+      if (windowSelect) {
+        if (mode === "quoi_de_neuf_24h" || mode === "sorties_officielles_24h") {
+          windowSelect.value = "1";
+        } else if (windowSelect.value === "1") {
+          windowSelect.value = "30";
+        }
+      }
+      renderActuSummary();
+    }
+
+    function setActuWindow(days) {
+      const windowSelect = document.getElementById("info-window");
+      if (windowSelect) {
+        windowSelect.value = String(days);
+      }
+      renderActuSummary();
     }
 
     function toggleFeedManager() {
@@ -1579,16 +1632,14 @@
     function toggleRssFeed(id) {
       rssFeeds = rssFeeds.map((f) => f.id === id ? { ...f, enabled: !f.enabled } : f);
       saveRssFeeds();
-      renderRssSourceFilter();
     }
 
     function removeRssFeed(id) {
       rssFeeds = rssFeeds.filter((f) => f.id !== id);
       saveRssFeeds();
       renderRssFeedsList();
-      renderRssSourceFilter();
       rssArticles = rssArticles.filter((a) => a.feedId !== id);
-      renderRssArticles();
+      renderActuSummary();
     }
 
     function addRssFeed() {
@@ -1607,7 +1658,6 @@
       document.getElementById("rss-new-name").value = "";
       document.getElementById("rss-new-url").value = "";
       renderRssFeedsList();
-      renderRssSourceFilter();
       refreshRssFeeds(true);
     }
 
@@ -1615,21 +1665,7 @@
       rssFeeds = DEFAULT_RSS_FEEDS.map((f) => ({ ...f }));
       saveRssFeeds();
       renderRssFeedsList();
-      renderRssSourceFilter();
       refreshRssFeeds(true);
-    }
-
-    function renderRssSourceFilter() {
-      const select = document.getElementById("rss-source-filter");
-      if (!select) return;
-      const current = select.value;
-      const names = Array.from(new Set(rssFeeds.filter((f) => f.enabled).map((f) => f.name)));
-      select.innerHTML = `<option value="">Toutes les sources</option>` + names.map((n) =>
-        `<option value="${escapeHTML(n)}">${escapeHTML(n)}</option>`
-      ).join("");
-      if (names.includes(current)) {
-        select.value = current;
-      }
     }
 
     function parseXmlFeed(xmlText, feed) {
@@ -1741,21 +1777,21 @@
       const btn = document.getElementById("btn-refresh-rss");
 
       if (activeFeeds.length === 0) {
-        if (statusEl) statusEl.textContent = "Aucun flux actif. Clique sur « Gérer les flux RSS » pour en activer ou ajouter un.";
-        renderRssArticles();
+        if (statusEl) statusEl.textContent = "Aucun flux actif. Clique sur « Gérer les flux (option) » pour en activer ou ajouter un.";
+        renderActuSummary();
         return;
       }
 
       if (!force && rssArticles.length > 0) {
-        renderRssArticles();
+        renderActuSummary();
         if (statusEl) {
-          statusEl.textContent = `${rssArticles.length} article(s) en cache local (plafond ${MAX_CACHED_ARTICLES}) • Clique sur « Actualiser les flux » pour vérifier les nouveautés.`;
+          statusEl.textContent = `${rssArticles.length} article(s) en cache (max ${MAX_CACHED_ARTICLES}) • Clique sur « Actualiser les flux » pour vérifier les nouveautés.`;
         }
         return;
       }
 
       if (btn) btn.disabled = true;
-      if (statusEl) statusEl.textContent = `Chargement de ${activeFeeds.length} flux RSS en cours...`;
+      if (statusEl) statusEl.textContent = `Chargement de ${activeFeeds.length} flux en cours...`;
 
       const collected = [];
       const errors = [];
@@ -1784,8 +1820,7 @@
       }
 
       if (btn) btn.disabled = false;
-      renderRssSourceFilter();
-      renderRssArticles();
+      renderActuSummary();
 
       if (statusEl) {
         const nowStr = new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
@@ -1794,82 +1829,128 @@
       }
     }
 
-    function detectMatchingStructures(text) {
+    function matchesReleaseSignal(text) {
       const hay = String(text || "").toLowerCase();
-      if (!hay || !Array.isArray(state)) return [];
-      const matches = [];
-      for (const s of state) {
-        const cleanName = String(s.nom || "")
-          .replace(/[\u{1F1E6}-\u{1F1FF}]{2}/gu, "")
-          .replace(/[^\p{L}\p{N}\s'-]/gu, " ")
-          .trim()
-          .toLowerCase();
-        if (cleanName.length >= 4 && hay.includes(cleanName)) {
-          matches.push(s.nom);
-        }
-        if (matches.length >= 4) break;
-      }
-      return matches;
+      return /\b(sortie|sorties|annonce|annoncé|annoncee|annoncée|disponible|précommande|precommande|boîte|boite|extension|édition|edition|release|released|announcement|announced|preorder)\b/i.test(hay);
     }
 
-    function renderRssArticles() {
-      const container = document.getElementById("rss-articles-list");
+    function matchesEventSignal(art) {
+      if ((art.category || "") === "Festivals & Salons") return true;
+      const hay = `${art.title} ${art.summary} ${art.source}`.toLowerCase();
+      return /\b(festival|festivals|salon|salons|fij|cannes|essen|spiel|nuremberg|spielwarenmesse|convention|rencontre|rencontres|tournoi|octogônes|pelickan|flj)\b/i.test(hay);
+    }
+
+    function buildConciseBullets(items, mode, selectedStructureLabel = "") {
+      if (items.length === 0) return [];
+      const top = items.slice(0, 4);
+      return top.map((art) => {
+        const cleanSummary = art.summary ? ` — ${art.summary}` : "";
+        if (mode === "structure_base" && selectedStructureLabel) {
+          return `<strong>${escapeHTML(art.source)}</strong> (${escapeHTML(art.dateLabel)}) : ${escapeHTML(art.title)}${escapeHTML(cleanSummary)}`;
+        }
+        return `<strong>${escapeHTML(art.source)}</strong> (${escapeHTML(art.dateLabel)}) : ${escapeHTML(art.title)}${escapeHTML(cleanSummary)}`;
+      });
+    }
+
+    function renderActuSummary() {
+      const container = document.getElementById("actu-summary-output");
       if (!container) return;
 
-      const q = (document.getElementById("rss-search")?.value || "").trim().toLowerCase();
-      const categoryFilter = document.getElementById("rss-category-filter")?.value || "";
-      const sourceFilter = document.getElementById("rss-source-filter")?.value || "";
-      const windowDays = Number(document.getElementById("rss-window-days")?.value ?? 30);
+      const mode = document.getElementById("info-mode")?.value || "quoi_de_neuf_24h";
+      const windowDays = Number(document.getElementById("info-window")?.value ?? 1);
+      const keyword = (document.getElementById("info-keyword")?.value || "").trim().toLowerCase();
+      const selectedStructId = document.getElementById("info-structure-select")?.value || "";
+      const selectedStruct = state.find((s) => s.id === selectedStructId) || null;
+      const cleanStructName = selectedStruct ? getCleanStructureName(selectedStruct.nom).toLowerCase() : "";
+
       const cutoffTs = windowDays > 0 ? (Date.now() - windowDays * 24 * 60 * 60 * 1000) : 0;
 
       const filtered = rssArticles.filter((art) => {
-        if (cutoffTs > 0 && art.timestamp > 0 && art.timestamp < cutoffTs) return false;
-        if (categoryFilter && (art.category || "Autre") !== categoryFilter) return false;
-        if (sourceFilter && art.source !== sourceFilter) return false;
-        if (!q) return true;
+        if (cutoffTs > 0) {
+          if (!art.timestamp || art.timestamp < cutoffTs) return false;
+        }
+
         const hay = `${art.title} ${art.summary} ${art.source} ${art.category || ""}`.toLowerCase();
-        return hay.includes(q);
+
+        if (keyword && !hay.includes(keyword)) return false;
+
+        if (mode === "sorties_officielles_24h") {
+          return matchesReleaseSignal(`${art.title} ${art.summary}`);
+        }
+        if (mode === "evenements_festivals") {
+          return matchesEventSignal(art);
+        }
+        if (mode === "structure_base") {
+          if (!cleanStructName) return false;
+          return hay.includes(cleanStructName);
+        }
+        return true;
       });
 
+      const modeTitles = {
+        quoi_de_neuf_24h: "Quoi de neuf (24h glissantes)",
+        sorties_officielles_24h: "Dernières sorties officielles (toutes structures)",
+        evenements_festivals: "Événements & Festivals",
+        structure_base: selectedStruct ? `Structure : ${selectedStruct.nom}` : "Structure de la base"
+      };
+
+      const windowLabel = windowDays === 1
+        ? "fenêtre 24h glissantes"
+        : windowDays > 0
+          ? `fenêtre ${windowDays} jours`
+          : "tout le cache";
+
       if (filtered.length === 0) {
+        const canBroaden = windowDays > 0 && windowDays < 30;
         container.innerHTML = `
           <div class="card">
-            <p class="muted">Aucun article à afficher sur cette fenêtre (${windowDays > 0 ? windowDays + " jours" : "tout"}) ou avec ces filtres.</p>
+            <strong>${escapeHTML(modeTitles[mode])}</strong>
+            <p class="muted" style="margin-top:6px;">
+              Aucun élément trouvé sur cette ${escapeHTML(windowLabel)}${keyword ? ` avec le mot-clé « ${escapeHTML(keyword)} »` : ""}.
+            </p>
+            <div class="row" style="margin-top:8px;">
+              ${canBroaden ? `<button type="button" class="secondary small" onclick="setActuWindow(7)">Vérifier sur 7 jours</button>` : ""}
+              ${windowDays !== 30 ? `<button type="button" class="secondary small" onclick="setActuWindow(30)">Vérifier sur 30 jours</button>` : ""}
+              <button type="button" class="small" onclick="refreshRssFeeds(true)">Actualiser les flux</button>
+            </div>
           </div>
         `;
         return;
       }
 
-      const displayed = filtered.slice(0, MAX_DISPLAYED_ARTICLES);
-      const capNotice = filtered.length > MAX_DISPLAYED_ARTICLES
-        ? `<p class="muted">Affichage limité à ${MAX_DISPLAYED_ARTICLES} articles sur ${filtered.length} pour préserver la fluidité.</p>`
-        : `<p class="muted">${displayed.length} article(s) affiché(s) (${windowDays > 0 ? "fenêtre " + windowDays + " j" : "fenêtre complète"}).</p>`;
+      const bullets = buildConciseBullets(filtered, mode, selectedStruct ? selectedStruct.nom : "");
+      const links = filtered.filter((a) => Boolean(a.link)).slice(0, MAX_SUMMARY_LINKS);
 
-      container.innerHTML = capNotice + displayed.map((art) => {
-        const matchedStructures = detectMatchingStructures(`${art.title} ${art.summary}`);
-        const structureBadges = matchedStructures.map((name) =>
-          `<span class="badge info">Structure : ${escapeHTML(name)}</span>`
-        ).join("");
-
-        return `
-          <div class="card">
-            <div class="row" style="justify-content: space-between;">
-              <div>
-                <span class="badge">${escapeHTML(art.source)}</span>
-                <span class="badge">${escapeHTML(art.category || "Autre")}</span>
-              </div>
-              <span class="muted" style="font-size:0.78rem;">${escapeHTML(art.dateLabel)}</span>
-            </div>
-            <div style="margin-top:6px; font-size:0.98rem;">
-              ${art.link
-                ? `<a class="article-link" href="${escapeHTML(art.link)}" target="_blank" rel="noopener noreferrer">${escapeHTML(art.title)}</a>`
-                : `<strong>${escapeHTML(art.title)}</strong>`}
-            </div>
-            ${art.summary ? `<p class="muted" style="margin:6px 0 0; line-height:1.4;">${escapeHTML(art.summary)}</p>` : ""}
-            ${structureBadges ? `<div style="margin-top:6px;">${structureBadges}</div>` : ""}
+      container.innerHTML = `
+        <div class="card">
+          <div class="row" style="justify-content: space-between;">
+            <strong>${escapeHTML(modeTitles[mode])}</strong>
+            <span class="badge info">${filtered.length} résultat(s) • ${escapeHTML(windowLabel)}</span>
           </div>
-        `;
-      }).join("");
+
+          <div class="summary-box">
+            <strong>Résumé synthétique (strictement basé sur les titres & extraits collectés)</strong>
+            <ul>
+              ${bullets.map((b) => `<li>${b}</li>`).join("")}
+            </ul>
+            ${filtered.length > bullets.length
+              ? `<div class="muted" style="font-size:0.78rem;">+ ${filtered.length - bullets.length} autre(s) élément(s) correspondant(s) dans la fenêtre sélectionnée.</div>`
+              : ""}
+          </div>
+
+          <div style="margin-top:12px;">
+            <strong>Liens sources (${links.length} max)</strong>
+            ${links.length === 0
+              ? `<div class="muted" style="margin-top:4px;">Aucun lien URL direct disponible sur ces éléments.</div>`
+              : links.map((l) => `
+                <div style="margin-top:6px; font-size:0.88rem;">
+                  <span class="badge">${escapeHTML(l.source)}</span>
+                  <a class="article-link" href="${escapeHTML(l.link)}" target="_blank" rel="noopener noreferrer">${escapeHTML(l.title)}</a>
+                </div>
+              `).join("")}
+          </div>
+        </div>
+      `;
     }
 
     function exportStateJSON() {
@@ -1894,9 +1975,9 @@
     renderEditeurs();
     renderBaseCriteriaSelector();
     updateSeuilLabel(false);
+    populateStructurePicker();
     renderRssFeedsList();
-    renderRssSourceFilter();
-    renderRssArticles();
+    renderActuSummary();
     syncFromSupabase();
   </script>
 </body>
