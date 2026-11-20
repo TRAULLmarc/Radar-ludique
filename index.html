@@ -96,6 +96,7 @@
     }
     .badge.terrain { background: #78350f; color: #fde68a; border: 1px solid var(--warn); }
     .badge.ok { background: #14532d; color: #bbf7d0; border: 1px solid var(--ok); }
+    .badge.info { background: #0c4a6e; color: #bae6fd; border: 1px solid var(--accent); }
     .badge.c-enfant { background: #831843; color: #fbcfe8; border: 1px solid #f472b6; }
     .badge.c-famille { background: #1e3a8a; color: #bfdbfe; border: 1px solid #60a5fa; }
     .badge.c-initie { background: #4c1d95; color: #ddd6fe; border: 1px solid #a78bfa; }
@@ -205,6 +206,24 @@
       margin-top: 6px;
       font-weight: 600;
     }
+    a.article-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    a.article-link:hover {
+      text-decoration: underline;
+    }
+    .feed-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.84rem;
+    }
+    .feed-row:last-child { border-bottom: none; }
     nav.bottom-nav {
       position: fixed;
       bottom: 0;
@@ -366,9 +385,52 @@
 
     <section id="tab-actu" class="panel">
       <div class="card">
-        <strong>Marché actuel & Fil Actu (Quel marché actuel ?)</strong>
-        <div class="box-missing">Flux RSS ludiques officiels et sorties récentes pour suivre le marché et repérer d'éventuelles pistes éditoriales.</div>
+        <div class="row" style="justify-content: space-between;">
+          <strong>Marché actuel & Fil Actu (Flux RSS)</strong>
+          <div class="row">
+            <button type="button" class="small" id="btn-refresh-rss" onclick="refreshRssFeeds(true)">Actualiser les flux</button>
+            <button type="button" class="secondary small" onclick="toggleFeedManager()">Gérer les flux RSS</button>
+          </div>
+        </div>
+        <p class="muted" style="margin-top:6px;">Agrégation côté client des flux RSS ludiques configurés, avec détection automatique des structures connues de ta base.</p>
+
+        <div class="row" style="margin-top:8px;">
+          <div style="flex:2; min-width:200px;">
+            <label for="rss-search">Filtrer les articles (mot-clé ou structure)</label>
+            <input id="rss-search" type="text" placeholder="Ex. extension, festival, Bombyx, financement..." oninput="renderRssArticles()" />
+          </div>
+          <div style="flex:1; min-width:160px;">
+            <label for="rss-source-filter">Source</label>
+            <select id="rss-source-filter" onchange="renderRssArticles()">
+              <option value="">Toutes les sources</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="rss-status" class="muted" style="margin-top:8px;">Aucun flux chargé pour le moment.</div>
+
+        <div id="rss-manager" class="edit-box" style="display:none; margin-top:10px;">
+          <strong>Sources RSS configurées</strong>
+          <div id="rss-feeds-list" style="margin-top:6px;"></div>
+
+          <div class="row" style="margin-top:10px;">
+            <div style="flex:1; min-width:150px;">
+              <label for="rss-new-name">Nom de la source</label>
+              <input id="rss-new-name" type="text" placeholder="Ex. Gus & Co" />
+            </div>
+            <div style="flex:2; min-width:220px;">
+              <label for="rss-new-url">URL du flux RSS / Atom</label>
+              <input id="rss-new-url" type="url" placeholder="https://.../feed/" />
+            </div>
+          </div>
+          <div class="row" style="margin-top:8px;">
+            <button type="button" class="small" onclick="addRssFeed()">+ Ajouter ce flux</button>
+            <button type="button" class="secondary small" onclick="resetRssFeeds()">Réinitialiser les flux par défaut</button>
+          </div>
+        </div>
       </div>
+
+      <div id="rss-articles-list"></div>
     </section>
   </main>
 
@@ -387,7 +449,16 @@
     const SUPABASE_ANON_KEY = "sb_publishable_dagt7loMaybYdZG_eNDt-A_RrLHWs1X";
     const STORAGE_KEY = "radar_ludique_state_v2";
     const SESSION_KEY = "radar_ludique_sb_session";
+    const RSS_FEEDS_KEY = "radar_ludique_rss_feeds_v1";
+    const RSS_CACHE_KEY = "radar_ludique_rss_cache_v1";
     const PAGE_SIZE = 60;
+
+    const DEFAULT_RSS_FEEDS = [
+      { id: "gus-co", name: "Gus & Co", url: "https://gusandco.net/feed/", enabled: true },
+      { id: "tric-trac", name: "Tric Trac", url: "https://www.trictrac.net/rss", enabled: true },
+      { id: "spielbox", name: "Spielbox", url: "https://spielbox.de/feed/", enabled: true },
+      { id: "dice-breaker", name: "Dicebreaker", url: "https://www.dicebreaker.com/feed", enabled: true }
+    ];
 
     const feedbackById = {};
     const editingIds = new Set();
@@ -395,6 +466,9 @@
     let displayLimit = PAGE_SIZE;
     let authSession = null;
     let isAdmin = false;
+    let rssFeeds = loadRssFeeds();
+    let rssArticles = loadRssCache();
+    let rssHasAutoLoaded = false;
 
     function isSupabaseConfigured() {
       return SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length > 10;
@@ -513,6 +587,9 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       updateStatusBar();
       renderBaseCriteriaSelector();
+      if (rssArticles.length > 0) {
+        renderRssArticles();
+      }
     }
 
     function loadSavedSession() {
@@ -803,6 +880,14 @@
       document.getElementById(`btn-${tabName}`).classList.add("active");
       if (tabName === "matching") {
         renderBaseCriteriaSelector();
+      } else if (tabName === "actu") {
+        renderRssFeedsList();
+        renderRssSourceFilter();
+        renderRssArticles();
+        if (!rssHasAutoLoaded) {
+          rssHasAutoLoaded = true;
+          refreshRssFeeds(false);
+        }
       }
     }
 
@@ -812,6 +897,24 @@
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
+    }
+
+    function stripHTML(htmlStr) {
+      const tmp = document.createElement("div");
+      tmp.innerHTML = String(htmlStr || "");
+      return (tmp.textContent || tmp.innerText || "").replace(/\s+/g, " ").trim();
+    }
+
+    function sanitizeUrl(urlStr) {
+      const raw = String(urlStr || "").trim();
+      if (!raw) return "";
+      try {
+        const parsed = new URL(raw);
+        if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+          return parsed.href;
+        }
+      } catch (e) {}
+      return "";
     }
 
     function toggleEdit(id) {
@@ -1353,6 +1456,316 @@
       `;
     }
 
+    function loadRssFeeds() {
+      try {
+        const raw = localStorage.getItem(RSS_FEEDS_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {}
+      return DEFAULT_RSS_FEEDS.map((f) => ({ ...f }));
+    }
+
+    function saveRssFeeds() {
+      localStorage.setItem(RSS_FEEDS_KEY, JSON.stringify(rssFeeds));
+    }
+
+    function loadRssCache() {
+      try {
+        const raw = localStorage.getItem(RSS_CACHE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed.articles)) return parsed.articles;
+        }
+      } catch (e) {}
+      return [];
+    }
+
+    function saveRssCache(articles, meta = {}) {
+      localStorage.setItem(RSS_CACHE_KEY, JSON.stringify({
+        updatedAt: new Date().toISOString(),
+        meta,
+        articles
+      }));
+    }
+
+    function toggleFeedManager() {
+      const el = document.getElementById("rss-manager");
+      if (!el) return;
+      const nextVisible = el.style.display === "none";
+      el.style.display = nextVisible ? "block" : "none";
+      if (nextVisible) renderRssFeedsList();
+    }
+
+    function renderRssFeedsList() {
+      const container = document.getElementById("rss-feeds-list");
+      if (!container) return;
+      if (rssFeeds.length === 0) {
+        container.innerHTML = `<div class="muted">Aucun flux configuré.</div>`;
+        return;
+      }
+      container.innerHTML = rssFeeds.map((f) => `
+        <div class="feed-row">
+          <div>
+            <label style="margin:0; display:inline-flex; gap:6px; align-items:center;">
+              <input type="checkbox" style="width:auto;" ${f.enabled ? "checked" : ""} onchange="toggleRssFeed('${escapeHTML(f.id)}')" />
+              <strong>${escapeHTML(f.name)}</strong>
+            </label>
+            <div class="muted" style="font-size:0.76rem; margin-left:22px;">${escapeHTML(f.url)}</div>
+          </div>
+          <button type="button" class="danger small" onclick="removeRssFeed('${escapeHTML(f.id)}')">Retirer</button>
+        </div>
+      `).join("");
+    }
+
+    function toggleRssFeed(id) {
+      rssFeeds = rssFeeds.map((f) => f.id === id ? { ...f, enabled: !f.enabled } : f);
+      saveRssFeeds();
+      renderRssSourceFilter();
+    }
+
+    function removeRssFeed(id) {
+      rssFeeds = rssFeeds.filter((f) => f.id !== id);
+      saveRssFeeds();
+      renderRssFeedsList();
+      renderRssSourceFilter();
+      rssArticles = rssArticles.filter((a) => a.feedId !== id);
+      renderRssArticles();
+    }
+
+    function addRssFeed() {
+      const name = (document.getElementById("rss-new-name").value || "").trim();
+      const rawUrl = (document.getElementById("rss-new-url").value || "").trim();
+      const safeUrl = sanitizeUrl(rawUrl);
+      if (!safeUrl) {
+        alert("Entre une URL HTTP/HTTPS valide pour le flux RSS.");
+        return;
+      }
+      const finalName = name || new URL(safeUrl).hostname.replace(/^www\./, "");
+      const id = `feed-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+      rssFeeds.push({ id, name: finalName, url: safeUrl, enabled: true });
+      saveRssFeeds();
+      document.getElementById("rss-new-name").value = "";
+      document.getElementById("rss-new-url").value = "";
+      renderRssFeedsList();
+      renderRssSourceFilter();
+      refreshRssFeeds(true);
+    }
+
+    function resetRssFeeds() {
+      rssFeeds = DEFAULT_RSS_FEEDS.map((f) => ({ ...f }));
+      saveRssFeeds();
+      renderRssFeedsList();
+      renderRssSourceFilter();
+      refreshRssFeeds(true);
+    }
+
+    function renderRssSourceFilter() {
+      const select = document.getElementById("rss-source-filter");
+      if (!select) return;
+      const current = select.value;
+      const names = Array.from(new Set(rssFeeds.filter((f) => f.enabled).map((f) => f.name)));
+      select.innerHTML = `<option value="">Toutes les sources</option>` + names.map((n) =>
+        `<option value="${escapeHTML(n)}">${escapeHTML(n)}</option>`
+      ).join("");
+      if (names.includes(current)) {
+        select.value = current;
+      }
+    }
+
+    function parseXmlFeed(xmlText, feed) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(xmlText, "application/xml");
+      if (doc.querySelector("parsererror")) {
+        throw new Error("XML invalide");
+      }
+
+      const items = [];
+      const rssItems = Array.from(doc.querySelectorAll("item"));
+      const atomEntries = Array.from(doc.querySelectorAll("entry"));
+      const nodes = rssItems.length > 0 ? rssItems : atomEntries;
+
+      nodes.forEach((node, idx) => {
+        const titleEl = node.querySelector("title");
+        const title = stripHTML(titleEl ? titleEl.textContent : "") || `Article #${idx + 1}`;
+
+        let link = "";
+        const linkEl = node.querySelector("link");
+        if (linkEl) {
+          link = linkEl.getAttribute("href") || linkEl.textContent || "";
+        }
+        link = sanitizeUrl(link);
+
+        const dateNode = node.querySelector("pubDate") || node.querySelector("published") || node.querySelector("updated") || node.querySelector("date");
+        const rawDate = dateNode ? dateNode.textContent.trim() : "";
+        const parsedTime = rawDate ? Date.parse(rawDate) : NaN;
+        const timestamp = Number.isFinite(parsedTime) ? parsedTime : 0;
+
+        const descNode = node.querySelector("description") || node.querySelector("summary") || node.querySelector("encoded");
+        const rawSummary = descNode ? stripHTML(descNode.textContent) : "";
+        const summary = rawSummary.length > 260 ? rawSummary.slice(0, 257).trim() + "…" : rawSummary;
+
+        items.push({
+          id: `${feed.id}-${link || title}-${idx}`,
+          feedId: feed.id,
+          source: feed.name,
+          title,
+          link,
+          summary,
+          timestamp,
+          dateLabel: timestamp > 0
+            ? new Date(timestamp).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" })
+            : (rawDate || "Date non précisée")
+        });
+      });
+
+      return items;
+    }
+
+    async function fetchSingleFeed(feed) {
+      const proxies = [
+        (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+        (u) => `https://corsproxy.io/?${encodeURIComponent(u)}`
+      ];
+
+      let lastErr = null;
+      for (const buildProxyUrl of proxies) {
+        try {
+          const resp = await fetch(buildProxyUrl(feed.url));
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          const text = await resp.text();
+          return parseXmlFeed(text, feed);
+        } catch (err) {
+          lastErr = err;
+        }
+      }
+      throw lastErr || new Error("Flux indisponible");
+    }
+
+    async function refreshRssFeeds(force = true) {
+      const activeFeeds = rssFeeds.filter((f) => f.enabled);
+      const statusEl = document.getElementById("rss-status");
+      const btn = document.getElementById("btn-refresh-rss");
+
+      if (activeFeeds.length === 0) {
+        if (statusEl) statusEl.textContent = "Aucun flux actif. Clique sur « Gérer les flux RSS » pour en activer ou ajouter un.";
+        renderRssArticles();
+        return;
+      }
+
+      if (!force && rssArticles.length > 0) {
+        renderRssArticles();
+        if (statusEl) {
+          statusEl.textContent = `${rssArticles.length} article(s) en cache local • Clique sur « Actualiser les flux » pour vérifier les nouveautés.`;
+        }
+        return;
+      }
+
+      if (btn) btn.disabled = true;
+      if (statusEl) statusEl.textContent = `Chargement de ${activeFeeds.length} flux RSS en cours...`;
+
+      const collected = [];
+      const errors = [];
+
+      await Promise.all(activeFeeds.map(async (feed) => {
+        try {
+          const items = await fetchSingleFeed(feed);
+          collected.push(...items);
+        } catch (e) {
+          errors.push(`${feed.name} (${e.message})`);
+        }
+      }));
+
+      if (collected.length > 0) {
+        const seen = new Set();
+        rssArticles = collected
+          .filter((item) => {
+            const key = item.link || `${item.source}|${item.title}`;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          })
+          .sort((a, b) => b.timestamp - a.timestamp);
+        saveRssCache(rssArticles, { errors });
+      }
+
+      if (btn) btn.disabled = false;
+      renderRssSourceFilter();
+      renderRssArticles();
+
+      if (statusEl) {
+        const nowStr = new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+        const errSuffix = errors.length > 0 ? ` • Flux en erreur : ${errors.join(", ")}` : "";
+        statusEl.textContent = `${rssArticles.length} article(s) chargé(s) à ${nowStr}${errSuffix}`;
+      }
+    }
+
+    function detectMatchingStructures(text) {
+      const hay = String(text || "").toLowerCase();
+      if (!hay || !Array.isArray(state)) return [];
+      const matches = [];
+      for (const s of state) {
+        const cleanName = String(s.nom || "")
+          .replace(/[\u{1F1E6}-\u{1F1FF}]{2}/gu, "")
+          .replace(/[^\p{L}\p{N}\s'-]/gu, " ")
+          .trim()
+          .toLowerCase();
+        if (cleanName.length >= 4 && hay.includes(cleanName)) {
+          matches.push(s.nom);
+        }
+        if (matches.length >= 4) break;
+      }
+      return matches;
+    }
+
+    function renderRssArticles() {
+      const container = document.getElementById("rss-articles-list");
+      if (!container) return;
+
+      const q = (document.getElementById("rss-search")?.value || "").trim().toLowerCase();
+      const sourceFilter = document.getElementById("rss-source-filter")?.value || "";
+
+      const filtered = rssArticles.filter((art) => {
+        if (sourceFilter && art.source !== sourceFilter) return false;
+        if (!q) return true;
+        const hay = `${art.title} ${art.summary} ${art.source}`.toLowerCase();
+        return hay.includes(q);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="card">
+            <p class="muted">Aucun article à afficher avec les filtres ou flux actuels.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.slice(0, 60).map((art) => {
+        const matchedStructures = detectMatchingStructures(`${art.title} ${art.summary}`);
+        const structureBadges = matchedStructures.map((name) =>
+          `<span class="badge info">Structure : ${escapeHTML(name)}</span>`
+        ).join("");
+
+        return `
+          <div class="card">
+            <div class="row" style="justify-content: space-between;">
+              <span class="badge">${escapeHTML(art.source)}</span>
+              <span class="muted" style="font-size:0.78rem;">${escapeHTML(art.dateLabel)}</span>
+            </div>
+            <div style="margin-top:6px; font-size:0.98rem;">
+              ${art.link
+                ? `<a class="article-link" href="${escapeHTML(art.link)}" target="_blank" rel="noopener noreferrer">${escapeHTML(art.title)}</a>`
+                : `<strong>${escapeHTML(art.title)}</strong>`}
+            </div>
+            ${art.summary ? `<p class="muted" style="margin:6px 0 0; line-height:1.4;">${escapeHTML(art.summary)}</p>` : ""}
+            ${structureBadges ? `<div style="margin-top:6px;">${structureBadges}</div>` : ""}
+          </div>
+        `;
+      }).join("");
+    }
+
     function exportStateJSON() {
       const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
@@ -1375,6 +1788,9 @@
     renderEditeurs();
     renderBaseCriteriaSelector();
     updateSeuilLabel(false);
+    renderRssFeedsList();
+    renderRssSourceFilter();
+    renderRssArticles();
     syncFromSupabase();
   </script>
 </body>
